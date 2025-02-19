@@ -22,7 +22,7 @@ $result = $conn->query($query);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Users</title>
+    <title>Manage Menu</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50">
@@ -37,7 +37,7 @@ $result = $conn->query($query);
             <h2 class="text-3xl font-bold mb-6 text-center">KANTIN IFSU BERKAH</h2>
             <ul class="space-y-4">
                 <li>
-                <a href="dashboard.php"
+    <a href="dashboard.php"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
@@ -92,10 +92,9 @@ $result = $conn->query($query);
                     </a>                </li>
             </ul>
         </div>
-
                 <!-- Main Content -->
-                <div class="container mx-auto p-6">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Daftar Transaksi</h2>
+                <div class="flex-1 p-8">
+            <h2 class="text-3xl font-semibold text-gray-700 mb-6">Transaksi</h2>
         <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
             <thead class="bg-blue-600 text-white">
                 <tr>

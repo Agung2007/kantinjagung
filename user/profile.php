@@ -60,7 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Update session jika diperlukan
     $_SESSION['username'] = $name;
-    echo "Profile updated successfully!";
+    
+    // Redirect ke halaman menu setelah update profil
+    header("Location: menu.php");
+    exit;
 }
 ?>
 
