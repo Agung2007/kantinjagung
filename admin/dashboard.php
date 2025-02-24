@@ -1,13 +1,39 @@
 <?php
 session_start();
 
+// Pastikan koneksi database sudah dimasukkan
+include('db_connection.php'); // Sesuaikan dengan path yang benar
+
 // Cek apakah pengguna sudah login sebagai admin
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    // Jika belum login, arahkan ke halaman login
     header("Location: login.php");
     exit;
 }
+
+// Mengambil jumlah total users dengan validasi query
+$total_users = 0;
+$result_users = $conn->query("SELECT COUNT(*) AS total_users FROM users");
+if ($result_users) {
+    $total_users = $result_users->fetch_assoc()['total_users'];
+}
+
+// Mengambil jumlah total menu items dengan validasi query
+$total_menu = 0;
+$result_menu = $conn->query("SELECT COUNT(*) AS menu FROM menu");
+if ($result_menu) {
+    $total_menu = $result_menu->fetch_assoc()['menu'];
+}
+
+// Mengambil jumlah total transaksi dengan validasi query
+$total_transactions = 0;
+$result_transactions = $conn->query("SELECT COUNT(*) AS total_transactions FROM transactions");
+if ($result_transactions) {
+    $total_transactions = $result_transactions->fetch_assoc()['total_transactions'];
+}
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -95,23 +121,53 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                 <p class="text-lg text-gray-500">Selamat datang di dashboard admin.</p>
             </div>
 
-            <!-- Cards for Dashboard Metrics -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-blue-100 p-6 rounded-lg shadow-lg">
-                    <h3 class="text-xl font-semibold text-gray-700">Total Users</h3>
-                    <p class="text-3xl text-blue-700 mt-2">120</p>
-                </div>
-                <div class="bg-green-100 p-6 rounded-lg shadow-lg">
-                    <h3 class="text-xl font-semibold text-gray-700">Menu Items</h3>
-                    <p class="text-3xl text-green-700 mt-2">45</p>
-                </div>
-                <div class="bg-yellow-100 p-6 rounded-lg shadow-lg">
-                    <h3 class="text-xl font-semibold text-gray-700">Total Transactions</h3>
-                    <p class="text-3xl text-yellow-700 mt-2">250</p>
-                </div>
+            <div class="bg-white p-8 rounded-lg shadow-lg w-full">
+    <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">📊 Laporan Admin</h2>
+    
+    <div class="flex justify-between gap-6">
+
+        <!-- Card Total Users -->
+        <div class="flex-1 bg-blue-100 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 flex items-center">
+            <div class="bg-blue-500 text-white p-4 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 20c4.418 0 8-1.79 8-4V9c0-2.21-3.582-4-8-4S4 6.79 4 9v7c0 2.21 3.582 4 8 4z"></path>
+                    <circle cx="12" cy="9" r="3"></circle>
+                </svg>
+            </div>
+            <div class="ml-4">
+                <h3 class="text-xl font-semibold text-gray-700">Total Users</h3>
+                <p class="text-4xl text-blue-700 font-bold mt-1"><?php echo $total_users; ?></p>
             </div>
         </div>
+
+        <!-- Card Menu Items -->
+        <div class="flex-1 bg-green-100 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 flex items-center">
+            <div class="bg-green-500 text-white p-4 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </div>
+            <div class="ml-4">
+                <h3 class="text-xl font-semibold text-gray-700">Menu Items</h3>
+                <p class="text-4xl text-green-700 font-bold mt-1"><?php echo $total_menu; ?></p>
+            </div>
+        </div>
+
+        <!-- Card Total Transactions -->
+        <div class="flex-1 bg-yellow-100 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 flex items-center">
+            <div class="bg-yellow-500 text-white p-4 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2l3 7h7l-5.5 5 2.5 8-7-4-7 4 2.5-8L2 9h7z"></path>
+                </svg>
+            </div>
+            <div class="ml-4">
+                <h3 class="text-xl font-semibold text-gray-700">Total Transactions</h3>
+                <p class="text-4xl text-yellow-700 font-bold mt-1"><?php echo $total_transactions; ?></p>
+            </div>
+        </div>
+
     </div>
+</div>
 </body>
 
 </html>

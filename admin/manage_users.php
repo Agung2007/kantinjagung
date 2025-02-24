@@ -30,12 +30,14 @@ if (isset($_GET['delete_id'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Users</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-50">
     <!-- Sidebar and Dashboard Container -->
     <div class="flex min-h-screen">
@@ -48,7 +50,7 @@ if (isset($_GET['delete_id'])) {
             <h2 class="text-3xl font-bold mb-6 text-center">KANTIN IFSU BERKAH</h2>
             <ul class="space-y-4">
                 <li>
-                <a href="dashboard.php"
+                    <a href="dashboard.php"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
@@ -100,7 +102,7 @@ if (isset($_GET['delete_id'])) {
                                 d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                         </svg>
                         Logout
-                    </a>                </li>
+                    </a> </li>
             </ul>
         </div>
         <!-- Main Content -->
@@ -120,17 +122,23 @@ if (isset($_GET['delete_id'])) {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php while ($user = $result->fetch_assoc()): ?>
+                            <?php 
+$no = 1; // Inisialisasi nomor urut
+while ($user = $result->fetch_assoc()): ?>
                             <tr class="border-b hover:bg-gray-100">
-                                <td class="py-3 px-4"><?php echo $user['id']; ?></td>
-                                <td class="py-3 px-4"><?php echo $user['username']; ?></td>
-                                <td class="py-3 px-4"><?php echo ucfirst($user['role']); ?></td>
+                                <td class="py-3 px-4"><?php echo $no; ?></td> <!-- Menampilkan nomor urut -->
+                                <td class="py-3 px-4"><?php echo htmlspecialchars($user['username']); ?></td>
+                                <td class="py-3 px-4"><?php echo ucfirst(htmlspecialchars($user['role'])); ?></td>
                                 <td class="py-3 px-4 text-center">
-                                    <a href="edit_user.php?id=<?php echo $user['id']; ?>" class="text-blue-500 hover:underline">Edit</a>
-                                    <a href="?delete_id=<?php echo $user['id']; ?>" class="text-red-500 hover:underline ml-4">Delete</a>
+                                    <a href="edit_user.php?id=<?php echo $user['id']; ?>"
+                                        class="text-blue-500 hover:underline">Edit</a>
+                                    <a href="?delete_id=<?php echo $user['id']; ?>"
+                                        class="text-red-500 hover:underline ml-4">Delete</a>
                                 </td>
                             </tr>
-                            <?php endwhile; ?>
+                            <?php 
+    $no++; // Tambah nomor urut setiap iterasi
+endwhile; ?>
                         </tbody>
                     </table>
                 </div>
@@ -138,4 +146,5 @@ if (isset($_GET['delete_id'])) {
         </div>
     </div>
 </body>
+
 </html>

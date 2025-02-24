@@ -18,20 +18,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_menu'])) {
 
     // Mengecek apakah ada gambar yang di-upload
     if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-        $image = 'images/' . $_FILES['image']['name'];
-        move_uploaded_file($_FILES['image']['tmp_name'], $image);
+        $upload_dir = '../images/'; // Folder penyimpanan
+        $image_name = time() . '_' . basename($_FILES['image']['name']); // Rename untuk mencegah nama duplikat
+        $target_file = $upload_dir . $image_name;
+
+        // Pindahkan file ke folder images
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+            $image = 'images/' . $image_name; // Simpan path relatif ke database
+        }
     }
+  
 
     // Query untuk menambahkan menu ke database
-    $sql = "INSERT INTO menu (name, price, image) VALUES (?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssd", $name, $price, $image);
-    $stmt->execute();
+    if (!empty($image)) {
+        $sql = "INSERT INTO menu (name, price, image) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sis", $name, $price, $image); // "sis" → String, Integer, String
+        $stmt->execute();
 
-    header("Location: manage_menu.php");
-    exit;
+        // Redirect ke halaman manage menu
+        header("Location: manage_menu.php");
+        exit;
+    } else {
+        echo "Gagal mengupload gambar.";
+    }
 }
-
 // Mengambil daftar menu dari database
 $sql = "SELECT * FROM menu";
 $result = $conn->query($sql);
@@ -39,12 +50,16 @@ $result = $conn->query($sql);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Menu</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
+
 <body class="bg-gray-50">
     <!-- Sidebar and Dashboard Container -->
     <div class="flex min-h-screen">
@@ -57,7 +72,7 @@ $result = $conn->query($sql);
             <h2 class="text-3xl font-bold mb-6 text-center">KANTIN IFSU BERKAH</h2>
             <ul class="space-y-4">
                 <li>
-    <a href="dashboard.php"
+                    <a href="dashboard.php"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
@@ -109,7 +124,7 @@ $result = $conn->query($sql);
                                 d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                         </svg>
                         Logout
-                    </a>                </li>
+                    </a> </li>
             </ul>
         </div>
         <!-- Main Content -->
@@ -121,19 +136,24 @@ $result = $conn->query($sql);
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700">Menu Name</label>
-                        <input type="text" name="name" id="name" class="w-full p-3 mt-2 border border-gray-300 rounded-md" required>
+                        <input type="text" name="name" id="name"
+                            class="w-full p-3 mt-2 border border-gray-300 rounded-md" required>
                     </div>
                     <div>
                         <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
-                        <input type="number" name="price" id="price" class="w-full p-3 mt-2 border border-gray-300 rounded-md" required>
+                        <input type="number" name="price" id="price"
+                            class="w-full p-3 mt-2 border border-gray-300 rounded-md" required>
                     </div>
                 </div>
                 <div class="mt-4">
                     <label for="image" class="block text-sm font-medium text-gray-700">Image (Optional)</label>
-                    <input type="file" name="image" id="image" class="w-full p-3 mt-2 border border-gray-300 rounded-md">
+                    <input type="file" name="image" id="image"
+                        class="w-full p-3 mt-2 border border-gray-300 rounded-md">
                 </div>
                 <div class="mt-6">
-                    <button type="submit" name="add_menu" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors">Add Menu</button>
+                    <button type="submit" name="add_menu"
+                        class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors">Add
+                        Menu</button>
                 </div>
             </form>
 
@@ -151,22 +171,26 @@ $result = $conn->query($sql);
                     </thead>
                     <tbody>
                         <?php
-                        $no = 1;
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<tr class='border-b'>
-                                <td class='px-4 py-3'>{$no}</td>
-                                <td class='px-4 py-3'>{$row['name']}</td>
-                                <td class='px-4 py-3'>{$row['price']}</td>
-                                <td class='px-4 py-3'>
-                                    <img src='{$row['image']}' alt='Menu Image' class='w-16 h-16 object-cover rounded-md'>
-                                </td>
-                                <td class='px-4 py-3 text-center'>
-                                    <a href='edit_menu.php?id={$row['id']}' class='text-blue-600 hover:underline'>Edit</a> |
-                                    <a href='delete_menu.php?id={$row['id']}' class='text-red-600 hover:underline'>Delete</a>
-                                </td>
-                            </tr>";
-                            $no++;
-                        }
+$no = 1;
+while ($row = $result->fetch_assoc()) {
+    // Pastikan path gambar benar (gunakan htmlspecialchars untuk keamanan)
+    $image_path = !empty($row['image']) ? htmlspecialchars($row['image']) : 'assets/default.jpg';
+
+    echo "<tr class='border-b'>
+        <td class='px-4 py-3 text-center'>{$no}</td>
+        <td class='px-4 py-3'>{$row['name']}</td>
+        <td class='px-4 py-3'>Rp " . number_format($row['price'], 0, ',', '.') . "</td>
+        <td class='px-4 py-3'>
+            <img src='../{$image_path}' alt='Menu Image' class='w-16 h-16 object-cover rounded-md border'>
+        </td>
+        <td class='px-4 py-3 text-center'>
+            <a href='edit_menu.php?id={$row['id']}' class='text-blue-600 hover:underline font-medium'>Edit</a> |
+            <a href='delete_menu.php?id={$row['id']}' class='text-red-600 hover:underline font-medium' onclick='return confirm(\"Apakah yakin ingin menghapus?\")'>Delete</a>
+        </td>
+    </tr>";
+
+    $no++;
+}
                         ?>
                     </tbody>
                 </table>
@@ -175,4 +199,5 @@ $result = $conn->query($sql);
     </div>
 
 </body>
+
 </html>

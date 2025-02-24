@@ -31,24 +31,49 @@ if ($id) {
 
 // Update data menu
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
+    $id = $_POST['id'];
     $name = $_POST['name'];
-    $price = $_POST['price'];
-    $image = $menu['image']; // Mempertahankan gambar lama jika tidak ada yang di-upload
+    $price = doubleval($_POST['price']);
+    $image = $_POST['old_image']; // Gunakan gambar lama sebagai default
 
-    // Mengecek apakah ada gambar baru yang di-upload
+    // Periksa apakah ada gambar baru yang di-upload
     if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-        $image = 'images/' . $_FILES['image']['name'];
-        move_uploaded_file($_FILES['image']['tmp_name'], $image);
+        $target_dir = "images/";
+        $target_file = $target_dir . basename($_FILES['image']['name']);
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+        // Pastikan folder ada
+        if (!is_dir($target_dir)) {
+            mkdir($target_dir, 0777, true);
+        }
+
+        // Validasi tipe gambar
+        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+        if (in_array($imageFileType, $allowed_types)) {
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+                $image = $target_file;
+            } else {
+                echo "Gagal mengunggah gambar.";
+                exit;
+            }
+        } else {
+            echo "Format gambar tidak didukung! Gunakan JPG, JPEG, PNG, atau GIF.";
+            exit;
+        }
     }
 
-    // Query untuk memperbarui data menu
+    // Update ke database
     $sql = "UPDATE menu SET name = ?, price = ?, image = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssdi", $name, $price, $image, $id);
-    $stmt->execute();
+    $stmt->bind_param("sdsi", $name, $price, $image, $id);
 
-    header("Location: manage_menu.php");
-    exit;
+    if ($stmt->execute()) {
+        // Redirect kembali ke halaman manage_menu setelah update
+        header("Location: manage_menu.php");
+        exit;
+    } else {
+        echo "Gagal memperbarui menu: " . $stmt->error;
+    }
 }
 ?>
 
@@ -71,18 +96,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
 
                 <!-- Form untuk mengedit menu -->
                 <form method="POST" enctype="multipart/form-data">
-                    <div class="flex space-x-4 mb-6">
-                        <input type="text" name="name" value="<?= $menu['name'] ?>" required class="w-1/2 p-2 border border-gray-300 rounded-md">
-                        <input type="number" name="price" value="<?= $menu['price'] ?>" required class="w-1/2 p-2 border border-gray-300 rounded-md">
-                        <input type="file" name="image" class="w-1/2 p-2 border border-gray-300 rounded-md">
-                        <button type="submit" name="update_menu" class="bg-blue-500 text-white px-4 py-2 rounded-md">Update Menu</button>
-                    </div>
-                </form>
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($menu['id']) ?>">
+                    <input type="hidden" name="old_image" value="<?= htmlspecialchars($menu['image']) ?>">
 
-                <div class="mt-6">
-                    <h3 class="text-xl font-semibold text-gray-700">Current Image:</h3>
-                    <img src="<?= $menu['image'] ?>" alt="Current Menu Image" class="w-32 h-32 object-cover mt-2">
-                </div>
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium text-gray-700">Nama Menu</label>
+                        <input type="text" name="name" id="name" value="<?= htmlspecialchars($menu['name']) ?>" required class="w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="price" class="block text-sm font-medium text-gray-700">Harga</label>
+                        <input type="number" name="price" id="price" value="<?= htmlspecialchars($menu['price']) ?>" required class="w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="image" class="block text-sm font-medium text-gray-700">Gambar Menu</label>
+                        <input type="file" name="image" id="image" class="w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+
+                    <div class="mb-6">
+                        <h3 class="text-lg font-medium text-gray-700">Gambar Saat Ini:</h3>
+                        <img src="<?= htmlspecialchars($menu['image']) ?>" alt="Current Menu Image" onerror="this.src='images/default.jpg';">
+
+                    </div>
+
+                    <button type="submit" name="update_menu" class="bg-blue-500 text-white px-4 py-2 rounded-md">Update Menu</button>
+                </form>
             </div>
         </div>
     </div>

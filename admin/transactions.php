@@ -9,22 +9,30 @@ if (!isset($_SESSION['admin_logged_in'])) {
 }
 
 // Ambil data transaksi
-$query = "SELECT t.id, u.username AS user_name, m.name AS menu_name, t.quantity, t.total_price, t.status, t.created_at 
-          FROM transactions t
-          JOIN users u ON t.user_id = u.id
-          JOIN menu m ON t.menu_id = m.id
-          ORDER BY t.created_at DESC";
+$query = "SELECT t.id, u.username AS user_name, 
+       GROUP_CONCAT(m.name SEPARATOR ', ') AS menu_name, 
+       SUM(od.quantity) AS total_quantity, 
+       t.total_price, t.status, o.order_date AS created_at
+FROM transactions t
+JOIN users u ON t.user_id = u.id
+JOIN orders o ON t.order_id = o.id
+JOIN order_details od ON o.id = od.order_id
+JOIN menu m ON od.menu_id = m.id
+GROUP BY t.id, u.username, t.total_price, t.status, o.order_date
+ORDER BY o.order_date DESC";
 $result = $conn->query($query);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Menu</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-50">
     <!-- Sidebar and Dashboard Container -->
     <div class="flex min-h-screen">
@@ -37,7 +45,7 @@ $result = $conn->query($query);
             <h2 class="text-3xl font-bold mb-6 text-center">KANTIN IFSU BERKAH</h2>
             <ul class="space-y-4">
                 <li>
-    <a href="dashboard.php"
+                    <a href="dashboard.php"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
@@ -89,50 +97,60 @@ $result = $conn->query($query);
                                 d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                         </svg>
                         Logout
-                    </a>                </li>
+                    </a> </li>
             </ul>
         </div>
-                <!-- Main Content -->
-                <div class="flex-1 p-8">
+        <!-- Main Content -->
+        <div class="flex-1 p-8">
             <h2 class="text-3xl font-semibold text-gray-700 mb-6">Transaksi</h2>
-        <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
-            <thead class="bg-blue-600 text-white">
-                <tr>
-                    <th class="py-3 px-4 text-left">ID</th>
-                    <th class="py-3 px-4 text-left">Pelanggan</th>
-                    <th class="py-3 px-4 text-left">Menu</th>
-                    <th class="py-3 px-4 text-left">Jumlah</th>
-                    <th class="py-3 px-4 text-left">Total Harga</th>
-                    <th class="py-3 px-4 text-left">Status</th>
-                    <th class="py-3 px-4 text-left">Tanggal</th>
-                    <th class="py-3 px-4 text-left">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = $result->fetch_assoc()) { ?>
+            <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+                <thead class="bg-blue-600 text-white">
+                    <tr>
+                        <th class="py-3 px-4 text-left">ID</th>
+                        <th class="py-3 px-4 text-left">Pelanggan</th>
+                        <th class="py-3 px-4 text-left">Menu</th>
+                        <th class="py-3 px-4 text-left">Jumlah</th>
+                        <th class="py-3 px-4 text-left">Total Harga</th>
+                        <th class="py-3 px-4 text-left">Status</th>
+                        <th class="py-3 px-4 text-left">Tanggal</th>
+                        <th class="py-3 px-4 text-left">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+$no = 1; // Inisialisasi nomor urut
+while ($row = $result->fetch_assoc()) { ?>
                     <tr class="border-b">
-                        <td class="py-3 px-4"> <?= $row['id'] ?> </td>
-                        <td class="py-3 px-4"> <?= $row['user_name'] ?> </td>
-                        <td class="py-3 px-4"> <?= $row['menu_name'] ?> </td>
-                        <td class="py-3 px-4"> <?= $row['quantity'] ?> </td>
-                        <td class="py-3 px-4"> Rp<?= $row['total_price'] ?> </td>
-                        <td class="py-3 px-4"> <?= $row['status'] ?> </td>
+                        <td class="py-3 px-4"> <?= $no ?> </td> <!-- Menampilkan nomor urut -->
+                        <td class="py-3 px-4"> <?= htmlspecialchars($row['user_name']) ?> </td>
+                        <td class="py-3 px-4"> <?= htmlspecialchars($row['menu_name']) ?> </td>
+                        <td class="py-3 px-4"> <?= $row['total_quantity'] ?> </td>
+                        <td class="py-3 px-4"> Rp<?= number_format($row['total_price'], 0, ',', '.') ?> </td>
+                        <td class="py-3 px-4"> <?= htmlspecialchars($row['status']) ?> </td>
                         <td class="py-3 px-4"> <?= $row['created_at'] ?> </td>
                         <td class="py-3 px-4">
                             <form method="POST" class="flex space-x-2">
                                 <input type="hidden" name="transaction_id" value="<?= $row['id'] ?>">
                                 <select name="status" class="border rounded px-2 py-1">
-                                    <option value="pending" <?= $row['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
-                                    <option value="processed" <?= $row['status'] == 'processed' ? 'selected' : '' ?>>Processed</option>
-                                    <option value="completed" <?= $row['status'] == 'completed' ? 'selected' : '' ?>>Completed</option>
+                                    <option value="pending" <?= $row['status'] == 'pending' ? 'selected' : '' ?>>Pending
+                                    </option>
+                                    <option value="processed" <?= $row['status'] == 'processed' ? 'selected' : '' ?>>
+                                        Processed</option>
+                                    <option value="completed" <?= $row['status'] == 'completed' ? 'selected' : '' ?>>
+                                        Completed</option>
                                 </select>
-                                <button type="submit" name="update_status" class="bg-green-500 text-white px-3 py-1 rounded">Update</button>
+                                <button type="submit" name="update_status"
+                                    class="bg-green-500 text-white px-3 py-1 rounded">Update</button>
                             </form>
                         </td>
                     </tr>
-                <?php } ?>
-            </tbody>
-        </table>
-    </div>
+                    <?php 
+    $no++; // Tambah nomor urut setiap iterasi
+} 
+?>
+                </tbody>
+            </table>
+        </div>
 </body>
+
 </html>

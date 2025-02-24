@@ -42,9 +42,18 @@ $user = $user_result->fetch_assoc();
                 <h1 class="text-2xl font-semibold">Kantin IFSU</h1>
             </div>
 
-            <!-- Profil Pengguna -->
+            <!-- Profil Pengguna & Order History -->
             <div class="flex items-center space-x-6">
                 <?php if ($user): ?>
+                    <!-- Order History -->
+                    <a href="order_history.php" class="flex items-center space-x-2 hover:underline">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2v-5m-3-4h3m-3 0V6m0 4V6m0 4l-3-3m3 3l3-3"></path>
+                        </svg>
+                        <span>Order History</span>
+                    </a>
+
+                    <!-- Profil -->
                     <a href="profile.php" class="flex items-center space-x-2 hover:underline">
                         <img src="<?= htmlspecialchars($user['profile_picture'] ?? '../assets/images/default-avatar.png') ?>" alt="Profile" class="h-10 w-10 rounded-full object-cover">
                         <span><?= htmlspecialchars($user['username']) ?></span>
@@ -63,7 +72,7 @@ $user = $user_result->fetch_assoc();
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <?php while ($menu = $result->fetch_assoc()): ?>
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                    <img src="../images/<?= htmlspecialchars($menu['image']) ?>" alt="<?= htmlspecialchars($menu['name']) ?>" class="w-full h-48 object-cover">
+                    <img src="../<?= htmlspecialchars($menu['image']) ?>" alt="<?= htmlspecialchars($menu['name']) ?>" class="w-full h-48 object-cover">
                     <div class="p-4">
                         <h3 class="text-xl font-semibold text-gray-800"><?= htmlspecialchars($menu['name']) ?></h3>
                         <p class="text-xl text-green-600 font-semibold mt-2">Rp <?= number_format($menu['price'], 0, ',', '.') ?></p>

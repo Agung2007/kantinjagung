@@ -1,33 +1,24 @@
 <?php
-session_start();
-
-// Cek apakah admin sudah login
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header("Location: login.php");
-    exit;
-}
-
-// Koneksi ke database
 include('db_connection.php');
 
-// Cek jika parameter id ada
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $menu_id = $_GET['id'];
 
-    // Query untuk menghapus menu berdasarkan id
-    $sql = "DELETE FROM menu WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
-    
-    // Menjalankan query
-    if ($stmt->execute()) {
-        // Jika berhasil dihapus, arahkan kembali ke halaman manage menu
-        header("Location: manage_menu.php");
-        exit;
+    // Hapus transaksi terkait
+    $delete_transactions = $conn->prepare("DELETE FROM transactions WHERE menu_id = ?");
+    $delete_transactions->bind_param("i", $menu_id);
+    $delete_transactions->execute();
+    $delete_transactions->close();
+
+    // Hapus menu setelah transaksi dihapus
+    $delete_menu = $conn->prepare("DELETE FROM menu WHERE id = ?");
+    $delete_menu->bind_param("i", $menu_id);
+    if ($delete_menu->execute()) {
+        header("Location: manage_menu.php?success=Menu berhasil dihapus");
+        exit();
     } else {
-        echo "Error deleting record: " . $conn->error;
+        header("Location: manage_menu.php?error=Gagal menghapus menu");
+        exit();
     }
-} else {
-    echo "No menu id provided!";
 }
 ?>

@@ -17,28 +17,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $menu_id = $_POST['menu_id'];
     $quantity = $_POST['quantity'];
 
-    // Ambil harga menu
-    $menu_query = "SELECT price FROM menu WHERE id = ?";
-    $stmt = $conn->prepare($menu_query);
-    $stmt->bind_param("i", $menu_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $menu = $result->fetch_assoc();
-    
-    if ($menu) {
+    // Validasi input
+    if (empty($menu_id) || empty($quantity) || $quantity <= 0) {
+        die("Error: Data tidak valid!");
+    }
+
+    // Mulai transaksi database
+    $conn->begin_transaction();
+
+    try {
+        // Ambil harga menu
+        $stmt_menu = $conn->prepare("SELECT price FROM menu WHERE id = ?");
+        $stmt_menu->bind_param("i", $menu_id);
+        $stmt_menu->execute();
+        $result_menu = $stmt_menu->get_result();
+        $menu = $result_menu->fetch_assoc();
+        $stmt_menu->close();
+
+        if (!$menu) {
+            throw new Exception("Menu tidak ditemukan.");
+        }
+
         $total_price = $menu['price'] * $quantity;
 
-        // Simpan transaksi
-        $insert_query = "INSERT INTO transactions (user_id, menu_id, quantity, total_price, status) VALUES (?, ?, ?, ?, 'pending')";
-        $stmt = $conn->prepare($insert_query);
-        $stmt->bind_param("iiid", $user_id, $menu_id, $quantity, $total_price);
-        if ($stmt->execute()) {
-            echo "Order berhasil! Silakan tunggu konfirmasi.";
-        } else {
-            echo "Gagal melakukan order.";
-        }
-    } else {
-        echo "Menu tidak ditemukan.";
+        // Simpan ke tabel `orders`
+        $stmt_order = $conn->prepare("INSERT INTO orders (user_id, total_price, order_date, status) VALUES (?, ?, NOW(), 'pending')");
+        $stmt_order->bind_param("id", $user_id, $total_price);
+        $stmt_order->execute();
+        $order_id = $stmt_order->insert_id; // Ambil ID order yang baru dibuat
+        $stmt_order->close();
+
+        // Simpan ke tabel `order_details`
+        $stmt_details = $conn->prepare("INSERT INTO order_details (order_id, menu_id, quantity, price) VALUES (?, ?, ?, ?)");
+        $stmt_details->bind_param("iiid", $order_id, $menu_id, $quantity, $menu['price']);
+        $stmt_details->execute();
+        $stmt_details->close();
+
+        // Simpan ke tabel `transactions`
+        $stmt_transaction = $conn->prepare("INSERT INTO transactions (user_id, order_id, total_price, status, created_at) VALUES (?, ?, ?, 'pending', NOW())");
+        $stmt_transaction->bind_param("iid", $user_id, $order_id, $total_price);
+        $stmt_transaction->execute();
+        $stmt_transaction->close();
+
+        // Commit transaksi agar data benar-benar tersimpan
+        $conn->commit();
+
+        echo "<script>alert('Order berhasil! Silakan tunggu konfirmasi.'); window.location='menu.php';</script>";
+    } catch (Exception $e) {
+        $conn->rollback(); // Batalkan semua perubahan jika terjadi kesalahan
+        echo "Gagal melakukan order: " . $e->getMessage();
     }
 }
 ?>
