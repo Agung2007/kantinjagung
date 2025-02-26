@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Username already taken!";
     } else {
         // Menambahkan pengguna baru ke database
-        $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, 'user')";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sss", $username, $email, $password);
         if ($stmt->execute()) {
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <button type="submit" class="w-full py-2 bg-blue-500 text-white rounded-lg">Register</button>
         </form>
-        <p class="mt-4 text-center">Already have an account? <a href="login.php" class="text-blue-500">Login here</a></p>
+        <p class="mt-4 text-center">Sudah punya akun? <a href="login.php" class="text-blue-500">Login</a></p>
     </div>
 </body>
 </html>

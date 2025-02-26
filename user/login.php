@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <button type="submit" class="w-full py-2 bg-blue-500 text-white rounded-lg">Login</button>
         </form>
-        <p class="mt-4 text-center">Don't have an account? <a href="register.php" class="text-blue-500">Register here</a></p>
+        <p class="mt-4 text-center">Belum punya akun? <a href="register.php" class="text-blue-500">Daftar Dulu</a></p>
     </div>
 </body>
 </html>

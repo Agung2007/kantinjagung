@@ -33,7 +33,7 @@ if (!$order_info) {
 // Ambil detail pesanan
 $query = "SELECT md.name, od.quantity, od.price 
           FROM order_details od 
-          JOIN menu md ON od.menu_item_id = md.id 
+          JOIN menu md ON od.menu_id = md.id 
           WHERE od.order_id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $order_id);

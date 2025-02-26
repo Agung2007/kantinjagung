@@ -13,6 +13,8 @@ $user_id = $_SESSION['user_id'];
 $menu_query = "SELECT * FROM menu";
 $menu_result = $conn->query($menu_query);
 
+$success = false;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $menu_id = $_POST['menu_id'];
     $quantity = $_POST['quantity'];
@@ -61,8 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Commit transaksi agar data benar-benar tersimpan
         $conn->commit();
-
-        echo "<script>alert('Order berhasil! Silakan tunggu konfirmasi.'); window.location='menu.php';</script>";
+        $success = true;
     } catch (Exception $e) {
         $conn->rollback(); // Batalkan semua perubahan jika terjadi kesalahan
         echo "Gagal melakukan order: " . $e->getMessage();
@@ -77,6 +78,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Menu</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            <?php if ($success) { ?>
+                Swal.fire({
+                    title: "Order Berhasil!",
+                    icon: "success",
+                    draggable: true
+                }).then(() => {
+                    window.location = 'menu.php';
+                });
+            <?php } ?>
+        });
+    </script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center h-screen">
     <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">

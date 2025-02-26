@@ -67,7 +67,7 @@ $result = $conn->query($sql);
         <div class="w-64 bg-blue-900 text-white p-6">
             <!-- Logo Kantin -->
             <div class="flex items-center justify-center mb-6">
-                <img src="../assets/images/logo.jpg" alt="Kantin Logo" class="w-24 h-24 object-cover rounded-full">
+                <img src="../assets/images/ifsu.png" alt="Kantin Logo" class="w-24 h-24 object-cover rounded-full">
             </div>
             <h2 class="text-3xl font-bold mb-6 text-center">KANTIN IFSU BERKAH</h2>
             <ul class="space-y-4">

@@ -8,6 +8,29 @@ if (!isset($_SESSION['admin_logged_in'])) {
     exit;
 }
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status'])) {
+    $transaction_id = $_POST['transaction_id'];
+    $status = $_POST['status'];
+
+    // Validasi input
+    if (!in_array($status, ['pending', 'processed', 'completed'])) {
+        die("Status tidak valid!");
+    }
+
+    // Update status di database
+    $stmt = $conn->prepare("UPDATE transactions SET status = ? WHERE id = ?");
+    $stmt->bind_param("si", $status, $transaction_id);
+
+    if ($stmt->execute()) {
+        echo "Status berhasil diperbarui!";
+    } else {
+        echo "Gagal memperbarui status: " . $stmt->error;
+    }
+
+    $stmt->close();
+}
+
+
 // Ambil data transaksi
 $query = "SELECT t.id, u.username AS user_name, 
        GROUP_CONCAT(m.name SEPARATOR ', ') AS menu_name, 
@@ -40,7 +63,7 @@ $result = $conn->query($query);
         <div class="w-64 bg-blue-900 text-white p-6">
             <!-- Logo Kantin -->
             <div class="flex items-center justify-center mb-6">
-                <img src="../assets/images/logo.jpg" alt="Kantin Logo" class="w-24 h-24 object-cover rounded-full">
+                <img src="../assets/images/ifsu.png" alt="Kantin Logo" class="w-24 h-24 object-cover rounded-full">
             </div>
             <h2 class="text-3xl font-bold mb-6 text-center">KANTIN IFSU BERKAH</h2>
             <ul class="space-y-4">
