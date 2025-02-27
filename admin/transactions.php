@@ -35,13 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status'])) {
 $query = "SELECT t.id, u.username AS user_name, 
        GROUP_CONCAT(m.name SEPARATOR ', ') AS menu_name, 
        SUM(od.quantity) AS total_quantity, 
-       t.total_price, t.status, o.order_date AS created_at
+       t.total_price, t.status, t.payment_method, o.order_date AS created_at
 FROM transactions t
 JOIN users u ON t.user_id = u.id
 JOIN orders o ON t.order_id = o.id
 JOIN order_details od ON o.id = od.order_id
 JOIN menu m ON od.menu_id = m.id
-GROUP BY t.id, u.username, t.total_price, t.status, o.order_date
+GROUP BY t.id, u.username, t.total_price, t.status, t.payment_method, o.order_date
 ORDER BY o.order_date DESC";
 $result = $conn->query($query);
 ?>
@@ -67,7 +67,7 @@ $result = $conn->query($query);
             </div>
             <h2 class="text-3xl font-bold mb-6 text-center">KANTIN IFSU BERKAH</h2>
             <ul class="space-y-4">
-                <li>
+            <li>
                     <a href="dashboard.php"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -112,6 +112,17 @@ $result = $conn->query($query);
                     </a>
                 </li>
                 <li>
+                    <a href="admin_chat.php"
+                        class="flex items-center p-2 gap-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"/>
+                        </svg> Chat User
+                    </a>
+                </li>
+
+                <li>
                     <a href="logout.php"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -120,7 +131,8 @@ $result = $conn->query($query);
                                 d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                         </svg>
                         Logout
-                    </a> </li>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- Main Content -->
@@ -128,47 +140,65 @@ $result = $conn->query($query);
             <h2 class="text-3xl font-semibold text-gray-700 mb-6">Transaksi</h2>
             <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
                 <thead class="bg-blue-600 text-white">
-                    <tr>
-                        <th class="py-3 px-4 text-left">ID</th>
-                        <th class="py-3 px-4 text-left">Pelanggan</th>
-                        <th class="py-3 px-4 text-left">Menu</th>
-                        <th class="py-3 px-4 text-left">Jumlah</th>
-                        <th class="py-3 px-4 text-left">Total Harga</th>
-                        <th class="py-3 px-4 text-left">Status</th>
-                        <th class="py-3 px-4 text-left">Tanggal</th>
-                        <th class="py-3 px-4 text-left">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php 
-$no = 1; // Inisialisasi nomor urut
-while ($row = $result->fetch_assoc()) { ?>
-                    <tr class="border-b">
-                        <td class="py-3 px-4"> <?= $no ?> </td> <!-- Menampilkan nomor urut -->
-                        <td class="py-3 px-4"> <?= htmlspecialchars($row['user_name']) ?> </td>
-                        <td class="py-3 px-4"> <?= htmlspecialchars($row['menu_name']) ?> </td>
-                        <td class="py-3 px-4"> <?= $row['total_quantity'] ?> </td>
-                        <td class="py-3 px-4"> Rp<?= number_format($row['total_price'], 0, ',', '.') ?> </td>
-                        <td class="py-3 px-4"> <?= htmlspecialchars($row['status']) ?> </td>
-                        <td class="py-3 px-4"> <?= $row['created_at'] ?> </td>
-                        <td class="py-3 px-4">
-                            <form method="POST" class="flex space-x-2">
-                                <input type="hidden" name="transaction_id" value="<?= $row['id'] ?>">
-                                <select name="status" class="border rounded px-2 py-1">
-                                    <option value="pending" <?= $row['status'] == 'pending' ? 'selected' : '' ?>>Pending
-                                    </option>
-                                    <option value="processed" <?= $row['status'] == 'processed' ? 'selected' : '' ?>>
-                                        Processed</option>
-                                    <option value="completed" <?= $row['status'] == 'completed' ? 'selected' : '' ?>>
-                                        Completed</option>
-                                </select>
-                                <button type="submit" name="update_status"
-                                    class="bg-green-500 text-white px-3 py-1 rounded">Update</button>
-                            </form>
-                        </td>
-                    </tr>
-                    <?php 
-    $no++; // Tambah nomor urut setiap iterasi
+                <tr>
+        <th class="py-3 px-4 text-left">ID</th>
+        <th class="py-3 px-4 text-left">Pelanggan</th>
+        <th class="py-3 px-4 text-left">Menu</th>
+        <th class="py-3 px-4 text-left">Jumlah</th>
+        <th class="py-3 px-4 text-left">Total Harga</th>
+        <th class="py-3 px-4 text-left">Metode Pembayaran</th> <!-- Tambahan -->
+        <th class="py-3 px-4 text-left">Status</th>
+        <th class="py-3 px-4 text-left">Tanggal</th>
+        <th class="py-3 px-4 text-left">Aksi</th>
+    </tr>
+</thead>
+<tbody>
+    <?php 
+    $no = 1;
+    while ($row = $result->fetch_assoc()) { ?>
+    <tr class="border-b">
+        <td class="py-3 px-4"> <?= $no ?> </td>
+        <td class="py-3 px-4"> <?= htmlspecialchars($row['user_name']) ?> </td>
+        <td class="py-3 px-4"> <?= htmlspecialchars($row['menu_name']) ?> </td>
+        <td class="py-3 px-4"> <?= $row['total_quantity'] ?> </td>
+        <td class="py-3 px-4"> Rp<?= number_format($row['total_price'], 0, ',', '.') ?> </td>
+        <td class="py-3 px-4">
+            <?php
+            $payment_method = htmlspecialchars($row['payment_method']);
+            $payment_logo = '';
+
+            // Menentukan logo berdasarkan metode pembayaran
+            if ($payment_method == 'Dana') {
+                $payment_logo = '../assets/images/icon_dana.png';
+            } elseif ($payment_method == 'E-Wallet') {
+                $payment_logo = '../assets/images/walet.png';
+            } elseif ($payment_method == 'COD') {
+                $payment_logo = '../assets/images/cod.png';
+            }
+
+            // Menampilkan logo jika ada
+            if (!empty($payment_logo)) {
+                echo "<img src='$payment_logo' alt='$payment_method' class='w-10 h-10 inline'>";
+            }
+            echo " $payment_method";
+            ?>
+        </td>
+        <td class="py-3 px-4"> <?= htmlspecialchars($row['status']) ?> </td>
+        <td class="py-3 px-4"> <?= $row['created_at'] ?> </td>
+        <td class="py-3 px-4">
+            <form method="POST" class="flex space-x-2">
+                <input type="hidden" name="transaction_id" value="<?= $row['id'] ?>">
+                <select name="status" class="border rounded px-2 py-1">
+                    <option value="pending" <?= $row['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
+                    <option value="processed" <?= $row['status'] == 'processed' ? 'selected' : '' ?>>Processed</option>
+                    <option value="completed" <?= $row['status'] == 'completed' ? 'selected' : '' ?>>Completed</option>
+                </select>
+                <button type="submit" name="update_status" class="bg-green-500 text-white px-3 py-1 rounded">Update</button>
+            </form>
+        </td>
+    </tr>
+    <?php 
+        $no++;
 } 
 ?>
                 </tbody>

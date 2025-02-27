@@ -61,9 +61,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Update session jika diperlukan
     $_SESSION['username'] = $name;
     
-    // Redirect ke halaman menu setelah update profil
-    header("Location: menu.php");
-    exit;
+    echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: 'Berhasil Ubah',
+                icon: 'success',
+                draggable: true
+            }).then(() => {
+                window.location.href = 'menu.php';
+            });
+        });
+    </script>";
 }
 ?>
 
@@ -74,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-100">
 

@@ -5,7 +5,7 @@ if (isset($_GET['id'])) {
     $menu_id = $_GET['id'];
 
     // Hapus transaksi terkait
-    $delete_transactions = $conn->prepare("DELETE FROM transactions WHERE menu_id = ?");
+    $delete_transactions = $conn->prepare("DELETE FROM transactions WHERE id = ?");
     $delete_transactions->bind_param("i", $menu_id);
     $delete_transactions->execute();
     $delete_transactions->close();

@@ -101,6 +101,17 @@ if ($result_transactions) {
                     </a>
                 </li>
                 <li>
+                    <a href="admin_chat.php"
+                        class="flex items-center p-2 gap-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"/>
+                        </svg> Chat User
+                    </a>
+                </li>
+
+                <li>
                     <a href="logout.php"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -122,52 +133,60 @@ if ($result_transactions) {
             </div>
 
             <div class="bg-white p-8 rounded-lg shadow-lg w-full">
-    <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">📊 Laporan Admin</h2>
-    
-    <div class="flex justify-between gap-6">
+                <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">📊 Laporan Admin</h2>
 
-        <!-- Card Total Users -->
-        <div class="flex-1 bg-blue-100 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 flex items-center">
-            <div class="bg-blue-500 text-white p-4 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 20c4.418 0 8-1.79 8-4V9c0-2.21-3.582-4-8-4S4 6.79 4 9v7c0 2.21 3.582 4 8 4z"></path>
-                    <circle cx="12" cy="9" r="3"></circle>
-                </svg>
-            </div>
-            <div class="ml-4">
-                <h3 class="text-xl font-semibold text-gray-700">Total Users</h3>
-                <p class="text-4xl text-blue-700 font-bold mt-1"><?php echo $total_users; ?></p>
-            </div>
-        </div>
+                <div class="flex justify-between gap-6">
 
-        <!-- Card Menu Items -->
-        <div class="flex-1 bg-green-100 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 flex items-center">
-            <div class="bg-green-500 text-white p-4 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
-            </div>
-            <div class="ml-4">
-                <h3 class="text-xl font-semibold text-gray-700">Menu Items</h3>
-                <p class="text-4xl text-green-700 font-bold mt-1"><?php echo $total_menu; ?></p>
-            </div>
-        </div>
+                    <!-- Card Total Users -->
+                    <div
+                        class="flex-1 bg-blue-100 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 flex items-center">
+                        <div class="bg-blue-500 text-white p-4 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M12 20c4.418 0 8-1.79 8-4V9c0-2.21-3.582-4-8-4S4 6.79 4 9v7c0 2.21 3.582 4 8 4z">
+                                </path>
+                                <circle cx="12" cy="9" r="3"></circle>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-xl font-semibold text-gray-700">Total Users</h3>
+                            <p class="text-4xl text-blue-700 font-bold mt-1"><?php echo $total_users; ?></p>
+                        </div>
+                    </div>
 
-        <!-- Card Total Transactions -->
-        <div class="flex-1 bg-yellow-100 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 flex items-center">
-            <div class="bg-yellow-500 text-white p-4 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2l3 7h7l-5.5 5 2.5 8-7-4-7 4 2.5-8L2 9h7z"></path>
-                </svg>
-            </div>
-            <div class="ml-4">
-                <h3 class="text-xl font-semibold text-gray-700">Total Transactions</h3>
-                <p class="text-4xl text-yellow-700 font-bold mt-1"><?php echo $total_transactions; ?></p>
-            </div>
-        </div>
+                    <!-- Card Menu Items -->
+                    <div
+                        class="flex-1 bg-green-100 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 flex items-center">
+                        <div class="bg-green-500 text-white p-4 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-xl font-semibold text-gray-700">Menu Items</h3>
+                            <p class="text-4xl text-green-700 font-bold mt-1"><?php echo $total_menu; ?></p>
+                        </div>
+                    </div>
 
-    </div>
-</div>
+                    <!-- Card Total Transactions -->
+                    <div
+                        class="flex-1 bg-yellow-100 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 flex items-center">
+                        <div class="bg-yellow-500 text-white p-4 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M12 2l3 7h7l-5.5 5 2.5 8-7-4-7 4 2.5-8L2 9h7z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-xl font-semibold text-gray-700">Total Transactions</h3>
+                            <p class="text-4xl text-yellow-700 font-bold mt-1"><?php echo $total_transactions; ?></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
 </body>
 
 </html>

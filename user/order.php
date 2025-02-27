@@ -18,9 +18,10 @@ $success = false;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $menu_id = $_POST['menu_id'];
     $quantity = $_POST['quantity'];
+    $payment_method = $_POST['payment_method'];
 
     // Validasi input
-    if (empty($menu_id) || empty($quantity) || $quantity <= 0) {
+    if (empty($menu_id) || empty($quantity) || $quantity <= 0 || empty($payment_method)) {
         die("Error: Data tidak valid!");
     }
 
@@ -46,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt_order = $conn->prepare("INSERT INTO orders (user_id, total_price, order_date, status) VALUES (?, ?, NOW(), 'pending')");
         $stmt_order->bind_param("id", $user_id, $total_price);
         $stmt_order->execute();
-        $order_id = $stmt_order->insert_id; // Ambil ID order yang baru dibuat
+        $order_id = $stmt_order->insert_id;
         $stmt_order->close();
 
         // Simpan ke tabel `order_details`
@@ -55,17 +56,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt_details->execute();
         $stmt_details->close();
 
-        // Simpan ke tabel `transactions`
-        $stmt_transaction = $conn->prepare("INSERT INTO transactions (user_id, order_id, total_price, status, created_at) VALUES (?, ?, ?, 'pending', NOW())");
-        $stmt_transaction->bind_param("iid", $user_id, $order_id, $total_price);
+        // Simpan ke tabel `transactions` dengan metode pembayaran
+        $stmt_transaction = $conn->prepare("INSERT INTO transactions (user_id, order_id, total_price, payment_method, status, created_at) VALUES (?, ?, ?, ?, 'pending', NOW())");
+        $stmt_transaction->bind_param("iids", $user_id, $order_id, $total_price, $payment_method);
         $stmt_transaction->execute();
         $stmt_transaction->close();
 
-        // Commit transaksi agar data benar-benar tersimpan
+        // Commit transaksi
         $conn->commit();
         $success = true;
     } catch (Exception $e) {
-        $conn->rollback(); // Batalkan semua perubahan jika terjadi kesalahan
+        $conn->rollback();
         echo "Gagal melakukan order: " . $e->getMessage();
     }
 }
@@ -110,6 +111,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div>
                 <label class="block text-sm font-medium text-gray-700">Jumlah:</label>
                 <input type="number" name="quantity" required class="w-full mt-1 p-2 border rounded-md">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Metode Pembayaran:</label>
+                <div class="flex space-x-2">
+                    <label class="flex items-center space-x-2">
+                        <input type="radio" name="payment_method" value="Dana" required>
+                        <img src="../assets/images/icon_dana.png" alt="Bank" class="w-10 h-10">
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="radio" name="payment_method" value="E-Wallet">
+                        <img src="../assets/images/walet.png" alt="E-Wallet" class="w-10 h-10">
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="radio" name="payment_method" value="COD">
+                        <img src="../assets/images/cod.png" alt="COD" class="w-10 h-10">
+                    </label>
+                </div>
             </div>
             <div class="flex justify-between">
                 <a href="menu.php" class="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400">Kembali</a>

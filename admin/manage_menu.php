@@ -71,7 +71,7 @@ $result = $conn->query($sql);
             </div>
             <h2 class="text-3xl font-bold mb-6 text-center">KANTIN IFSU BERKAH</h2>
             <ul class="space-y-4">
-                <li>
+            <li>
                     <a href="dashboard.php"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -116,6 +116,17 @@ $result = $conn->query($sql);
                     </a>
                 </li>
                 <li>
+                    <a href="admin_chat.php"
+                        class="flex items-center p-2 gap-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"/>
+                        </svg> Chat User
+                    </a>
+                </li>
+
+                <li>
                     <a href="logout.php"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -124,7 +135,8 @@ $result = $conn->query($sql);
                                 d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                         </svg>
                         Logout
-                    </a> </li>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- Main Content -->

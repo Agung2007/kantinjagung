@@ -3,7 +3,6 @@ session_start();
 
 // Cek apakah pengguna sudah login sebagai admin
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    // Jika belum login, arahkan ke halaman login
     header("Location: login.php");
     exit;
 }
@@ -37,11 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt = $conn->prepare($update_sql);
     $stmt->bind_param("ssi", $username, $role, $user_id);
     $stmt->execute();
-
-    header("Location: manage_users.php");  // Arahkan kembali ke halaman manage_users
+    
+    // Set session notifikasi
+    $_SESSION['update_success'] = true;
+    header("Location: edit_user.php?id=$user_id");
     exit;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit User</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-50">
     <div class="flex justify-center items-center min-h-screen">
@@ -72,5 +73,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </form>
         </div>
     </div>
+
+    <?php if (isset($_SESSION['update_success'])): ?>
+        <script>
+            Swal.fire({
+                title: 'Berhasil!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                window.location.href = 'manage_users.php';
+            });
+        </script>
+        <?php unset($_SESSION['update_success']); ?>
+    <?php endif; ?>
 </body>
 </html>

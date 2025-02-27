@@ -77,12 +77,6 @@ $result = $stmt->get_result();
                 <?php } ?>
             </tbody>
         </table>
-
-        <div class="mt-6 text-center">
-            <a href="order_history.php" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700">
-                Kembali ke Riwayat Pesanan
-            </a>
-        </div>
     </div>
 </body>
 </html>
