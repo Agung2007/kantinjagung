@@ -120,8 +120,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <img src="../assets/images/icon_dana.png" alt="Bank" class="w-10 h-10">
                     </label>
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="payment_method" value="E-Wallet">
-                        <img src="../assets/images/walet.png" alt="E-Wallet" class="w-10 h-10">
+                        <input type="radio" name="payment_method" value="Shope.pay">
+                        <img src="../assets/images/pay.png" alt="Shope.pay" class="w-10 h-10">
                     </label>
                     <label class="flex items-center space-x-2">
                         <input type="radio" name="payment_method" value="COD">

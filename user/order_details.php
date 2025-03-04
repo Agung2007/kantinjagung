@@ -42,41 +42,71 @@ $result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Details</title>
+    <title>Detail Pesanan</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
-    <div class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md mt-10">
-        <h2 class="text-3xl font-semibold text-center mb-6">Order Details</h2>
 
-        <div class="mb-6">
-            <p><strong>Total Price:</strong> $<?= number_format($order_info['total_price'], 2) ?></p>
-            <p><strong>Order Date:</strong> <?= htmlspecialchars($order_info['order_date']) ?></p>
-            <p><strong>Status:</strong> <?= ucfirst(htmlspecialchars($order_info['status'])) ?></p>
+    <div class="max-w-4xl mx-auto p-8 bg-white rounded-lg shadow-lg mt-12">
+        <h2 class="text-4xl font-bold text-center text-blue-700 uppercase tracking-widest mb-6">
+            Detail Pesanan
+        </h2>
+
+        <div class="mb-6 text-lg text-gray-700">
+            <p><strong>Total Harga:</strong> 
+                <span class="text-green-600 font-semibold">
+                    Rp <?= number_format($order_info['total_price'], 0, ',', '.') ?>
+                </span>
+            </p>
+            <p><strong>Tanggal Pesanan:</strong> <?= htmlspecialchars($order_info['order_date']) ?></p>
+            <p><strong>Status:</strong> 
+                <span class="px-3 py-1 rounded-full text-white 
+                    <?= match ($order_info['status']) {
+                        'pending' => 'bg-yellow-500',
+                        'processed' => 'bg-blue-500',
+                        'completed' => 'bg-green-500',
+                        'canceled' => 'bg-red-500',
+                        default => 'bg-gray-500',
+                    } ?>">
+                    <?= ucfirst(htmlspecialchars($order_info['status'])) ?>
+                </span>
+            </p>
         </div>
 
         <table class="w-full bg-gray-50 rounded-lg shadow-md">
-            <thead class="bg-blue-500 text-white">
+            <thead class="bg-blue-600 text-white">
                 <tr>
-                    <th class="px-6 py-3 text-left">Menu Item</th>
-                    <th class="px-6 py-3 text-center">Quantity</th>
-                    <th class="px-6 py-3 text-right">Price</th>
+                    <th class="px-6 py-3 text-left">Nama Menu</th>
+                    <th class="px-6 py-3 text-center">Jumlah</th>
+                    <th class="px-6 py-3 text-right">Harga</th>
                 </tr>
             </thead>
             <tbody>
                 <?php while ($row = $result->fetch_assoc()) { ?>
-                    <tr class="border-b">
+                    <tr class="border-b hover:bg-gray-100 transition">
                         <td class="px-6 py-3"><?= htmlspecialchars($row['name']) ?></td>
                         <td class="px-6 py-3 text-center"><?= htmlspecialchars($row['quantity']) ?></td>
-                        <td class="px-6 py-3 text-right">$<?= number_format($row['price'], 2) ?></td>
+                        <td class="px-6 py-3 text-right text-green-600 font-semibold">
+                            Rp <?= number_format($row['price'], 0, ',', '.') ?>
+                        </td>
                     </tr>
                 <?php } ?>
             </tbody>
         </table>
+
+        <!-- Tombol Download PDF -->
+        <div class="mt-6 text-center">
+            <a href="generate_pdf.php?id=<?= $order_id ?>" 
+                class="px-6 py-3 bg-green-500 text-white rounded-lg font-semibold shadow-md hover:bg-green-600 transition flex items-center justify-center gap-2">
+                📄 Download PDF
+            </a>
+        </div>
     </div>
+
 </body>
 </html>
+

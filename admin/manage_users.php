@@ -3,7 +3,6 @@ session_start();
 
 // Cek apakah pengguna sudah login sebagai admin
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    // Jika belum login, arahkan ke halaman login
     header("Location: login.php");
     exit;
 }
@@ -11,24 +10,27 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 // Menyertakan koneksi database
 include('db_connection.php');
 
-// Mengambil data pengguna
-$sql = "SELECT * FROM users";  // Ambil semua pengguna
+// Ambil data pengguna dari database
+$sql = "SELECT * FROM users";
 $result = $conn->query($sql);
 
-// Menangani penghapusan pengguna jika tombol hapus diklik
-if (isset($_GET['delete_id'])) {
+// Proses hapus data jika ada parameter delete_id
+if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id'])) {
     $delete_id = $_GET['delete_id'];
+
+    // Siapkan query untuk menghindari SQL Injection
     $delete_sql = "DELETE FROM users WHERE id = ?";
     $stmt = $conn->prepare($delete_sql);
     $stmt->bind_param("i", $delete_id);
-    $stmt->execute();
-    header("Location: manage_users.php");  // Redirect untuk menghindari resubmit
-    exit;
 
-    
+    if ($stmt->execute()) {
+        // Redirect setelah berhasil menghapus
+        header("Location: manage_users.php?deleted=success");
+        exit;
+    } else {
+        echo "<script>alert('Gagal menghapus user!');</script>";
+    }
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -39,6 +41,8 @@ if (isset($_GET['delete_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Users</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body class="bg-gray-50">
@@ -77,10 +81,10 @@ if (isset($_GET['delete_id'])) {
                 <li>
                     <a href="manage_menu.php"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-700 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
-                            <path fill-rule="evenodd"
-                                d="M2 2.75A.75.75 0 0 1 2.75 2h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 2.75Zm0 10.5a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1-.75-.75ZM2 6.25a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 6.25Zm0 3.5A.75.75 0 0 1 2.75 9h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 9.75Z"
-                                clip-rule="evenodd" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
                         </svg>
                         Kelola Menu
                     </a>
@@ -108,7 +112,7 @@ if (isset($_GET['delete_id'])) {
                 </li>
 
                 <li>
-                    <a href="logout.php"
+                <a href="javascript:void(0);" onclick="confirmLogout()"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
@@ -145,10 +149,16 @@ if (isset($_GET['delete_id'])) {
                                 <td class="py-3 px-4"><?php echo htmlspecialchars($user['username']); ?></td>
                                 <td class="py-3 px-4"><?php echo ucfirst(htmlspecialchars($user['role'])); ?></td>
                                 <td class="py-3 px-4 text-center">
-                                    <a href="edit_user.php?id=<?php echo $user['id']; ?>"
-                                        class="text-blue-500 hover:underline">Edit</a>
-                                    <a href="?delete_id=<?php echo $user['id']; ?>"
-                                        class="text-red-500 hover:underline ml-4">Delete</a>
+                                    <a href="edit_user.php?id=<?php echo $user['id']; ?>">
+                                        <button
+                                            class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600">Edit</button>
+                                    </a>
+                                     <button
+                                        class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 ml-2"
+                                        onclick="confirmDelete(<?php echo $user['id']; ?>)">
+                                        Delete
+                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                             <?php 
@@ -161,5 +171,58 @@ if (isset($_GET['delete_id'])) {
         </div>
     </div>
 </body>
+
+<script>
+function confirmDelete(userId) {
+    Swal.fire({
+        title: "Apakah yakin ingin menghapus?",
+        text: "Data tidak dapat dikembalikan setelah dihapus!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "hapus",
+        cancelButtonText: "Batal"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "manage_users.php?delete_id=" + userId;
+        }
+    });
+}
+
+// Cek apakah ada parameter deleted di URL dan tampilkan notifikasi
+document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('deleted')) {
+        Swal.fire({
+            title: "Berhasil!",
+            text: "Pengguna berhasil di dihapus.",
+            icon: "success",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK"
+        }).then(() => {
+            // Hapus parameter dari URL setelah ditampilkan
+            window.history.replaceState(null, null, window.location.pathname);
+        });
+    }
+});
+
+
+    function confirmLogout() {
+        Swal.fire({
+            title: "Apa kamu yakin?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, logout!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "logout.php"; // Redirect ke logout jika dikonfirmasi
+            }
+        });
+    }
+
+</script>
 
 </html>

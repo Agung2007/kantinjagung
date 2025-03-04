@@ -2,36 +2,32 @@
 session_start();
 include('db_connection.php');
 
-// Menangani proses pendaftaran
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Memastikan semua data dikirim
     if (!isset($_POST['username'], $_POST['email'], $_POST['password'], $_POST['confirm_password'])) {
-        echo "Please fill in all fields.";
+        $_SESSION['alert'] = ['type' => 'error', 'message' => 'Please fill in all fields.'];
+        header("Location: register.php");
         exit;
     }
 
-    // Mengambil data dari form
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
 
-    // Validasi email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "Invalid email format!";
+        $_SESSION['alert'] = ['type' => 'error', 'message' => 'Email Gagal'];
+        header("Location: register.php");
         exit;
     }
 
-    // Memeriksa apakah password dan konfirmasi password cocok
     if ($password !== $confirm_password) {
-        echo "Passwords do not match!";
+        $_SESSION['alert'] = ['type' => 'error', 'message' => 'Passwords Gagal'];
+        header("Location: register.php");
         exit;
     }
 
-    // Enkripsi password sebelum disimpan
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Memeriksa apakah username atau email sudah ada di database
     $sql = "SELECT * FROM users WHERE username = ? OR email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ss", $username, $email);
@@ -39,21 +35,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        echo "Username or Email is already taken!";
+        $_SESSION['alert'] = ['type' => 'error', 'message' => 'Username Atau Email sudah terpakai!'];
+        header("Location: register.php");
         exit;
     }
 
-    // Memasukkan data pengguna baru ke database
     $sql = "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, 'admin')";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sss", $username, $email, $hashed_password);
     
     if ($stmt->execute()) {
-        // Setelah berhasil, arahkan pengguna ke halaman login
-        header("Location: login.php");
+        $_SESSION['alert'] = ['type' => 'success', 'message' => 'Berhasil Daftar, Silahkan Login.'];
+        header("Location: register.php"); // Tetap di halaman register dulu
         exit;
     } else {
-        echo "Error: " . $stmt->error;
+        $_SESSION['alert'] = ['type' => 'error', 'message' => "Error: " . $stmt->error];
+        header("Location: register.php");
+        exit;
     }
 }
 ?>
@@ -64,11 +62,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+        <div class="flex justify-center mb-6">
+            <img src="../assets/images/ifsu.png" alt="Logo Admin" class="w-20 h-20">
+        </div>
+
         <h2 class="text-2xl font-bold text-center mb-6">Register Admin</h2>
+
+        <!-- Menampilkan alert dengan SweetAlert2 -->
+        <?php if (isset($_SESSION['alert'])) : ?>
+    <script>
+        Swal.fire({
+            icon: "<?php echo $_SESSION['alert']['type']; ?>",
+            title: "<?php echo $_SESSION['alert']['type'] === 'error' ? 'Oops...' : 'Success!'; ?>",
+            text: "<?php echo $_SESSION['alert']['message']; ?>",
+            <?php if ($_SESSION['alert']['type'] === 'success') : ?>
+                willClose: () => {
+                    window.location.href = "login.php"; // Redirect ke login setelah alert sukses ditutup
+                }
+            <?php endif; ?>
+        });
+    </script>
+    <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
+
         <form method="POST">
             <div class="mb-4">
                 <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
@@ -88,6 +109,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <button type="submit" class="w-full py-2 bg-blue-500 text-white rounded-lg">Register</button>
         </form>
+
+        <div class="text-center mt-4">
+            <p class="text-sm">Sudah punya akun? <a href="login.php" class="text-blue-500">Login di sini</a></p>
+        </div>
     </div>
 </body>
 </html>

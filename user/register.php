@@ -1,13 +1,13 @@
 <?php
 include('db_connection.php');
 
+$register_status = "";
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Mendapatkan data form pendaftaran
     $username = $_POST['username'];
     $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);  // Meng-hash password
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-    // Mengecek apakah username sudah digunakan
     $sql = "SELECT * FROM users WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
@@ -15,18 +15,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        echo "Username already taken!";
+        $register_status = "error|Username already taken!";
     } else {
-        // Menambahkan pengguna baru ke database
         $sql = "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, 'user')";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sss", $username, $email, $password);
         if ($stmt->execute()) {
-            echo "Registration successful!";
-            header("Location: login.php");  // Arahkan ke halaman login setelah registrasi
-            exit;
+            $register_status = "success|Registration successful!";
         } else {
-            echo "Error: " . $stmt->error;
+            $register_status = "error|Error: " . $stmt->error;
         }
     }
 }
@@ -39,10 +36,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Kantin</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        @keyframes wave {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(5deg);
+            }
+
+            50% {
+                transform: rotate(-5deg);
+            }
+
+            75% {
+                transform: rotate(5deg);
+            }
+        }
+
+        .wave {
+            animation: wave 1.5s infinite ease-in-out;
+        }
+    </style>
+
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 class="text-2xl font-bold text-center mb-6">Register</h2>
+        <div class="flex justify-center mb-6">
+        <img src="../assets/images/ifsu.png" alt="Logo Kantin" class="w-20 h-20 wave">
+        </div>
+        
+        <h2 class="text-2xl font-bold text-center mb-6">Daftar Pengguna</h2>
         <form method="POST">
             <div class="mb-4">
                 <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
@@ -60,5 +88,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
         <p class="mt-4 text-center">Sudah punya akun? <a href="login.php" class="text-blue-500">Login</a></p>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            <?php if (!empty($register_status)) { 
+                list($type, $message) = explode("|", $register_status);
+                echo "Swal.fire({ icon: '$type', title: '$message' }).then(() => { if ('$type' === 'success') window.location.href = 'login.php'; });";
+            } ?>
+        });
+    </script>
 </body>
 </html>

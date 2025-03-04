@@ -36,14 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_menu'])) {
         $stmt->bind_param("sis", $name, $price, $image); // "sis" → String, Integer, String
         $stmt->execute();
 
-        // Redirect ke halaman manage menu
-        header("Location: manage_menu.php");
-        exit;
+        // Set pesan sukses
+        $success_message = "Menu berhasil ditambahkan!";
     } else {
         echo "Gagal mengupload gambar.";
     }
-}
-// Mengambil daftar menu dari database
+}// Mengambil daftar menu dari database
 $sql = "SELECT * FROM menu";
 $result = $conn->query($sql);
 ?>
@@ -61,6 +59,19 @@ $result = $conn->query($sql);
 </head>
 
 <body class="bg-gray-50">
+    <?php if (!empty($success_message)) : ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                icon: "success",
+                title: "Sukses!",
+                text: "<?php echo $success_message; ?>",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            });
+        });
+    </script>
+    <?php endif; ?>
     <!-- Sidebar and Dashboard Container -->
     <div class="flex min-h-screen">
         <!-- Sidebar -->
@@ -71,7 +82,7 @@ $result = $conn->query($sql);
             </div>
             <h2 class="text-3xl font-bold mb-6 text-center">KANTIN IFSU BERKAH</h2>
             <ul class="space-y-4">
-            <li>
+                <li>
                     <a href="dashboard.php"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -96,10 +107,10 @@ $result = $conn->query($sql);
                 <li>
                     <a href="manage_menu.php"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-700 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
-                            <path fill-rule="evenodd"
-                                d="M2 2.75A.75.75 0 0 1 2.75 2h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 2.75Zm0 10.5a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1-.75-.75ZM2 6.25a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 6.25Zm0 3.5A.75.75 0 0 1 2.75 9h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 9.75Z"
-                                clip-rule="evenodd" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
                         </svg>
                         Kelola Menu
                     </a>
@@ -121,13 +132,13 @@ $result = $conn->query($sql);
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"/>
+                                d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
                         </svg> Chat User
                     </a>
                 </li>
 
                 <li>
-                    <a href="logout.php"
+                <a href="javascript:void(0);" onclick="confirmLogout()"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
@@ -164,16 +175,16 @@ $result = $conn->query($sql);
                 </div>
                 <div class="mt-6">
                     <button type="submit" name="add_menu"
-                        class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors">Add
+                        class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-500 transition-colors">Tambahkan
                         Menu</button>
                 </div>
             </form>
 
             <!-- Tabel Daftar Menu -->
-            <div class="overflow-x-auto bg-white p-6 rounded-lg shadow-md">
-                <table class="min-w-full text-sm text-left text-gray-700">
-                    <thead class="bg-gray-100">
-                        <tr>
+            <div class="overflow-x-auto">
+                    <table class="min-w-full table-auto bg-white border border-gray-200 rounded-lg shadow-lg">
+                        <thead class="bg-blue-500 text-white">
+                            <tr>
                             <th class="px-4 py-3">No</th>
                             <th class="px-4 py-3">Menu Name</th>
                             <th class="px-4 py-3">Price</th>
@@ -189,27 +200,48 @@ while ($row = $result->fetch_assoc()) {
     $image_path = !empty($row['image']) ? htmlspecialchars($row['image']) : 'assets/default.jpg';
 
     echo "<tr class='border-b'>
-        <td class='px-4 py-3 text-center'>{$no}</td>
-        <td class='px-4 py-3'>{$row['name']}</td>
-        <td class='px-4 py-3'>Rp " . number_format($row['price'], 0, ',', '.') . "</td>
-        <td class='px-4 py-3'>
-            <img src='../{$image_path}' alt='Menu Image' class='w-16 h-16 object-cover rounded-md border'>
-        </td>
-        <td class='px-4 py-3 text-center'>
-            <a href='edit_menu.php?id={$row['id']}' class='text-blue-600 hover:underline font-medium'>Edit</a> |
-            <a href='delete_menu.php?id={$row['id']}' class='text-red-600 hover:underline font-medium' onclick='return confirm(\"Apakah yakin ingin menghapus?\")'>Delete</a>
-        </td>
-    </tr>";
-
-    $no++;
+    <td class='px-4 py-3 text-center'>{$no}</td>
+    <td class='px-4 py-3'>{$row['name']}</td>
+    <td class='px-4 py-3'>Rp " . number_format($row['price'], 0, ',', '.') . "</td>
+    <td class='px-4 py-3'>
+        <img src='../{$image_path}' alt='Menu Image' class='w-16 h-16 object-cover rounded-md border'>
+    </td>
+    <td class='px-4 py-3 text-center'>
+        <a href='edit_menu.php?id={$row['id']}'>
+            <button class='px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600'>Edit</button>
+        </a>
+        <a href='delete_menu.php?id={$row['id']}' onclick='return confirm(\"Apakah yakin ingin menghapus?\")'>
+            <button class='px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600'>Delete</button>
+        </a>
+    </td>
+</tr>";
+$no++;
 }
-                        ?>
+                        ?>  
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    
 
 </body>
+<script>
+    function confirmLogout() {
+        Swal.fire({
+            title: "Apa kamu yakin?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, logout!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "logout.php"; // Redirect ke logout jika dikonfirmasi
+            }
+        });
+    }
+</script>
+
 
 </html>
