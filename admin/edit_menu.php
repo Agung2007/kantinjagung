@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
 
     // Periksa apakah ada gambar baru yang di-upload
     if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-        $target_dir = "images/";
+        $target_dir = "../images/";
         $target_file = $target_dir . basename($_FILES['image']['name']);
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
 
                     <div class="mb-6">
                         <h3 class="text-lg font-medium text-gray-700">Gambar Saat Ini:</h3>
-                        <img src="<?= htmlspecialchars($menu['image']) ?>" alt="Current Menu Image" onerror="this.src='images/default.jpg';">
+                        <img src="../<?php echo htmlspecialchars($menu['image']); ?>" alt="Menu Image" class="w-16 h-16 object-cover rounded-md border">
 
                     </div>
 

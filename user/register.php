@@ -15,13 +15,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $register_status = "error|Username already taken!";
+        $register_status = "error|Username Sudah Di Gunakan!";
     } else {
         $sql = "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, 'user')";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sss", $username, $email, $password);
         if ($stmt->execute()) {
-            $register_status = "success|Registration successful!";
+            $register_status = "success|Registrasi Berhasil";
         } else {
             $register_status = "error|Error: " . $stmt->error;
         }
@@ -80,10 +80,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                 <input type="email" id="email" name="email" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
             </div>
-            <div class="mb-6">
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <input type="password" id="password" name="password" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-            </div>
+            <div class="mb-6 relative">
+    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+    <div class="relative">
+        <input type="password" id="password" name="password" required
+            class="mt-1 block w-full p-2 border border-gray-300 rounded-md pr-10">
+        <button type="button" id="togglePassword" class="absolute inset-y-0 right-2 flex items-center">
+            <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 4.5c-7.5 0-9.75 7.5-9.75 7.5s2.25 7.5 9.75 7.5 9.75-7.5 9.75-7.5-2.25-7.5-9.75-7.5Zm0 10.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
+            </svg>
+            <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500 hidden">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 12s2.25 7.5 9.75 7.5S21.75 12 21.75 12s-2.25-7.5-9.75-7.5S3 12 3 12ZM9 9l6 6m0-6-6 6" />
+            </svg>
+        </button>
+    </div>
+</div>
             <button type="submit" class="w-full py-2 bg-blue-500 text-white rounded-lg">Register</button>
         </form>
         <p class="mt-4 text-center">Sudah punya akun? <a href="login.php" class="text-blue-500">Login</a></p>
@@ -96,6 +111,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo "Swal.fire({ icon: '$type', title: '$message' }).then(() => { if ('$type' === 'success') window.location.href = 'login.php'; });";
             } ?>
         });
+
+        const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+    const eyeOpen = document.getElementById("eyeOpen");
+    const eyeClosed = document.getElementById("eyeClosed");
+
+    togglePassword.addEventListener("click", function () {
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            eyeOpen.classList.add("hidden");
+            eyeClosed.classList.remove("hidden");
+        } else {
+            passwordInput.type = "password";
+            eyeOpen.classList.remove("hidden");
+            eyeClosed.classList.add("hidden");
+        }
+    });
+
     </script>
 </body>
 </html>

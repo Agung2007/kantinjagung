@@ -31,6 +31,7 @@ $result = $stmt->get_result();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Riwayat Pesanan</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function showOrderDetails(orderId) {
             fetch(`order_details.php?id=${orderId}`)
@@ -38,16 +39,43 @@ $result = $stmt->get_result();
                 .then(data => {
                     document.getElementById('order-detail-content').innerHTML = data;
                     document.getElementById('order-detail-modal').classList.remove('hidden');
-                    document.getElementById('order-detail-modal').classList.add('animate-fadeIn');
                 });
         }
 
+        function confirmCancel(orderId) {
+    Swal.fire({
+        title: "Yakin ingin membatalkan pesanan?",
+        text: "Pesanan yang dibatalkan tidak dapat dikembalikan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Ya, batalkan!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch("cancel_order.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "order_id=" + encodeURIComponent(orderId)
+            })
+            .then(response => response.json())
+            .then(data => {
+                Swal.fire({
+                    title: data.status === "success" ? "Berhasil" : "Gagal",
+                    text: data.message,
+                    icon: data.status === "success" ? "success" : "error"
+                }).then(() => {
+                    if (data.status === "success") {
+                        location.reload(); // Refresh halaman setelah pembatalan
+                    }
+                });
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    });
+}
         function closeModal() {
-            document.getElementById('order-detail-modal').classList.add('animate-fadeOut');
-            setTimeout(() => {
-                document.getElementById('order-detail-modal').classList.add('hidden');
-                document.getElementById('order-detail-modal').classList.remove('animate-fadeOut');
-            }, 300);
+            document.getElementById('order-detail-modal').classList.add('hidden');
         }
     </script>
 </head>
@@ -99,11 +127,17 @@ $result = $stmt->get_result();
                                 </span>
                             </td>
                             <td class="px-5 py-3 text-center"><?= htmlspecialchars($row['order_date']) ?></td>
-                            <td class="px-5 py-3 text-center">
+                            <td class="px-5 py-3 text-center flex justify-center space-x-2">
                                 <button onclick="showOrderDetails(<?= $row['id'] ?>)" 
                                     class="px-5 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 shadow-md transition">
                                     🔍 Lihat Detail
                                 </button>
+                                <?php if ($row['status'] == 'pending'): ?>
+    <button onclick="confirmCancel(<?= $row['id'] ?>)" 
+        class="px-5 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 shadow-md transition">
+        ❌ Batalkan
+    </button>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php } ?>
@@ -125,4 +159,3 @@ $result = $stmt->get_result();
     </div>
 </body>
 </html>
-

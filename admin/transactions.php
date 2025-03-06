@@ -13,9 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status'])) {
     $status = $_POST['status'];
 
     // Validasi input
-    if (!in_array($status, ['pending', 'processed', 'completed'])) {
-        die("Status tidak valid!");
-    }
+if (!in_array($status, ['pending', 'processed', 'completed', 'canceled'])) {
+    die("Status tidak valid!");
+}
 
     // Update status di database
     $stmt = $conn->prepare("UPDATE transactions SET status = ? WHERE id = ?");
@@ -57,6 +57,7 @@ JOIN users u ON t.user_id = u.id
 JOIN orders o ON t.order_id = o.id
 JOIN order_details od ON o.id = od.order_id
 JOIN menu m ON od.menu_id = m.id
+WHERE t.status IN ('pending', 'processed', 'completed', 'canceled') -- Tambahkan status canceled
 GROUP BY t.id, u.username, t.total_price, t.status, t.payment_method, o.order_date
 ORDER BY o.order_date DESC";
 $result = $conn->query($query);
@@ -207,14 +208,12 @@ $result = $conn->query($query);
                         <td class="py-3 px-4">
                             <form method="POST" class="flex space-x-2">
                                 <input type="hidden" name="transaction_id" value="<?= $row['id'] ?>">
-                                <select name="status" class="border rounded px-2 py-1">
-                                    <option value="pending" <?= $row['status'] == 'pending' ? 'selected' : '' ?>>Pending
-                                    </option>
-                                    <option value="processed" <?= $row['status'] == 'processed' ? 'selected' : '' ?>>
-                                        Processed</option>
-                                    <option value="completed" <?= $row['status'] == 'completed' ? 'selected' : '' ?>>
-                                        Completed</option>
-                                </select>
+<select name="status" class="border rounded px-2 py-1" <?= $row['status'] == 'canceled' ? 'disabled' : '' ?>>
+    <option value="pending" <?= $row['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
+    <option value="processed" <?= $row['status'] == 'processed' ? 'selected' : '' ?>>Processed</option>
+    <option value="completed" <?= $row['status'] == 'completed' ? 'selected' : '' ?>>Completed</option>
+    <option value="canceled" <?= $row['status'] == 'canceled' ? 'selected' : '' ?>>Canceled</option>
+</select>
                                 <button type="submit" name="update_status"
                                     class="bg-green-500 text-white px-3 py-1 rounded">Update</button>
                             </form>

@@ -182,45 +182,46 @@ $result = $conn->query($sql);
 
             <!-- Tabel Daftar Menu -->
             <div class="overflow-x-auto">
-                    <table class="min-w-full table-auto bg-white border border-gray-200 rounded-lg shadow-lg">
-                        <thead class="bg-blue-500 text-white">
-                            <tr>
-                            <th class="px-4 py-3">No</th>
-                            <th class="px-4 py-3">Menu Name</th>
-                            <th class="px-4 py-3">Price</th>
-                            <th class="px-4 py-3">Image</th>
-                            <th class="px-4 py-3 text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-$no = 1;
-while ($row = $result->fetch_assoc()) {
-    // Pastikan path gambar benar (gunakan htmlspecialchars untuk keamanan)
-    $image_path = !empty($row['image']) ? htmlspecialchars($row['image']) : 'assets/default.jpg';
-
-    echo "<tr class='border-b'>
-    <td class='px-4 py-3 text-center'>{$no}</td>
-    <td class='px-4 py-3'>{$row['name']}</td>
-    <td class='px-4 py-3'>Rp " . number_format($row['price'], 0, ',', '.') . "</td>
-    <td class='px-4 py-3'>
-        <img src='../{$image_path}' alt='Menu Image' class='w-16 h-16 object-cover rounded-md border'>
-    </td>
-    <td class='px-4 py-3 text-center'>
-        <a href='edit_menu.php?id={$row['id']}'>
-            <button class='px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600'>Edit</button>
-        </a>
-        <a href='delete_menu.php?id={$row['id']}' onclick='return confirm(\"Apakah yakin ingin menghapus?\")'>
-            <button class='px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600'>Delete</button>
-        </a>
-    </td>
-</tr>";
-$no++;
-}
-                        ?>  
-                    </tbody>
-                </table>
-            </div>
+    <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+        <thead class="bg-blue-500 text-white">
+            <tr>
+                <th class="px-6 py-3 text-center">No</th>
+                <th class="px-6 py-3 text-left">Menu Name</th>
+                <th class="px-6 py-3 text-center">Price</th>
+                <th class="px-6 py-3 text-center">Image</th>
+                <th class="px-6 py-3 text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $no = 1;
+            while ($row = $result->fetch_assoc()) {
+                $image_path = !empty($row['image']) ? htmlspecialchars($row['image']) : 'assets/default.jpg';
+            ?>
+                <tr class="border-b hover:bg-gray-100">
+                    <td class="px-6 py-4 text-center"><?= $no ?></td>
+                    <td class="px-6 py-4"><?= htmlspecialchars($row['name']) ?></td>
+                    <td class="px-6 py-4 text-center">Rp <?= number_format($row['price'], 0, ',', '.') ?></td>
+                    <td class="px-6 py-4 flex justify-center">
+                        <img src="../<?= $image_path ?>" alt="Menu Image" class="w-16 h-16 object-cover rounded-md border">
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <a href="edit_menu.php?id=<?= $row['id'] ?>">
+                            <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200">Edit</button>
+                        </a>
+                        <button onclick="confirmDelete(<?= $row['id'] ?>)" 
+                            class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200 ml-2">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            <?php
+                $no++;
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
         </div>
     </div>
     
@@ -241,7 +242,60 @@ $no++;
             }
         });
     }
+
+    
+    function confirmDelete(menuId) {
+        Swal.fire({
+            title: "Apakah yakin ingin menghapus menu ini?",
+            text: "Data yang dihapus tidak bisa dikembalikan!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Batal"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `delete_menu.php?id=${menuId}`;
+            }
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const successMessage = urlParams.get("success");
+        const errorMessage = urlParams.get("error");
+
+        if (successMessage) {
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil!",
+                text: "Menu berhasil dihapus.",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            }).then(() => {
+                window.location.href = "manage_menu.php"; // Hapus parameter dari URL
+            });
+        }
+
+        if (errorMessage) {
+            Swal.fire({
+                icon: "error",
+                title: "Gagal!",
+                text: "Menu gagal dihapus.",
+                confirmButtonColor: "#d33",
+                confirmButtonText: "OK"
+            }).then(() => {
+                window.location.href = "manage_menu.php"; // Hapus parameter dari URL
+            });
+        }
+    });
+
+    
+
 </script>
+
+
 
 
 </html>

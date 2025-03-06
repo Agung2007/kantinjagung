@@ -65,7 +65,7 @@ $user = $user_result->fetch_assoc();
 </head>
 
 <body>
-<body class="relative min-h-screen" style="background: url('../assets/images/home.kantin.png') no-repeat center center/cover;">
+<body class="relative min-h-screen">
 
 
 <!-- Navbar -->

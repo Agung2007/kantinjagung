@@ -30,10 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['user_id'] = $user['id'];
                 $login_status = "success|Login Berhasil!";
             } else {
-                $login_status = "error|Invalid password!";
+                $login_status = "error|Password Salah!";
             }
         } else {
-            $login_status = "error|User not found!";
+            $login_status = "error|User tidak di temukan!";
         }
     }
 }
@@ -70,20 +70,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <p class="text-center text-gray-500 mb-6">Masuk untuk melanjutkan</p>
 
         <form method="POST">
-            <div class="mb-4">
-                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                <input type="text" id="username" name="username" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none">
-            </div>
-            <div class="mb-6">
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <input type="password" id="password" name="password" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none">
-            </div>
-            <button type="submit" class="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200">Login</button>
-        </form>
+    <!-- Input Username -->
+    <div class="mb-4">
+        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+        <input type="text" id="username" name="username" required
+            class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none">
+    </div>
 
-        <p class="mt-4 text-center text-gray-600">Belum punya akun? 
-            <a href="register.php" class="text-blue-500 hover:underline">Daftar Dulu</a>
-        </p>
+    <!-- Input Password dengan Toggle -->
+    <div class="mb-6 relative">
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <div class="relative">
+            <input type="password" id="password" name="password" required
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none pr-10">
+            <button type="button" id="togglePassword" class="absolute inset-y-0 right-2 flex items-center">
+                <!-- Icon Mata Terbuka -->
+                <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 4.5c-7.5 0-9.75 7.5-9.75 7.5s2.25 7.5 9.75 7.5 9.75-7.5 9.75-7.5-2.25-7.5-9.75-7.5Zm0 10.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
+                </svg>
+                <!-- Icon Mata Tertutup (Hidden Default) -->
+                <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500 hidden">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 12s2.25 7.5 9.75 7.5S21.75 12 21.75 12s-2.25-7.5-9.75-7.5S3 12 3 12ZM9 9l6 6m0-6-6 6" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Tombol Login -->
+    <button type="submit"
+        class="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200">
+        Login
+    </button>
+</form>
+
+<!-- Link ke Register -->
+<p class="mt-4 text-center text-gray-600">
+    Belum punya akun? 
+    <a href="register.php" class="text-blue-500 hover:underline">Daftar dulu</a>
+</p>
     </div>
 
     <script>
@@ -93,6 +121,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo "Swal.fire({ icon: '$type', title: '$message' }).then(() => { if ('$type' === 'success') window.location.href = 'menu.php'; });";
             } ?>
         });
+
+        const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+    const eyeOpen = document.getElementById("eyeOpen");
+    const eyeClosed = document.getElementById("eyeClosed");
+
+    togglePassword.addEventListener("click", () => {
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            eyeOpen.classList.add("hidden");
+            eyeClosed.classList.remove("hidden");
+        } else {
+            passwordInput.type = "password";
+            eyeOpen.classList.remove("hidden");
+            eyeClosed.classList.add("hidden");
+        }
+    });
+
     </script>
 </body>
 </html>
