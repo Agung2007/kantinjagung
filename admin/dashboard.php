@@ -50,7 +50,7 @@ if ($result_transactions) {
     <!-- Sidebar and Dashboard Container -->
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <div class="w-64 bg-blue-900 text-white p-6">
+        <div class="w-64 bg-blue-900 text-white p-6 fixed h-screen">
             <!-- Logo Kantin -->
             <div class="flex items-center justify-center mb-6">
                 <img src="../assets/images/ifsu.png" alt="Kantin Logo" class="w-24 h-24 object-cover rounded-full">
@@ -127,7 +127,7 @@ if ($result_transactions) {
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1 p-10">
+        <div class="flex-1 p-8 ml-64">
             <div class="bg-white p-6 rounded-lg shadow-xl mb-8">
                 <h2 class="text-3xl font-semibold text-gray-700 mb-4">Dashboard Admin</h2>
                 <p class="text-lg text-gray-500">Selamat datang di dashboard admin.</p>
@@ -188,11 +188,6 @@ if ($result_transactions) {
 
                 </div>
             </div>
-            <!-- Footer -->
-            <footer class="fixed bottom-0 left-0 w-full bg-transparent text-gray-700 text-center p-4">
-                <p class="text-sm">© 2025 Agung Ganteng. Kantin Berkah.</p>
-            </footer>
-
 </body>
 
 </html>

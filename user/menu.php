@@ -65,13 +65,15 @@ $user = $user_result->fetch_assoc();
 </head>
 
 <body>
+<body class="relative min-h-screen" style="background: url('../assets/images/home.kantin.png') no-repeat center center/cover;">
+
 
 <!-- Navbar -->
 <nav class="bg-gradient-to-r from-blue-900 to-blue-600 p-5 shadow-lg font-semibold fixed w-full top-0 z-50">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
         <div class="flex items-center space-x-4">
             <img src="../assets/images/ifsu.png" alt="Logo Kantin" class="w-16 h-16 rounded-full border-2 border-white">
-            <h1 class="text-3xl font-extrabold tracking-wide text-blue-300">
+            <h1 class="text-3xl font-extrabold tracking-wide text-yellow-300">
                 Kantin IFSU BERKAH
             </h1>
         </div>
@@ -108,14 +110,14 @@ $user = $user_result->fetch_assoc();
 </nav>
 
 <!-- Main Content -->
-<div class="max-w-7xl mx-auto p-6 mt-24 bg-white rounded-lg shadow-lg py-10">
+<div class="max-w-7xl mx-auto p-6 mt-24 bg-white/50 backdrop-blur-md rounded-lg shadow-lg py-10">
     <h2 class="text-4xl font-extrabold text-center mb-12 uppercase tracking-widest text-blue-700 animate-pulse">
         Menu Kantin
     </h2>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         <?php while ($menu = $result->fetch_assoc()): ?>
-        <div class="relative bg-gradient-to-br from-blue-100 to-white border border-gray-200 rounded-xl shadow-lg overflow-hidden transform transition duration-500 hover:scale-105 hover:shadow-2xl group">
+        <div class="relative bg-white/50 border border-gray-200 rounded-xl shadow-lg overflow-hidden transform transition duration-500 hover:scale-105 hover:shadow-2xl group backdrop-blur-lg">
             <!-- Bagian Depan (Gambar) -->
             <div class="relative w-full h-56 overflow-hidden rounded-t-xl">
                 <img src="../<?= !empty($menu['image']) ? htmlspecialchars($menu['image']) : 'default.jpg' ?>"

@@ -49,7 +49,7 @@ if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id'])) {
     <!-- Sidebar and Dashboard Container -->
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <div class="w-64 bg-blue-900 text-white p-6">
+        <div class="w-64 bg-blue-900 text-white p-6 fixed h-screen">
             <!-- Logo Kantin -->
             <div class="flex items-center justify-center mb-6">
                 <img src="../assets/images/ifsu.png" alt="Kantin Logo" class="w-24 h-24 object-cover rounded-full">
@@ -125,7 +125,7 @@ if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id'])) {
             </ul>
         </div>
         <!-- Main Content -->
-        <div class="flex-1 p-10">
+        <div class="flex-1 p-8 ml-64">
             <div class="bg-white p-6 rounded-lg shadow-xl mb-8">
                 <h2 class="text-3xl font-semibold text-gray-700 mb-4">Kelola Admin dan User</h2>
 

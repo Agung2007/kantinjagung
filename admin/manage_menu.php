@@ -75,8 +75,8 @@ $result = $conn->query($sql);
     <!-- Sidebar and Dashboard Container -->
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <div class="w-64 bg-blue-900 text-white p-6">
-            <!-- Logo Kantin -->
+        <div class="w-64 bg-blue-900 text-white p-6 fixed h-screen">
+        <!-- Logo Kantin -->
             <div class="flex items-center justify-center mb-6">
                 <img src="../assets/images/ifsu.png" alt="Kantin Logo" class="w-24 h-24 object-cover rounded-full">
             </div>
@@ -151,8 +151,8 @@ $result = $conn->query($sql);
             </ul>
         </div>
         <!-- Main Content -->
-        <div class="flex-1 p-8">
-            <h2 class="text-3xl font-semibold text-gray-700 mb-6">Manage Menu</h2>
+        <div class="flex-1 p-8 ml-64">
+        <h2 class="text-3xl font-semibold text-gray-700 mb-6">Manage Menu</h2>
 
             <!-- Form untuk menambah menu baru -->
             <form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md mb-8">

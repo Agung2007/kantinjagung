@@ -49,7 +49,7 @@ $pdf->SetMargins(10, 10, 10);
 $pdf->AddPage();
 
 // Judul
-$pdf->SetFont('helvetica', 'B', 16);
+$pdf->SetFont('helvetica', 'B', 16);  
 $pdf->Cell(0, 10, 'Invoice Pesanan', 0, 1, 'C');
 
 // Info pesanan

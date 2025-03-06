@@ -86,7 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 Swal.fire({
                     title: "Order Berhasil!",
                     icon: "success",
-                    draggable: true
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "OK"
                 }).then(() => {
                     window.location = 'menu.php';
                 });
@@ -94,46 +95,66 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         });
     </script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-        <h2 class="text-xl font-bold mb-4 text-center">Order Menu</h2>
-        <form method="POST" class="space-y-4">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen" 
+    style="background: url('../assets/images/order.kantin.png') no-repeat center center/cover;">
+
+    <div class="bg-white/90 backdrop-blur-md p-8 rounded-xl shadow-lg w-full max-w-lg">
+        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Order Menu</h2>
+        
+        <form method="POST" class="space-y-5">
+            <!-- Pilih Menu -->
             <div>
                 <label class="block text-sm font-medium text-gray-700">Pilih Menu:</label>
-                <select name="menu_id" required class="w-full mt-1 p-2 border rounded-md">
+                <select name="menu_id" required 
+                    class="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
                     <?php while ($menu = $menu_result->fetch_assoc()) { ?>
                         <option value="<?= $menu['id'] ?>">
-                            <?= $menu['name'] ?> - Rp<?= number_format($menu['price'], 0, ',', '.') ?>
+                            <?= htmlspecialchars($menu['name']) ?> - Rp<?= number_format($menu['price'], 0, ',', '.') ?>
                         </option>
                     <?php } ?>
                 </select>
             </div>
+
+            <!-- Jumlah -->
             <div>
                 <label class="block text-sm font-medium text-gray-700">Jumlah:</label>
-                <input type="number" name="quantity" required class="w-full mt-1 p-2 border rounded-md">
+                <input type="number" name="quantity" required min="1" value="1"
+                    class="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
             </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Metode Pembayaran:</label>
-                <div class="flex space-x-2">
-                    <label class="flex items-center space-x-2">
-                        <input type="radio" name="payment_method" value="Dana" required>
-                        <img src="../assets/images/icon_dana.png" alt="Bank" class="w-10 h-10">
-                    </label>
-                    <label class="flex items-center space-x-2">
-                        <input type="radio" name="payment_method" value="Shope.pay">
-                        <img src="../assets/images/pay.png" alt="Shope.pay" class="w-10 h-10">
-                    </label>
-                    <label class="flex items-center space-x-2">
-                        <input type="radio" name="payment_method" value="COD">
-                        <img src="../assets/images/cod.png" alt="COD" class="w-10 h-10">
-                    </label>
-                </div>
-            </div>
-            <div class="flex justify-between">
-                <a href="menu.php" class="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400">Kembali</a>
-                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Pesan</button>
+
+            <!-- Metode Pembayaran -->
+            <div class="grid grid-cols-3 gap-4">
+    <label class="flex flex-col items-center cursor-pointer border-2 border-gray-300 rounded-lg p-2 transition-all peer-checked:border-blue-500">
+        <input type="radio" name="payment_method" value="Dana" required class="hidden peer">
+        <img src="../assets/images/icon_dana.png" alt="Dana" class="w-12 h-12 transition-transform peer-checked:scale-110">
+        <span class="text-sm text-gray-700 mt-1 peer-checked:text-blue-500">Dana</span>
+    </label>
+    
+    <label class="flex flex-col items-center cursor-pointer border-2 border-gray-300 rounded-lg p-2 transition-all peer-checked:border-blue-500">
+        <input type="radio" name="payment_method" value="ShopeePay" class="hidden peer">
+        <img src="../assets/images/pay.png" alt="ShopeePay" class="w-12 h-12 transition-transform peer-checked:scale-110">
+        <span class="text-sm text-gray-700 mt-1 peer-checked:text-blue-500">ShopeePay</span>
+    </label>
+    
+    <label class="flex flex-col items-center cursor-pointer border-2 border-gray-300 rounded-lg p-2 transition-all peer-checked:border-blue-500">
+        <input type="radio" name="payment_method" value="COD" class="hidden peer">
+        <img src="../assets/images/cod.png" alt="COD" class="w-12 h-12 transition-transform peer-checked:scale-110">
+        <span class="text-sm text-gray-700 mt-1 peer-checked:text-blue-500">COD</span>
+    </label>
+</div>
+
+            <!-- Tombol -->
+            <div class="flex justify-between items-center">
+                <a href="menu.php" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-all">
+                    Kembali
+                </a>
+                <button type="submit" 
+                    class="px-6 py-2 bg-blue-500 text-white rounded-md font-semibold hover:bg-blue-600 transition-all">
+                    Pesan
+                </button>
             </div>
         </form>
     </div>
+
 </body>
 </html>

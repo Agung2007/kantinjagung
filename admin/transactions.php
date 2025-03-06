@@ -79,7 +79,7 @@ $result = $conn->query($query);
     <!-- Sidebar and Dashboard Container -->
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <div class="w-64 bg-blue-900 text-white p-6">
+        <div class="w-64 bg-blue-900 text-white p-6 fixed h-screen">
             <!-- Logo Kantin -->
             <div class="flex items-center justify-center mb-6">
                 <img src="../assets/images/ifsu.png" alt="Kantin Logo" class="w-24 h-24 object-cover rounded-full">
@@ -155,7 +155,7 @@ $result = $conn->query($query);
             </ul>
         </div>
         <!-- Main Content -->
-        <div class="flex-1 p-8">
+        <div class="flex-1 p-8 ml-64">
             <h2 class="text-3xl font-semibold text-gray-700 mb-6">Transaksi</h2>
             <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
                 <thead class="bg-blue-600 text-white">

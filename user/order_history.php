@@ -119,7 +119,7 @@ $result = $stmt->get_result();
             <div id="order-detail-content" class="text-gray-700"></div>
             <button onclick="closeModal()" 
                 class="mt-4 px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition">
-                ❌ Tutup
+                 Tutup
             </button>
         </div>
     </div>
