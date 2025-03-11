@@ -30,6 +30,24 @@ $result_transactions = $conn->query("SELECT COUNT(*) AS total_transactions FROM 
 if ($result_transactions) {
     $total_transactions = $result_transactions->fetch_assoc()['total_transactions'];
 }
+
+$query_profit = "SELECT SUM(total_price) AS total_revenue, SUM(profit) AS total_profit FROM transactions";
+$result_profit = $conn->query($query_profit);
+$data_profit = $result_profit->fetch_assoc();
+
+$total_revenue = $data_profit['total_revenue'] ?? 0;
+$total_profit = $data_profit['total_profit'] ?? 0;
+
+$start_date = $_GET['start_date'] ?? date('Y-m-01');
+$end_date = $_GET['end_date'] ?? date('Y-m-t');
+
+$query_profit = "SELECT SUM(total_price) AS total_revenue, SUM(profit) AS total_profit 
+                 FROM transactions 
+                 WHERE transaction_date BETWEEN '$start_date' AND '$end_date'";
+
+$result_profit = $conn->query($query_profit);
+$data_profit = $result_profit->fetch_assoc();
+
 ?>
 
 
@@ -42,6 +60,7 @@ if ($result_transactions) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <link rel="shortcut icon" href="../assets/images/images.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -101,17 +120,6 @@ if ($result_transactions) {
                         Transaksi
                     </a>
                 </li>
-                <li>
-                    <a href="admin_chat.php"
-                        class="flex items-center p-2 gap-3 rounded-lg hover:bg-blue-700 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
-                        </svg> Chat User
-                    </a>
-                </li>
-
                 <li>
                     <a href="javascript:void(0);" onclick="confirmLogout()"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-700 transition-colors">
@@ -185,6 +193,37 @@ if ($result_transactions) {
                             <p class="text-4xl text-yellow-700 font-bold mt-1"><?php echo $total_transactions; ?></p>
                         </div>
                     </div>
+
+                    <div class="flex-1 bg-purple-100 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 flex items-center">
+    <div class="bg-purple-500 text-white p-4 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h11M9 21v-9m5 9V9m-5 4h7m4 0h2m-2-4h2m-2 8h2"/>
+        </svg>
+    </div>
+    <div class="ml-4">
+        <h3 class="text-xl font-semibold text-gray-700">Total Pendapatan</h3>
+        <p class="text-4xl text-purple-700 font-bold mt-1">Rp<?php echo number_format($total_revenue, 0, ',', '.'); ?></p>
+    </div>
+</div>
+
+<div class="flex-1 bg-red-100 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 flex items-center">
+    <div class="bg-red-500 text-white p-4 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h11M9 21v-9m5 9V9m-5 4h7m4 0h2m-2-4h2m-2 8h2"/>
+        </svg>
+    </div>
+    <div class="ml-4">
+        <h3 class="text-xl font-semibold text-gray-700">Total Keuntungan</h3>
+        <p class="text-4xl text-red-700 font-bold mt-1">Rp<?php echo number_format($total_profit, 0, ',', '.'); ?></p>
+        <form method="GET" class="flex gap-4 mb-6">
+    <input type="date" name="start_date" value="<?php echo $start_date; ?>" class="border p-2 rounded">
+    <input type="date" name="end_date" value="<?php echo $end_date; ?>" class="border p-2 rounded">
+    <button type="submit" class="bg-blue-500 text-white p-2 rounded">Filter</button>
+</form>
+
+    </div>
+</div>
+
 
                 </div>
             </div>

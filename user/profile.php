@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     echo "<script>
         document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
-                title: 'Berhasil Ubah',
+                title: 'Berhasil',
                 icon: 'success',
                 draggable: true
             }).then(() => {
@@ -81,17 +81,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
+    <link rel="shortcut icon" href="../assets/images/images.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 relative"
+style="background: url('../assets/images/new.jpg') no-repeat center center/cover;">
 
-    <div class="container mx-auto p-8">
-        <h2 class="text-3xl font-semibold text-center mb-6">Your Profile</h2>
+    <div class="container mx-auto p-8 relative">
+        <!-- Tombol Kembali -->
+        <a href="menu.php" class="absolute top-4 left-4 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-full p-2">
+            ✖
+        </a>
+
+        <h2 class="text-3xl font-semibold text-center mb-6">Edit Profil</h2>
 
         <form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md">
             <div class="mb-4">
-                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                <label for="name" class="block text-sm font-medium text-gray-700">Nama</label>
                 <input type="text" name="username" id="username" value="<?= htmlspecialchars($user['username']) ?>" class="w-full p-3 border border-gray-300 rounded-md" required>
             </div>
 
@@ -101,14 +108,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <div class="mb-4">
-                <label for="profile_picture" class="block text-sm font-medium text-gray-700">Profile Picture</label>
+                <label for="profile_picture" class="block text-sm font-medium text-gray-700">Foto Profil</label>
                 <input type="file" name="profile_picture" id="profile_picture" class="w-full p-3 border border-gray-300 rounded-md">
                 <?php if ($user['profile_picture']) { ?>
                     <img src="<?= htmlspecialchars($user['profile_picture']) ?>" alt="Profile Picture" class="w-24 h-24 mt-4 rounded-full object-cover">
                 <?php } ?>
             </div>
 
-            <button type="submit" class="w-full py-2 bg-blue-500 text-white rounded-lg">Update Profile</button>
+            <button type="submit" class="w-full py-2 bg-blue-500 text-white rounded-lg">Simpan Profil</button>
         </form>
     </div>
 

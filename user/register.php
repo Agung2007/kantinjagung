@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Kantin</title>
+    <link rel="shortcut icon" href="../assets/images/images.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -64,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </style>
 
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen" style="background: url('../assets/images/kantin.png') no-repeat center center/cover;">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen" style="background: url('../assets/images/new,jpg') no-repeat center center/cover;">
     <div class="bg-white p-8 rounded-lg shadow-lg w-96">
         <div class="flex justify-center mb-6">
         <img src="../assets/images/ifsu.png" alt="Logo Kantin" class="w-20 h-20 wave">

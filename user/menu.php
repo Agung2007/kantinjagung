@@ -30,6 +30,8 @@ $user = $user_result->fetch_assoc();
     <title>Menu Kantin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="shortcut icon" href="../assets/images/images.png">
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
@@ -68,49 +70,55 @@ $user = $user_result->fetch_assoc();
 <body class="relative min-h-screen">
 
 
-<!-- Navbar -->
-<nav class="bg-gradient-to-r from-blue-900 to-blue-600 p-5 shadow-lg font-semibold fixed w-full top-0 z-50">
+<nav class="relative bg-gradient-to-r from-blue-900 to-blue-600 p-4 shadow-lg fixed w-full top-0 z-50">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <!-- Logo dan Judul -->
         <div class="flex items-center space-x-4">
-            <img src="../assets/images/ifsu.png" alt="Logo Kantin" class="w-16 h-16 rounded-full border-2 border-white">
-            <h1 class="text-3xl font-extrabold tracking-wide text-yellow-300">
-                Kantin IFSU BERKAH
+            <img src="../assets/images/ifsu.png" alt="Logo Kantin" class="w-12 h-12 rounded-full border-2 border-white">
+            <h1 class="text-lg md:text-2xl font-extrabold tracking-wide text-yellow-300">
+                KANTIN IFSU BERKAH
             </h1>
         </div>
+
+        <!-- Profil + Menu (Harus di Flex agar ke Kanan) -->
         <div class="flex items-center space-x-6">
+            <!-- **Profil (Tetap Muncul di Mobile & Desktop)** -->
             <?php if ($user): ?>
-            <a href="order_history.php" class="flex items-center space-x-2 text-white hover:text-blue-300 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-                </svg>
-                <span>Order History</span>
-            </a>
-            <a href="chat.php" class="flex items-center space-x-2 text-white hover:text-blue-300 transition bg-blue-700 px-4 py-2 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.068.157 2.148.279 3.238.364.466.037.893.281 1.153.671L12 21l2.652-3.978c.26-.39.687-.634 1.153-.67 1.09-.086 2.17-.208 3.238-.365 1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
-                </svg>
-                <span>Chat Admin</span>
-            </a>
-            <a href="profile.php" class="flex items-center space-x-2 text-white hover:text-blue-300 transition">
+            <a href="profile.php" class="flex items-center space-x-2">
                 <img src="<?= htmlspecialchars($user['profile_picture'] ?? '../assets/images/avatar.jpeg') ?>"
                     alt="Profile" class="h-10 w-10 rounded-full border-2 border-white object-cover">
-                <span><?= htmlspecialchars($user['username']) ?></span>
+                <span class="text-white font-semibold"><?= htmlspecialchars($user['username']) ?></span>
             </a>
             <?php endif; ?>
-            <a href="javascript:void(0);" onclick="confirmLogout()"
-                class="px-5 py-2 bg-red-600 rounded-full hover:bg-red-700 transition font-bold text-white">
-                Logout
-            </a>
+
+            <!-- Menu Navbar (Desktop) -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="order_history.php" class="text-white hover:text-yellow-300 transition">Riwayat Pemesanan</a>
+
+                <a href="javascript:void(0);" onclick="confirmLogout()" 
+                class="px-4 py-2 bg-red-600 rounded-full hover:bg-red-700 transition font-bold text-white">
+                    Logout
+                </a>
+            </div>
+
+            <!-- Tombol Menu Mobile -->
+            <button id="menu-toggle" class="md:hidden text-white text-2xl focus:outline-none">
+                ☰
+            </button>
         </div>
     </div>
-</nav>
 
+    <!-- **DROPDOWN MENU MOBILE (WARNA PUTIH, POSISI DI BAWAH)** -->
+    <div id="mobile-menu" 
+        class="hidden absolute right-4 top-20 w-48 bg-white text-black border border-gray-300 shadow-lg rounded-lg z-50">
+        <a href="order_history.php" class="block px-4 py-2 hover:bg-gray-100 transition">Riwayat Pesanan</a>
+
+        <a href="javascript:void(0);" onclick="confirmLogout()" 
+        class="block px-4 py-2 hover:bg-gray-100 transition">Logout</a>
+    </div>
+</nav>
 <!-- Main Content -->
-<div class="max-w-7xl mx-auto p-6 mt-24 bg-white/50 backdrop-blur-md rounded-lg shadow-lg py-10">
+<div class="max-w-7xl mx-auto p-6 mt-8 bg-white/50 backdrop-blur-md rounded-lg shadow-lg py-10">
     <h2 class="text-4xl font-extrabold text-center mb-12 uppercase tracking-widest text-blue-700 animate-pulse">
         Menu Kantin
     </h2>
@@ -162,6 +170,19 @@ $user = $user_result->fetch_assoc();
             }
         });
     }
+
+    document.getElementById("menu-toggle").addEventListener("click", function () {
+        document.getElementById("mobile-menu").classList.toggle("hidden");
+    });
+
+    // Tutup menu jika klik di luar
+    document.addEventListener("click", function (event) {
+        let menu = document.getElementById("mobile-menu");
+        let button = document.getElementById("menu-toggle");
+        if (!menu.contains(event.target) && !button.contains(event.target)) {
+            menu.classList.add("hidden");
+        }
+    });
 </script>
 
 </html>

@@ -78,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Menu</title>
+    <link rel="shortcut icon" href="../assets/images/images.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -96,10 +97,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen" 
-    style="background: url('../assets/images/order.kantin.png') no-repeat center center/cover;">
+    style="background: url('../assets/images/new.jpg') no-repeat center center/cover;">
 
     <div class="bg-white/90 backdrop-blur-md p-8 rounded-xl shadow-lg w-full max-w-lg">
-        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Order Menu</h2>
+        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Pesan Menu</h2>
         
         <form method="POST" class="space-y-5">
             <!-- Pilih Menu -->

@@ -16,7 +16,6 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 }
 
 $order_id = intval($_GET['id']); // Pastikan order_id adalah integer
-
 // Ambil informasi umum pesanan
 $query = "SELECT total_price, order_date, status FROM orders WHERE id = ?";
 $stmt = $conn->prepare($query);
@@ -47,6 +46,7 @@ $result = $stmt->get_result();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Pesanan</title>
+    <link rel="shortcut icon" href="../assets/images/images.png">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
