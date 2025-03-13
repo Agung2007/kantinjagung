@@ -34,24 +34,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
     $id = $_POST['id'];
     $name = $_POST['name'];
     $price = doubleval($_POST['price']);
-    $image = $_POST['old_image']; // Gunakan gambar lama sebagai default
+    $image = $_POST['old_image']; // Gunakan gambar lama jika tidak ada yang baru
 
     // Periksa apakah ada gambar baru yang di-upload
     if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-        $target_dir = "../images/";
-        $target_file = $target_dir . basename($_FILES['image']['name']);
+        $target_dir = "images/"; // Gunakan path relatif tanpa "../"
+        $new_filename = time() . "_" . basename($_FILES['image']['name']);
+        $target_file = $target_dir . $new_filename;
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-        // Pastikan folder ada
+        // Pastikan folder images ada
         if (!is_dir($target_dir)) {
             mkdir($target_dir, 0777, true);
         }
 
-        // Validasi tipe gambar
+        // Validasi tipe file
         $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
         if (in_array($imageFileType, $allowed_types)) {
             if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-                $image = $target_file;
+                $image = $target_file; // Simpan path baru
             } else {
                 echo "Gagal mengunggah gambar.";
                 exit;
@@ -68,7 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
     $stmt->bind_param("sdsi", $name, $price, $image, $id);
 
     if ($stmt->execute()) {
-        // Redirect kembali ke halaman manage_menu setelah update
         header("Location: manage_menu.php");
         exit;
     } else {
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -88,9 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
 </head>
 <body class="bg-gray-50">
     <div class="flex min-h-screen">
-        <!-- Sidebar (Similar to the previous sidebar code) -->
-
-        <!-- Main Content -->
         <div class="flex-1 p-10">
             <div class="bg-white p-6 rounded-lg shadow-xl mb-8">
                 <h2 class="text-3xl font-semibold text-gray-700 mb-4">Edit Menu</h2>
@@ -117,8 +114,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
 
                     <div class="mb-6">
                         <h3 class="text-lg font-medium text-gray-700">Gambar Saat Ini:</h3>
-                        <img src="../<?php echo htmlspecialchars($menu['image']); ?>" alt="Menu Image" class="w-16 h-16 object-cover rounded-md border">
+                        <!-- Path gambar diperbaiki -->
+                        <img src="/kantinjagung/<?= htmlspecialchars($menu['image']) ?>" alt="Menu Image" class="w-16 h-16 object-cover rounded-md border">
 
+                        <!-- Debugging Path -->
+                        <p class="text-sm text-gray-500">Path: <?= htmlspecialchars($menu['image']) ?></p>
                     </div>
 
                     <button type="submit" name="update_menu" class="bg-blue-500 text-white px-4 py-2 rounded-md">Update Menu</button>

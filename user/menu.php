@@ -7,17 +7,22 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// Ambil menu dari database tanpa kolom description
-$sql = "SELECT id, name, price, image FROM menu";
-$result = $conn->query($sql);
+// Proses pencarian
+$search = $_GET['search'] ?? '';
+$sql = "SELECT id, name, price, image FROM menu WHERE name LIKE ?";
+$stmt = $conn->prepare($sql);
+$search_param = "%$search%";
+$stmt->bind_param("s", $search_param);
+$stmt->execute();
+$result = $stmt->get_result();
 
 // Ambil data pengguna untuk menampilkan profil
 $user_id = $_SESSION['user_id'] ?? null;
 $user_query = "SELECT username, profile_picture FROM users WHERE id = ?";
-$stmt = $conn->prepare($user_query);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$user_result = $stmt->get_result();
+$stmt_user = $conn->prepare($user_query);
+$stmt_user->bind_param("i", $user_id);
+$stmt_user->execute();
+$user_result = $stmt_user->get_result();
 $user = $user_result->fetch_assoc();
 ?>
 
@@ -70,7 +75,7 @@ $user = $user_result->fetch_assoc();
 <body class="relative min-h-screen">
 
 
-<nav class="relative bg-gradient-to-r from-blue-900 to-blue-600 p-4 shadow-lg fixed w-full top-0 z-50">
+<nav class="fixed top-0 left-0 w-full bg-gradient-to-r from-blue-900 to-blue-600 p-4 shadow-lg z-50">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
         <!-- Logo dan Judul -->
         <div class="flex items-center space-x-4">
@@ -80,9 +85,8 @@ $user = $user_result->fetch_assoc();
             </h1>
         </div>
 
-        <!-- Profil + Menu (Harus di Flex agar ke Kanan) -->
+        <!-- Profil + Menu -->
         <div class="flex items-center space-x-6">
-            <!-- **Profil (Tetap Muncul di Mobile & Desktop)** -->
             <?php if ($user): ?>
             <a href="profile.php" class="flex items-center space-x-2">
                 <img src="<?= htmlspecialchars($user['profile_picture'] ?? '../assets/images/avatar.jpeg') ?>"
@@ -91,7 +95,6 @@ $user = $user_result->fetch_assoc();
             </a>
             <?php endif; ?>
 
-            <!-- Menu Navbar (Desktop) -->
             <div class="hidden md:flex items-center space-x-6">
                 <a href="order_history.php" class="text-white hover:text-yellow-300 transition">Riwayat Pemesanan</a>
 
@@ -108,7 +111,7 @@ $user = $user_result->fetch_assoc();
         </div>
     </div>
 
-    <!-- **DROPDOWN MENU MOBILE (WARNA PUTIH, POSISI DI BAWAH)** -->
+    <!-- **DROPDOWN MENU MOBILE** -->
     <div id="mobile-menu" 
         class="hidden absolute right-4 top-20 w-48 bg-white text-black border border-gray-300 shadow-lg rounded-lg z-50">
         <a href="order_history.php" class="block px-4 py-2 hover:bg-gray-100 transition">Riwayat Pesanan</a>
@@ -118,41 +121,43 @@ $user = $user_result->fetch_assoc();
     </div>
 </nav>
 <!-- Main Content -->
-<div class="max-w-7xl mx-auto p-6 mt-8 bg-white/50 backdrop-blur-md rounded-lg shadow-lg py-10">
-    <h2 class="text-4xl font-extrabold text-center mb-12 uppercase tracking-widest text-blue-700 animate-pulse">
-        Menu Kantin
-    </h2>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+<div class="max-w-7xl mx-auto p-6 mt-20 bg-white/50 backdrop-blur-md rounded-lg shadow-lg py-10">
+    <h2 class="text-4xl font-extrabold text-center mb-6 uppercase tracking-widest text-blue-700 animate-pulse">Menu Kantin</h2>
+    
+    <!-- Search Bar -->
+    <div class="flex justify-center mb-6 px-4">
+        <form method="GET" class="flex w-full max-w-md">
+            <input type="text" name="search" placeholder="Cari menu..." class="px-4 py-2 border rounded-l-md focus:outline-none w-full" value="<?= htmlspecialchars($search) ?>">
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-r-md">Cari</button>
+        </form>
+    </div>
+<!-- produk dan harga -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
         <?php while ($menu = $result->fetch_assoc()): ?>
         <div class="relative bg-white/50 border border-gray-200 rounded-xl shadow-lg overflow-hidden transform transition duration-500 hover:scale-105 hover:shadow-2xl group backdrop-blur-lg">
-            <!-- Bagian Depan (Gambar) -->
-            <div class="relative w-full h-56 overflow-hidden rounded-t-xl">
-                <img src="../<?= !empty($menu['image']) ? htmlspecialchars($menu['image']) : 'default.jpg' ?>"
-                    alt="<?= htmlspecialchars($menu['name']) ?>"
-                    class="w-full h-full object-cover transition-all duration-500 group-hover:scale-110">
+            <div class="relative w-full h-64 overflow-hidden rounded-t-xl">
+                <img src="../<?= !empty($menu['image']) ? htmlspecialchars($menu['image']) : 'default.jpg' ?>" alt="<?= htmlspecialchars($menu['name']) ?>" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-110">
             </div>
-
-            <!-- Detail Menu -->
             <div class="p-6 text-gray-900 flex flex-col flex-grow text-center">
-                <h3 class="text-2xl font-semibold group-hover:text-blue-600 transition-colors duration-300">
-                    <?= htmlspecialchars($menu['name']) ?>
-                </h3>
-                <p class="text-lg text-green-600 font-bold mt-2">
-                    Rp <?= number_format($menu['price'], 0, ',', '.') ?>
-                </p>
-
-                <!-- Tombol Pesan -->
-                <a href="order.php?id=<?= $menu['id'] ?>" 
-                    class="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-center rounded-lg font-bold 
-                    hover:scale-110 hover:from-blue-700 hover:to-blue-500 transition-all duration-300">
-                    Pesan Sekarang
-                </a>
+                <h3 class="text-2xl font-semibold group-hover:text-blue-600 transition-colors duration-300"><?= htmlspecialchars($menu['name']) ?></h3>
+                <p class="text-lg text-green-600 font-bold mt-2">Rp <?= number_format($menu['price'], 0, ',', '.') ?></p>
+                <a href="order.php?id=<?= $menu['id'] ?>" class="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-center rounded-lg font-bold hover:scale-110 hover:from-blue-700 hover:to-blue-500 transition-all duration-300">Pesan Sekarang</a>
             </div>
         </div>
         <?php endwhile; ?>
-    </div>
+    </div>    </div>
 </div>
+
+<footer class="bg-gray-50">
+  <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
+    <div class="sm:flex sm:items-center sm:justify-between">
+
+      <p class="mt-4 text-center text-sm text-gray-500 lg:mt-0 lg:text-right">
+        Copyright &copy; 2025. Kantin Ifsu berkah.
+      </p>
+    </div>
+  </div>
+</footer>
 
 </body>
 <script>

@@ -119,7 +119,7 @@ if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id'])) {
         <!-- Main Content -->
         <div class="flex-1 p-8 ml-64">
             <div class="bg-white p-6 rounded-lg shadow-xl mb-8">
-                <h2 class="text-3xl font-semibold text-gray-700 mb-4">Kelola Admin dan User</h2>
+                <h2 class="text-3xl font-semibold text-gray-700 mb-4">Kelola User</h2>
 
                 <!-- Tabel Pengguna -->
                 <div class="overflow-x-auto">

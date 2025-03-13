@@ -31,22 +31,13 @@ if ($result_transactions) {
     $total_transactions = $result_transactions->fetch_assoc()['total_transactions'];
 }
 
-$query_profit = "SELECT SUM(total_price) AS total_revenue, SUM(profit) AS total_profit FROM transactions";
-$result_profit = $conn->query($query_profit);
-$data_profit = $result_profit->fetch_assoc();
-
-$total_revenue = $data_profit['total_revenue'] ?? 0;
-$total_profit = $data_profit['total_profit'] ?? 0;
-
-$start_date = $_GET['start_date'] ?? date('Y-m-01');
-$end_date = $_GET['end_date'] ?? date('Y-m-t');
-
-$query_profit = "SELECT SUM(total_price) AS total_revenue, SUM(profit) AS total_profit 
-                 FROM transactions 
-                 WHERE transaction_date BETWEEN '$start_date' AND '$end_date'";
-
-$result_profit = $conn->query($query_profit);
-$data_profit = $result_profit->fetch_assoc();
+// Mengambil total pendapatan dari transaksi
+$total_revenue = 0;
+$result_revenue = $conn->query("SELECT SUM(total_price) AS total_revenue FROM transactions");
+if ($result_revenue) {
+    $row = $result_revenue->fetch_assoc();
+    $total_revenue = $row['total_revenue'] ? $row['total_revenue'] : 0;
+}
 
 ?>
 
@@ -194,38 +185,13 @@ $data_profit = $result_profit->fetch_assoc();
                         </div>
                     </div>
 
-                    <div class="flex-1 bg-purple-100 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 flex items-center">
-    <div class="bg-purple-500 text-white p-4 rounded-full">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h11M9 21v-9m5 9V9m-5 4h7m4 0h2m-2-4h2m-2 8h2"/>
-        </svg>
-    </div>
-    <div class="ml-4">
-        <h3 class="text-xl font-semibold text-gray-700">Total Pendapatan</h3>
-        <p class="text-4xl text-purple-700 font-bold mt-1">Rp<?php echo number_format($total_revenue, 0, ',', '.'); ?></p>
-    </div>
-</div>
-
-<div class="flex-1 bg-red-100 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 flex items-center">
-    <div class="bg-red-500 text-white p-4 rounded-full">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h11M9 21v-9m5 9V9m-5 4h7m4 0h2m-2-4h2m-2 8h2"/>
-        </svg>
-    </div>
-    <div class="ml-4">
-        <h3 class="text-xl font-semibold text-gray-700">Total Keuntungan</h3>
-        <p class="text-4xl text-red-700 font-bold mt-1">Rp<?php echo number_format($total_profit, 0, ',', '.'); ?></p>
-        <form method="GET" class="flex gap-4 mb-6">
-    <input type="date" name="start_date" value="<?php echo $start_date; ?>" class="border p-2 rounded">
-    <input type="date" name="end_date" value="<?php echo $end_date; ?>" class="border p-2 rounded">
-    <button type="submit" class="bg-blue-500 text-white p-2 rounded">Filter</button>
-</form>
-
-    </div>
-</div>
-
-
                 </div>
+                <div class="mt-8 text-center">
+    <h3 class="text-2xl font-semibold text-gray-700">Total Pendapatan</h3>
+    <p class="text-5xl text-purple-700 font-bold mt-2">Rp <?php echo number_format($total_revenue, 0, ',', '.'); ?></p>
+</div>
+
+
             </div>
 </body>
 

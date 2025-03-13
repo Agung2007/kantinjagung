@@ -104,17 +104,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         <form method="POST" class="space-y-5">
             <!-- Pilih Menu -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Pilih Menu:</label>
-                <select name="menu_id" required 
-                    class="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                    <?php while ($menu = $menu_result->fetch_assoc()) { ?>
-                        <option value="<?= $menu['id'] ?>">
-                            <?= htmlspecialchars($menu['name']) ?> - Rp<?= number_format($menu['price'], 0, ',', '.') ?>
-                        </option>
-                    <?php } ?>
-                </select>
-            </div>
+<div>
+    <label class="block text-sm font-medium text-gray-700">Pilih Menu:</label>
+    <select name="menu_id" required 
+        class="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+        <?php while ($menu = $menu_result->fetch_assoc()) { ?>
+            <option value="<?= $menu['id'] ?>" class="text-sm md:text-base lg:text-lg">
+                <?= htmlspecialchars($menu['name']) ?> - Rp<?= number_format($menu['price'], 0, ',', '.') ?>
+            </option>
+        <?php } ?>
+    </select>
+</div>
 
             <!-- Jumlah -->
             <div>
