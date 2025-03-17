@@ -13,9 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status'])) {
     $status = $_POST['status'];
 
     // Validasi input
-if (!in_array($status, ['pending', 'processed', 'completed', 'canceled'])) {
-    die("Status tidak valid!");
-}
+    if (!in_array($status, ['pending', 'processed', 'completed', 'canceled'])) {
+        die("Status tidak valid!");
+    }
 
     // Update status di database
     $stmt = $conn->prepare("UPDATE transactions SET status = ? WHERE id = ?");
@@ -46,8 +46,12 @@ if (!in_array($status, ['pending', 'processed', 'completed', 'canceled'])) {
     $stmt->close();
 }
 
-
 // Ambil data transaksi
+$search = "";
+if (isset($_GET['search'])) {
+    $search = trim($_GET['search']);
+}
+
 $query = "SELECT t.id, u.username AS user_name, 
        GROUP_CONCAT(m.name SEPARATOR ', ') AS menu_name, 
        SUM(od.quantity) AS total_quantity, 
@@ -57,12 +61,17 @@ JOIN users u ON t.user_id = u.id
 JOIN orders o ON t.order_id = o.id
 JOIN order_details od ON o.id = od.order_id
 JOIN menu m ON od.menu_id = m.id
-WHERE t.status IN ('pending', 'processed', 'completed', 'canceled') -- Tambahkan status canceled
+WHERE t.status IN ('pending', 'processed', 'completed', 'canceled') 
+AND (u.username LIKE ? OR m.name LIKE ? OR t.payment_method LIKE ?)
 GROUP BY t.id, u.username, t.total_price, t.status, t.payment_method, o.order_date
 ORDER BY o.order_date DESC";
-$result = $conn->query($query);
-?>
 
+$stmt = $conn->prepare($query);
+$search_param = "%$search%";
+$stmt->bind_param("sss", $search_param, $search_param, $search_param);
+$stmt->execute();
+$result = $stmt->get_result();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -148,6 +157,10 @@ $result = $conn->query($query);
         <!-- Main Content -->
         <div class="flex-1 p-8 ml-64">
             <h2 class="text-3xl font-semibold text-gray-700 mb-6">Transaksi</h2>
+            <form method="GET" class="mb-4">
+            <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Cari transaksi..." class="px-4 py-2 border rounded w-1/3">
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Cari</button>
+        </form>
             <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
                 <thead class="bg-blue-600 text-white">
                     <tr>
@@ -196,18 +209,20 @@ $result = $conn->query($query);
                         <td class="py-3 px-4"> <?= htmlspecialchars($row['status']) ?> </td>
                         <td class="py-3 px-4"> <?= $row['created_at'] ?> </td>
                         <td class="py-3 px-4">
-                            <form method="POST" class="flex space-x-2">
-                                <input type="hidden" name="transaction_id" value="<?= $row['id'] ?>">
-<select name="status" class="border rounded px-2 py-1" <?= $row['status'] == 'canceled' ? 'disabled' : '' ?>>
-    <option value="pending" <?= $row['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
-    <option value="processed" <?= $row['status'] == 'processed' ? 'selected' : '' ?>>Processed</option>
-    <option value="completed" <?= $row['status'] == 'completed' ? 'selected' : '' ?>>Completed</option>
-    <option value="canceled" <?= $row['status'] == 'canceled' ? 'selected' : '' ?>>Canceled</option>
-</select>
-                                <button type="submit" name="update_status"
-                                    class="bg-green-500 text-white px-3 py-1 rounded">Update</button>
-                            </form>
-                        </td>
+    <?php if ($row['status'] != 'canceled') { ?>
+        <form method="POST" class="flex space-x-2">
+            <input type="hidden" name="transaction_id" value="<?= $row['id'] ?>">
+            <select name="status" class="border rounded px-2 py-1">
+                <option value="pending" <?= $row['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
+                <option value="processed" <?= $row['status'] == 'processed' ? 'selected' : '' ?>>Processed</option>
+                <option value="completed" <?= $row['status'] == 'completed' ? 'selected' : '' ?>>Completed</option>
+            </select>
+            <button type="submit" name="update_status" class="bg-green-500 text-white px-3 py-1 rounded">Update</button>
+        </form>
+    <?php } else { ?>
+        <span class="text-red-500 font-bold">Canceled</span>
+    <?php } ?>
+</td>
                     </tr>
                     <?php 
         $no++;

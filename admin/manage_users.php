@@ -141,17 +141,17 @@ if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id'])) {
                                 <td class="py-3 px-4"><?php echo htmlspecialchars($user['username']); ?></td>
                                 <td class="py-3 px-4"><?php echo ucfirst(htmlspecialchars($user['role'])); ?></td>
                                 <td class="py-3 px-4 text-center">
-                                    <a href="edit_user.php?id=<?php echo $user['id']; ?>">
-                                        <button
-                                            class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600">Edit</button>
-                                    </a>
-                                     <button
-                                        class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 ml-2"
-                                        onclick="confirmDelete(<?php echo $user['id']; ?>)">
-                                        Delete
-                                    </button>
-                                    </a>
-                                </td>
+                                <?php if ($user['role'] !== 'admin'): ?>
+    <a href="edit_user.php?id=<?php echo $user['id']; ?>">
+        <button class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600">Edit</button>
+    </a>
+    <button
+            class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 ml-2"
+            onclick="confirmDelete(<?php echo $user['id']; ?>)">
+            Delete
+        </button>
+    <?php endif; ?>
+</td>
                             </tr>
                             <?php 
                           $no++; // Tambah nomor urut setiap iterasi
