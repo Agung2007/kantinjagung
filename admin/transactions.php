@@ -47,11 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status'])) {
 }
 
 // Ambil data transaksi
-$search = "";
-if (isset($_GET['search'])) {
-    $search = trim($_GET['search']);
-}
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
+$end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
 
+// Query dasar
 $query = "SELECT t.id, u.username AS user_name, 
        GROUP_CONCAT(m.name SEPARATOR ', ') AS menu_name, 
        SUM(od.quantity) AS total_quantity, 
@@ -61,14 +61,37 @@ JOIN users u ON t.user_id = u.id
 JOIN orders o ON t.order_id = o.id
 JOIN order_details od ON o.id = od.order_id
 JOIN menu m ON od.menu_id = m.id
-WHERE t.status IN ('pending', 'processed', 'completed', 'canceled') 
-AND (u.username LIKE ? OR m.name LIKE ? OR t.payment_method LIKE ?)
-GROUP BY t.id, u.username, t.total_price, t.status, t.payment_method, o.order_date
+WHERE t.status IN ('pending', 'processed', 'completed', 'canceled')";
+
+// Tambahkan kondisi pencarian jika ada
+$search_param = "%$search%";
+$params = [];
+$types = "";
+
+if (!empty($search)) {
+    $query .= " AND (u.username LIKE ? OR m.name LIKE ? OR t.payment_method LIKE ?)";
+    $params[] = $search_param;
+    $params[] = $search_param;
+    $params[] = $search_param;
+    $types .= "sss";
+}
+
+// Tambahkan filter berdasarkan rentang tanggal jika diisi
+if (!empty($start_date) && !empty($end_date)) {
+    $query .= " AND (o.order_date BETWEEN ? AND ?)";
+    $params[] = $start_date;
+    $params[] = $end_date;
+    $types .= "ss";
+}
+
+$query .= " GROUP BY t.id, u.username, t.total_price, t.status, t.payment_method, o.order_date
 ORDER BY o.order_date DESC";
 
+// Eksekusi query dengan parameter yang sesuai
 $stmt = $conn->prepare($query);
-$search_param = "%$search%";
-$stmt->bind_param("sss", $search_param, $search_param, $search_param);
+if (!empty($params)) {
+    $stmt->bind_param($types, ...$params);
+}
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
@@ -157,10 +180,17 @@ $result = $stmt->get_result();
         <!-- Main Content -->
         <div class="flex-1 p-8 ml-64">
             <h2 class="text-3xl font-semibold text-gray-700 mb-6">Transaksi</h2>
-            <form method="GET" class="mb-4">
-            <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Cari transaksi..." class="px-4 py-2 border rounded w-1/3">
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Cari</button>
-        </form>
+            <form method="GET" class="mb-4 flex items-center space-x-2">
+    <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Cari transaksi..." class="px-4 py-2 border rounded w-1/3">
+    
+    <label for="start_date" class="text-gray-700">Dari:</label>
+    <input type="date" name="start_date" value="<?= isset($_GET['start_date']) ? $_GET['start_date'] : '' ?>" class="px-4 py-2 border rounded">
+
+    <label for="end_date" class="text-gray-700">Sampai:</label>
+    <input type="date" name="end_date" value="<?= isset($_GET['end_date']) ? $_GET['end_date'] : '' ?>" class="px-4 py-2 border rounded">
+
+    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Cari</button>
+</form>
             <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
                 <thead class="bg-blue-600 text-white">
                     <tr>
