@@ -35,7 +35,7 @@ $user = $user_result->fetch_assoc();
     <title>Menu Kantin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="shortcut icon" href="../assets/images/images.png">
+    <link rel="shortcut icon" href="../assets/images/bahanicon.png">
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');

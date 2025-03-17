@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Menu</title>
-    <link rel="shortcut icon" href="../assets/images/images.png">
+    <link rel="shortcut icon" href="../assets/images/bahanicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50">
