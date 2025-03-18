@@ -33,11 +33,35 @@ if ($result_transactions) {
 
 // Mengambil total pendapatan dari transaksi
 $total_revenue = 0;
-$result_revenue = $conn->query("SELECT SUM(total_price) AS total_revenue FROM transactions");
-if ($result_revenue) {
-    $row = $result_revenue->fetch_assoc();
-    $total_revenue = $row['total_revenue'] ? $row['total_revenue'] : 0;
+$query_revenue = "SELECT SUM(total_price) AS total_revenue FROM transactions WHERE status = 'completed'";
+
+if (!empty($_GET['start_date']) && !empty($_GET['end_date'])) {
+    $query_revenue .= " AND transaction_date BETWEEN ? AND ?";
 }
+
+$stmt = $conn->prepare($query_revenue);
+
+if (!empty($_GET['start_date']) && !empty($_GET['end_date'])) {
+    $stmt->bind_param("ss", $_GET['start_date'], $_GET['end_date']);
+}
+
+$stmt->execute();
+$result_revenue = $stmt->get_result();
+$row = $result_revenue->fetch_assoc();
+$total_revenue = $row['total_revenue'] ? $row['total_revenue'] : 0;
+$stmt->close();
+
+//produk terlaris
+$top_products_query = "
+    SELECT m.id, m.name AS menu_name, m.image, SUM(od.quantity) AS total_quantity, m.price
+    FROM order_details od
+    JOIN menu m ON od.menu_id = m.id
+    GROUP BY m.id, m.name, m.image, m.price
+    ORDER BY total_quantity DESC
+    LIMIT 5";
+
+$top_products_result = $conn->query($top_products_query);
+
 
 ?>
 
@@ -187,9 +211,35 @@ if ($result_revenue) {
 
                 </div>
                 <div class="mt-8 text-center">
+                <form method="GET" action="" class="mb-6 flex gap-4 justify-center">
+    <input type="date" name="start_date" class="p-2 border rounded" value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>" required>
+    <input type="date" name="end_date" class="p-2 border rounded" value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>" required>
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800">Filter</button>
+</form>
     <h3 class="text-2xl font-semibold text-gray-700">Total Pendapatan</h3>
     <p class="text-5xl text-purple-700 font-bold mt-2">Rp <?php echo number_format($total_revenue, 0, ',', '.'); ?></p>
+    <?php if (isset($_GET['start_date']) && isset($_GET['end_date'])): ?>
+        <p class="text-gray-500 mt-2">Dari <?php echo date("d M Y", strtotime($_GET['start_date'])); ?> sampai <?php echo date("d M Y", strtotime($_GET['end_date'])); ?></p>
+    <?php endif; ?>
 </div>
+
+<div class="mt-8 p-6 bg-white shadow-md rounded-lg">
+    <h3 class="text-2xl font-semibold text-gray-700 mb-4">Produk Terlaris</h3>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <?php while ($row = $top_products_result->fetch_assoc()) { ?>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                <img src="../<?= htmlspecialchars($row['image']) ?>" alt="<?= htmlspecialchars($row['menu_name']) ?>" class="w-full h-40 object-cover">
+                <div class="p-4">
+                    <h4 class="text-lg font-semibold"><?= htmlspecialchars($row['menu_name']) ?></h4>
+                    <p class="text-gray-600">Terjual: <span class="font-semibold"><?= $row['total_quantity'] ?></span></p>
+                    <p class="text-gray-800 font-bold">Rp<?= number_format($row['price'], 0, ',', '.') ?></p>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
+</div>
+
+
 
 
             </div>
