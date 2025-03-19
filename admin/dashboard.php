@@ -65,9 +65,6 @@ $top_products_result = $conn->query($top_products_query);
 
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -211,33 +208,41 @@ $top_products_result = $conn->query($top_products_query);
 
                 </div>
                 <div class="mt-8 text-center">
-                <form method="GET" action="" class="mb-6 flex gap-4 justify-center">
-    <input type="date" name="start_date" class="p-2 border rounded" value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>" required>
-    <input type="date" name="end_date" class="p-2 border rounded" value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>" required>
-    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800">Filter</button>
-</form>
-    <h3 class="text-2xl font-semibold text-gray-700">Total Pendapatan</h3>
-    <p class="text-5xl text-purple-700 font-bold mt-2">Rp <?php echo number_format($total_revenue, 0, ',', '.'); ?></p>
-    <?php if (isset($_GET['start_date']) && isset($_GET['end_date'])): ?>
-        <p class="text-gray-500 mt-2">Dari <?php echo date("d M Y", strtotime($_GET['start_date'])); ?> sampai <?php echo date("d M Y", strtotime($_GET['end_date'])); ?></p>
-    <?php endif; ?>
-</div>
-
-<div class="mt-8 p-6 bg-white shadow-md rounded-lg">
-    <h3 class="text-2xl font-semibold text-gray-700 mb-4">Produk Terlaris</h3>
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        <?php while ($row = $top_products_result->fetch_assoc()) { ?>
-            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-                <img src="../<?= htmlspecialchars($row['image']) ?>" alt="<?= htmlspecialchars($row['menu_name']) ?>" class="w-full h-40 object-cover">
-                <div class="p-4">
-                    <h4 class="text-lg font-semibold"><?= htmlspecialchars($row['menu_name']) ?></h4>
-                    <p class="text-gray-600">Terjual: <span class="font-semibold"><?= $row['total_quantity'] ?></span></p>
-                    <p class="text-gray-800 font-bold">Rp<?= number_format($row['price'], 0, ',', '.') ?></p>
+                    <form method="GET" action="" class="mb-6 flex gap-4 justify-center">
+                        <input type="date" name="start_date" class="p-2 border rounded"
+                            value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>" required>
+                        <input type="date" name="end_date" class="p-2 border rounded"
+                            value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>" required>
+                        <button type="submit"
+                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800">Filter</button>
+                    </form>
+                    <h3 class="text-2xl font-semibold text-gray-700">Total Pendapatan</h3>
+                    <p class="text-5xl text-purple-700 font-bold mt-2">Rp
+                        <?php echo number_format($total_revenue, 0, ',', '.'); ?></p>
+                    <?php if (isset($_GET['start_date']) && isset($_GET['end_date'])): ?>
+                    <p class="text-gray-500 mt-2">Dari <?php echo date("d M Y", strtotime($_GET['start_date'])); ?>
+                        sampai <?php echo date("d M Y", strtotime($_GET['end_date'])); ?></p>
+                    <?php endif; ?>
                 </div>
-            </div>
-        <?php } ?>
-    </div>
-</div>
+
+                <div class="mt-8 p-6 bg-white shadow-md rounded-lg">
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">Produk Terlaris</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                        <?php while ($row = $top_products_result->fetch_assoc()) { ?>
+                        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                            <img src="../<?= htmlspecialchars($row['image']) ?>"
+                                alt="<?= htmlspecialchars($row['menu_name']) ?>" class="w-full h-40 object-cover">
+                            <div class="p-4">
+                                <h4 class="text-lg font-semibold"><?= htmlspecialchars($row['menu_name']) ?></h4>
+                                <p class="text-gray-600">Terjual: <span
+                                        class="font-semibold"><?= $row['total_quantity'] ?></span></p>
+                                <p class="text-gray-800 font-bold">Rp<?= number_format($row['price'], 0, ',', '.') ?>
+                                </p>
+                            </div>
+                        </div>
+                        <?php } ?>
+                    </div>
+                </div>
 
 
 
