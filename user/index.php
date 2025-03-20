@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <link rel="shortcut icon" href="../assets/images/bahanicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <!-- header -->
+    <header class="bg-white fixed top-0 left-0 w-full z-50 shadow-md">
+    <div class="mx-auto max-w-screen-xl px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center">
+                <img src="../assets/images/ifsu.png" alt="Logo" class="h-8 sm:h-10 md:h-12 mr-3">
+                <div>
+                        <h1 class="text-2xl font-bold text-yellow-300 sm:text-3xl">DAPOER IFSU</h1>
+                        <p class="mt-1 text-sm text-black-500">Selamat datang di website kantin SMK INFORMATIKA SUMEDANG
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="login.php"
+                        class="inline-flex items-center justify-center gap-1.5 rounded-sm border border-gray-200 bg-white px-5 py-3 text-gray-900 transition hover:text-gray-700 focus:ring-3 focus:outline-hidden">
+                        <span class="text-sm font-medium"> Login </span>
+                    </a>
+                    <a href="register.php"
+                        class="inline-block rounded-sm bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:ring-3 focus:outline-hidden">
+                        Register
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- bnner -->
+
+
+    <section class="relative">
+        <img src="../assets/images/page2.png" alt="Background Image"
+            class="absolute inset-0 h-full w-full object-cover" />
+
+        <div
+            class="absolute inset-0 bg-gray-900/75 sm:bg-transparent sm:from-gray-900/95 sm:to-gray-900/25 ltr:sm:bg-gradient-to-r rtl:sm:bg-gradient-to-l">
+        </div>
+
+        <div class="relative mx-auto max-w-screen-xl px-4 py-32 sm:px-6 lg:flex lg:h-screen lg:items-center lg:px-8">
+            <div class="max-w-xl text-center ltr:sm:text-left rtl:sm:text-right">
+                <h1 class="text-3xl font-extrabold text-black sm:text-5xl">
+                    KANTIN DIGITAL
+                    <strong class="block font-extrabold text-yellow-300"> ANTI RIBET. </strong>
+                </h1>
+                <p class="mt-4 max-w-lg text-black sm:text-xl/relaxed">
+                    Kantin IFSU Berkah adalah platform digital yang memudahkan siswa dan staf SMK Informatika Sumedang
+                    dalam melihat menu, memesan makanan, dan mengetahui informasi terbaru tentang kantin sekolah.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUK -->
+    <section class="mx-auto max-w-screen-xl px-4 py-12">
+        <h2 class="text-3xl font-bold text-gray-900 text-center mb-8">PRODUK UNGGULAN</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="text-center">
+                <img class="h-69 w-full object-cover rounded-lg" src="../assets/images/mieayam.png" alt="Produk 1">
+                <p class="mt-2 text-sm text-gray-700">Mie Ayam</p>
+            </div>
+            <div class="text-center">
+                <img class="h-69 w-full object-cover rounded-lg" src="../assets/images/cendol.png" alt="Produk 2">
+                <p class="mt-2 text-sm text-gray-700">Cendol</p>
+            </div>
+            <div class="text-center">
+                <img class="h-69 w-full object-cover rounded-lg" src="../assets/images/sate.png" alt="Produk 3">
+                <p class="mt-2 text-sm text-gray-700">Sate</p>
+            </div>
+            <div class="text-center">
+                <img class="h-69 w-full object-cover rounded-lg" src="../assets/images/nasichiken.png" alt="Produk 4">
+                <p class="mt-2 text-sm text-gray-700">Nasi Chiken</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONI -->
+    <link href="https://cdn.jsdelivr.net/npm/keen-slider@6.8.6/keen-slider.min.css" rel="stylesheet" />
+
+    <script type="module">
+        import KeenSlider from 'https://cdn.jsdelivr.net/npm/keen-slider@6.8.6/+esm'
+
+  const keenSliderActive = document.getElementById('keen-slider-active')
+  const keenSliderCount = document.getElementById('keen-slider-count')
+
+  const keenSlider = new KeenSlider(
+    '#keen-slider',
+    {
+      loop: true,
+      defaultAnimation: {
+        duration: 750,
+      },
+      slides: {
+        origin: 'center',
+        perView: 1,
+        spacing: 16,
+      },
+      breakpoints: {
+        '(min-width: 640px)': {
+          slides: {
+            origin: 'center',
+            perView: 1.5,
+            spacing: 16,
+          },
+        },
+        '(min-width: 768px)': {
+          slides: {
+            origin: 'center',
+            perView: 1.75,
+            spacing: 16,
+          },
+        },
+        '(min-width: 1024px)': {
+          slides: {
+            origin: 'center',
+            perView: 3,
+            spacing: 16,
+          },
+        },
+      },
+      created(slider) {
+        slider.slides[slider.track.details.rel].classList.remove('opacity-40')
+
+        keenSliderActive.innerText = slider.track.details.rel + 1
+        keenSliderCount.innerText = slider.slides.length
+      },
+      slideChanged(slider) {
+        slider.slides.forEach((slide) => slide.classList.add('opacity-40'))
+
+        slider.slides[slider.track.details.rel].classList.remove('opacity-40')
+
+        keenSliderActive.innerText = slider.track.details.rel + 1
+      },
+    },
+    []
+  )
+
+  const keenSliderPrevious = document.getElementById('keen-slider-previous')
+  const keenSliderNext = document.getElementById('keen-slider-next')
+
+  keenSliderPrevious.addEventListener('click', () => keenSlider.prev())
+  keenSliderNext.addEventListener('click', () => keenSlider.next())
+</script>
+
+    <section class="bg-white">
+        <div class="mx-auto max-w-screen-xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+            <h2 class="text-center text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+                PELANGGAN TERKENAL
+            </h2>
+
+            <div class="mt-8">
+                <div id="keen-slider" class="keen-slider">
+                    <div class="keen-slider__slide opacity-40 transition-opacity duration-500">
+                        <blockquote class="rounded-lg bg-gray-50 p-6 shadow-xs sm:p-8">
+                            <div class="flex items-center gap-4">
+                                <img src="../assets/images/ronaldo.jpeg" alt="Testimoni"
+                                    class="size-14 rounded-full object-cover mx-auto">
+
+                                <div>
+                                    <div class="flex justify-center gap-0.5 text-green-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                    </div>
+
+                                    <p class="mt-0.5 text-lg font-medium text-gray-900">Cristiano Ronaldo</p>
+                                </div>
+                            </div>
+
+                            <p class="mt-4 text-gray-700">
+                                Ya makanan nya sangat enak sekali keluarga saya di portugal semua nya suka </p>
+                        </blockquote>
+                    </div>
+
+                    <div class="keen-slider__slide opacity-40 transition-opacity duration-500">
+                        <blockquote class="rounded-lg bg-gray-50 p-6 shadow-xs sm:p-8">
+                            <div class="flex items-center gap-4">
+                                <img src="../assets/images/agung.jpg" alt="Testimoni"
+                                    class="size-14 rounded-full object-cover mx-auto">
+                                <div>
+                                    <div class="flex justify-center gap-0.5 text-green-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                    </div>
+
+                                    <p class="mt-0.5 text-lg font-medium text-gray-900">Agung Ganteng</p>
+                                </div>
+                            </div>
+
+                            <p class="mt-4 text-gray-700">
+                                Saya beli disini tidak pernah kecewa, pegawai ramah </p>
+                        </blockquote>
+                    </div>
+
+                    <div class="keen-slider__slide opacity-40 transition-opacity duration-500">
+                        <blockquote class="rounded-lg bg-gray-50 p-6 shadow-xs sm:p-8">
+                            <div class="flex items-center gap-4">
+                                <img src="../assets/images/boykun.webp" alt="Testimoni"
+                                    class="size-14 rounded-full object-cover mx-auto">
+
+
+                                <div>
+                                    <div class="flex justify-center gap-0.5 text-green-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                    </div>
+
+                                    <p class="mt-0.5 text-lg font-medium text-gray-900">Tanboy kun</p>
+                                </div>
+                            </div>
+
+                            <p class="mt-4 text-gray-700">
+                                Saya suka mukbang cireng di sini </p>
+                        </blockquote>
+                    </div>
+
+                    <div class="keen-slider__slide opacity-40 transition-opacity duration-500">
+                        <blockquote class="rounded-lg bg-gray-50 p-6 shadow-xs sm:p-8">
+                            <div class="flex items-center gap-4">
+                                <img src="../assets/images/messi.jpeg" alt="Testimoni"
+                                    class="size-14 rounded-full object-cover mx-auto">
+
+
+                                <div>
+                                    <div class="flex justify-center gap-0.5 text-green-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                    </div>
+
+                                    <p class="mt-0.5 text-lg font-medium text-gray-900">Lionel Messi</p>
+                                </div>
+                            </div>
+
+                            <p class="mt-4 text-gray-700">
+                                Mantap cocok rasa nya cocok untuk lidah orang Argentina </p>
+                        </blockquote>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex items-center justify-center gap-4">
+                    <button aria-label="Previous slide" id="keen-slider-previous"
+                        class="text-gray-600 transition-colors hover:text-gray-900">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                    </button>
+
+                    <p class="w-16 text-center text-sm text-gray-700">
+                        <span id="keen-slider-active"></span>
+                        /
+                        <span id="keen-slider-count"></span>
+                    </p>
+
+                    <button aria-label="Next slide" id="keen-slider-next"
+                        class="text-gray-600 transition-colors hover:text-gray-900">
+                        <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="space-y-3 max-w-md mx-auto">
+  <details class="group rounded-lg bg-gray-50 p-4 [&_summary::-webkit-details-marker]:hidden" open>
+    <summary class="flex cursor-pointer items-center justify-between gap-1 text-gray-900">
+      <h2 class="font-medium text-sm">Jam berapa kantin tutup?</h2>
+      <span class="relative size-4 shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 size-4 opacity-100 group-open:opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 size-4 opacity-0 group-open:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </span>
+    </summary>
+    <p class="mt-2 text-sm text-gray-700">
+      Kantin Buka setiap hari, Buka Pukul 08.00 dan Tutup 16.00
+    </p>
+  </details>
+
+  <details class="group rounded-lg bg-gray-50 p-4 [&_summary::-webkit-details-marker]:hidden">
+    <summary class="flex cursor-pointer items-center justify-between gap-1 text-gray-900">
+      <h2 class="font-medium text-sm">Kapan website bisa di gunakan?</h2>
+      <span class="relative size-4 shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 size-4 opacity-100 group-open:opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 size-4 opacity-0 group-open:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </span>
+    </summary>
+    <p class="mt-2 text-sm text-gray-700">
+      Website dapat di gunakan hanya satu jam sebelum istirahat.
+    </p>
+  </details>
+
+  <details class="group rounded-lg bg-gray-50 p-4 [&_summary::-webkit-details-marker]:hidden">
+    <summary class="flex cursor-pointer items-center justify-between gap-1 text-gray-900">
+      <h2 class="font-medium text-sm">Siapa yang membuat website ini?</h2>
+      <span class="relative size-4 shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 size-4 opacity-100 group-open:opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 size-4 opacity-0 group-open:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </span>
+    </summary>
+    <p class="mt-2 text-sm text-gray-700">
+      Website ini di buat oleh Agung ganteng.
+    </p>
+  </details>
+
+</div>
+</body>
+
+</html>
