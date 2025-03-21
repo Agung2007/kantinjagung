@@ -17,22 +17,20 @@
 <body>
     <!-- header -->
     <header id="header" class="bg-white fixed top-0 left-0 w-full z-50 shadow-md opacity-0 transform -translate-y-full transition-all duration-500 ease-out">
-    <div class="mx-auto max-w-screen-xl px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
-        <div class="flex items-center justify-between mb-2">
+    <div class="mx-auto max-w-screen-xl px-4 py-2 sm:px-6 sm:py-2 lg:px-8">
+        <div class="flex items-center justify-between">
             <div class="flex items-center">
-                <img src="../assets/images/ifsu.png" alt="Logo" class="h-8 sm:h-10 md:h-12 mr-3">
+                <img src="../assets/images/ifsu.png" alt="Logo" class="h-6 sm:h-8 md:h-10 mr-2">
                 <div>
-                    <h1 class="text-2xl font-bold text-yellow-300 sm:text-3xl">DAPOER IFSU</h1>
-                    <p class="mt-1 text-sm text-black-500">Selamat datang di website kantin SMK INFORMATIKA SUMEDANG</p>
+                    <h1 class="text-lg font-bold text-yellow-300 sm:text-xl">DAPOER IFSU</h1>
+                    <p class="mt-0 text-xs text-gray-600">Selamat datang di website kantin SMK INFORMATIKA SUMEDANG</p>
                 </div>
             </div>
-            <div class="flex items-center gap-4">
-                <a href="login.php"
-                    class="inline-flex items-center justify-center gap-1.5 rounded-sm border border-gray-200 bg-white px-5 py-3 text-gray-900 transition hover:text-gray-700 focus:ring-3 focus:outline-hidden">
-                    <span class="text-sm font-medium"> Login </span>
+            <div class="flex items-center gap-3">
+                <a href="login.php" class="text-sm px-3 py-2 border border-gray-200 bg-white text-gray-900 transition hover:text-gray-700">
+                    Login
                 </a>
-                <a href="register.php"
-                    class="inline-block rounded-sm bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:ring-3 focus:outline-hidden">
+                <a href="register.php" class="text-sm px-4 py-2 bg-indigo-600 text-white transition hover:bg-indigo-700">
                     Register
                 </a>
             </div>
@@ -159,7 +157,7 @@
     });
 </script>
 
-<section class="relative animate-section opacity-0 translate-x-10 transition-all duration-[1200ms] ease-in-out">
+<section class="relative animate-section opacity-0 translate-x-10 transition-all duration-[2500ms] delay-700 ease-in-out">
     <img src="../assets/images/model.png" alt="Background Image"
         class="absolute inset-0 h-full w-full object-cover" />
 
@@ -172,27 +170,29 @@
 </section>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const sections = document.querySelectorAll(".animate-section");
+document.addEventListener("DOMContentLoaded", function () {
+    const sections = document.querySelectorAll(".animate-section");
 
-        function handleScrollAnimations() {
-            sections.forEach((section) => {
-                const rect = section.getBoundingClientRect();
-                const windowHeight = window.innerHeight;
+    function handleScrollAnimations() {
+        sections.forEach((section) => {
+            const rect = section.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
 
-                if (rect.top < windowHeight * 0.9 && rect.bottom > 0) {
+            if (rect.top < windowHeight * 0.9 && rect.bottom > 0) {
+                setTimeout(() => { // Tambahkan delay lebih lama
                     section.classList.add("opacity-100", "translate-x-0");
                     section.classList.remove("opacity-0", "translate-x-10");
-                } else {
-                    section.classList.add("opacity-0", "translate-x-10"); // Reset efek agar bisa muncul lagi
-                    section.classList.remove("opacity-100", "translate-x-0");
-                }
-            });
-        }
+                }, 1000); // Delay 1 detik sebelum animasi dimulai
+            } else {
+                section.classList.add("opacity-0", "translate-x-10"); // Reset efek agar bisa muncul lagi
+                section.classList.remove("opacity-100", "translate-x-0");
+            }
+        });
+    }
 
-        window.addEventListener("scroll", handleScrollAnimations);
-        handleScrollAnimations();
-    });
+    window.addEventListener("scroll", handleScrollAnimations);
+    handleScrollAnimations();
+});
 </script>
 
 
