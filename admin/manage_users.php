@@ -57,7 +57,7 @@ if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id'])) {
             <div class="flex items-center justify-center mb-6">
                 <img src="../assets/images/ifsu.png" alt="Kantin Logo" class="w-24 h-24 object-cover rounded-full">
             </div>
-            <h2 class="text-3xl font-bold mb-6 text-center">KANTIN IFSU BERKAH</h2>
+            <h2 class="text-3xl font-bold mb-6 text-center">DAPOER IFSU</h2>
             <ul class="space-y-4">
                 <li>
                     <a href="dashboard.php"

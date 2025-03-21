@@ -81,7 +81,7 @@ $user = $user_result->fetch_assoc();
         <div class="flex items-center space-x-4">
             <img src="../assets/images/ifsu.png" alt="Logo Kantin" class="w-12 h-12 rounded-full border-2 border-white">
             <h1 class="text-lg md:text-2xl font-extrabold tracking-wide text-yellow-300">
-                KANTIN IFSU BERKAH
+                DAPOER IFSU
             </h1>
         </div>
 

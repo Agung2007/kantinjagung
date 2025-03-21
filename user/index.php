@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Landing Page</title>
     <link rel="shortcut icon" href="../assets/images/bahanicon.png">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 
@@ -16,14 +18,14 @@
 
 <body>
     <!-- header -->
-    <header id="header" class="bg-white fixed top-0 left-0 w-full z-50 shadow-md opacity-0 transform -translate-y-full transition-all duration-500 ease-out">
+    <header id="header" class="bg-blue-900 fixed top-0 left-0 w-full z-50 shadow-md opacity-0 transform -translate-y-full transition-all duration-500 ease-out">
     <div class="mx-auto max-w-screen-xl px-4 py-2 sm:px-6 sm:py-2 lg:px-8">
         <div class="flex items-center justify-between">
             <div class="flex items-center">
                 <img src="../assets/images/ifsu.png" alt="Logo" class="h-6 sm:h-8 md:h-10 mr-2">
                 <div>
                     <h1 class="text-lg font-bold text-yellow-300 sm:text-xl">DAPOER IFSU</h1>
-                    <p class="mt-0 text-xs text-gray-600">Selamat datang di website kantin SMK INFORMATIKA SUMEDANG</p>
+                    <p class="mt-0 text-xs text-white">Selamat datang di website kantin SMK INFORMATIKA SUMEDANG</p>
                 </div>
             </div>
             <div class="flex items-center gap-3">
@@ -104,8 +106,8 @@
 
     <!-- PRODUK -->
     <section class="mx-auto max-w-screen-xl px-4 py-12">
-    <h2 class="text-3xl font-bold text-gray-900 text-center mb-8 scroll-fade opacity-0 translate-x-10 transition-all duration-700 ease-in-out">
-        MENU UNGGULAN
+    <h2 class="text-3xl font-bold text-gray-900 text-center mb-8 scroll-fade opacity-0 translate-x-10 transition-all duration-[2500ms] delay-500 ease-in-out">
+    MENU UNGGULAN
     </h2>
 
     <span class="relative flex justify-center scroll-fade opacity-0 translate-x-10 transition-all duration-700 ease-in-out">
@@ -531,7 +533,17 @@ document.addEventListener("DOMContentLoaded", function () {
   </details>
 
 </div>
+<footer class="p-4 bg-white md:p-8 lg:p-10 dark:bg-gray-800">
+  <div class="mx-auto max-w-screen-xl text-center">
+      <a href="#" class="flex justify-center items-center text-2xl font-semibold text-gray-900 dark:text-white">
+      <img src="../assets/images/ifsu.png" alt="Logo" class="mr-2 h-8">
+      SMK INFORMATIKA SUMEDANG
+      </a>
+      <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2025-2026 <a href="#" class="hover:underline">agung ganteng</a>. dapoer ifsu.</span>
+  </div>
+</footer>
 
 </body>
 
 </html>
+
