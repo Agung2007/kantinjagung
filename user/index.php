@@ -7,15 +7,23 @@
   <title>Landing Page</title>
   <link rel="shortcut icon" href="../assets/images/bahanicon.png">
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
   <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
   <!-- AOS CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-
-
-
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+    75% { transform: rotate(-3deg); }
+  }
+
+  .animate-wiggle {
+    animation: wiggle 0.3s ease-in-out;
+  }
+</style>
 
 </head>
 
@@ -558,7 +566,11 @@
 </script>
 
 <a href="https://wa.me/08586270297" target="_blank"
-  class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg flex items-center space-x-2 transition hover:scale-110 hover:bg-green-600">
+  class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg flex items-center space-x-2 
+         transition hover:scale-110 hover:bg-green-600 
+         animate-pulse hover:animate-none"
+  onmouseover="this.classList.add('animate-wiggle')"
+  onmouseout="this.classList.remove('animate-wiggle')">
   <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" class="w-6 h-6">
   <span class="hidden md:inline font-semibold">Hubungi Admin</span>
 </a>

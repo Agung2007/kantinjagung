@@ -132,17 +132,22 @@ $user = $user_result->fetch_assoc();
         </form>
     </div>
 <!-- produk dan harga -->
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
-        <?php while ($menu = $result->fetch_assoc()): ?>
-        <div class="relative bg-white/50 border border-gray-200 rounded-xl shadow-lg overflow-hidden transform transition duration-500 hover:scale-105 hover:shadow-2xl group backdrop-blur-lg">
-            <div class="relative w-full h-64 overflow-hidden rounded-t-xl">
-                <img src="../<?= !empty($menu['image']) ? htmlspecialchars($menu['image']) : 'default.jpg' ?>" alt="<?= htmlspecialchars($menu['name']) ?>" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-110">
-            </div>
-            <div class="p-6 text-gray-900 flex flex-col flex-grow text-center">
-                <h3 class="text-2xl font-semibold group-hover:text-blue-600 transition-colors duration-300"><?= htmlspecialchars($menu['name']) ?></h3>
-                <p class="text-lg text-green-600 font-bold mt-2">Rp <?= number_format($menu['price'], 0, ',', '.') ?></p>
-                <a href="order.php?id=<?= $menu['id'] ?>" class="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-center rounded-lg font-bold hover:scale-110 hover:from-blue-700 hover:to-blue-500 transition-all duration-300">Pesan Sekarang</a>
-            </div>
+<div id="menuContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4 opacity-0 scale-90 transition-all duration-700 ease-out">
+    <?php while ($menu = $result->fetch_assoc()): ?>
+    <div class="relative bg-white/50 border border-gray-200 rounded-xl shadow-lg overflow-hidden transform transition duration-500 hover:scale-105 hover:shadow-2xl group backdrop-blur-lg">
+        <div class="relative w-full h-64 overflow-hidden rounded-t-xl">
+            <img src="../<?= !empty($menu['image']) ? htmlspecialchars($menu['image']) : 'default.jpg' ?>" 
+                 alt="<?= htmlspecialchars($menu['name']) ?>" 
+                 class="w-full h-full object-cover transition-all duration-500 group-hover:scale-110">
+        </div>
+        <div class="p-6 text-gray-900 flex flex-col flex-grow text-center">
+            <h3 class="text-2xl font-semibold group-hover:text-blue-600 transition-colors duration-300"><?= htmlspecialchars($menu['name']) ?></h3>
+            <p class="text-lg text-green-600 font-bold mt-2">Rp <?= number_format($menu['price'], 0, ',', '.') ?></p>
+            <a href="order.php?id=<?= $menu['id'] ?>" 
+               class="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-center rounded-lg font-bold hover:scale-110 hover:from-blue-700 hover:to-blue-500 transition-all duration-300">
+               Pesan Sekarang
+            </a>
+        </div>
         </div>
         <?php endwhile; ?>
     </div>    </div>
@@ -188,6 +193,13 @@ $user = $user_result->fetch_assoc();
             menu.classList.add("hidden");
         }
     });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        setTimeout(() => {
+            document.getElementById("menuContainer").classList.remove("opacity-0", "scale-90");
+        }, 500); // Delay agar terasa lebih smooth setelah login
+    });
+
 </script>
 <a href="https://wa.me/08586270297" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg flex items-center space-x-2 transition hover:scale-110 hover:bg-green-600">
     <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" class="w-6 h-6">
