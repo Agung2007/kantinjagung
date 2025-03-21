@@ -131,5 +131,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     });
 
     </script>
+    <a href="https://wa.me/08586270297" target="_blank"
+  class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg flex items-center space-x-2 transition hover:scale-110 hover:bg-green-600">
+  <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" class="w-6 h-6">
+  <span class="hidden md:inline font-semibold">Hubungi Admin</span>
+</a>
+
+
 </body>
 </html>

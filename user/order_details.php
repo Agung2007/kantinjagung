@@ -106,7 +106,6 @@ $result = $stmt->get_result();
             </a>
         </div>
     </div>
-
 </body>
 </html>
 
