@@ -142,7 +142,7 @@ $result = $conn->query($sql);
         </div>
         <!-- Main Content -->
         <div class="flex-1 p-8 ml-64">
-        <h2 class="text-3xl font-semibold text-gray-700 mb-6">Manage Menu</h2>
+        <h2 class="text-3xl font-semibold text-gray-700 mb-6">Kelola Menu</h2>
 
             <!-- Form untuk menambah menu baru -->
             <form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md mb-8">

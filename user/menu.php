@@ -9,14 +9,30 @@ if (!$conn) {
 
 // Proses pencarian
 $search = $_GET['search'] ?? '';
-$sql = "SELECT id, name, price, image FROM menu WHERE name LIKE ?";
-$stmt = $conn->prepare($sql);
 $search_param = "%$search%";
-$stmt->bind_param("s", $search_param);
+
+// Pagination setup
+$limit = 4;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$start = ($page - 1) * $limit;
+
+// Ambil total menu untuk pagination
+$totalQuery = $conn->prepare("SELECT COUNT(id) AS total FROM menu WHERE name LIKE ?");
+$totalQuery->bind_param("s", $search_param);
+$totalQuery->execute();
+$totalResult = $totalQuery->get_result();
+$totalRow = $totalResult->fetch_assoc();
+$totalMenu = $totalRow['total'];
+$totalPages = ceil($totalMenu / $limit);
+
+// Ambil menu sesuai halaman
+$sql = "SELECT id, name, price, image FROM menu WHERE name LIKE ? LIMIT ?, ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("sii", $search_param, $start, $limit);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Ambil data pengguna untuk menampilkan profil
+// Ambil data pengguna
 $user_id = $_SESSION['user_id'] ?? null;
 $user_query = "SELECT username, profile_picture FROM users WHERE id = ?";
 $stmt_user = $conn->prepare($user_query);
@@ -25,7 +41,6 @@ $stmt_user->execute();
 $user_result = $stmt_user->get_result();
 $user = $user_result->fetch_assoc();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -133,24 +148,43 @@ $user = $user_result->fetch_assoc();
     </div>
 <!-- produk dan harga -->
 <div id="menuContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4 opacity-0 scale-90 transition-all duration-700 ease-out">
-    <?php while ($menu = $result->fetch_assoc()): ?>
-    <div class="relative bg-white/50 border border-gray-200 rounded-xl shadow-lg overflow-hidden transform transition duration-500 hover:scale-105 hover:shadow-2xl group backdrop-blur-lg">
-        <div class="relative w-full h-64 overflow-hidden rounded-t-xl">
-            <img src="../<?= !empty($menu['image']) ? htmlspecialchars($menu['image']) : 'default.jpg' ?>" 
-                 alt="<?= htmlspecialchars($menu['name']) ?>" 
-                 class="w-full h-full object-cover transition-all duration-500 group-hover:scale-110">
-        </div>
-        <div class="p-6 text-gray-900 flex flex-col flex-grow text-center">
-            <h3 class="text-2xl font-semibold group-hover:text-blue-600 transition-colors duration-300"><?= htmlspecialchars($menu['name']) ?></h3>
-            <p class="text-lg text-green-600 font-bold mt-2">Rp <?= number_format($menu['price'], 0, ',', '.') ?></p>
-            <a href="order.php?id=<?= $menu['id'] ?>" 
-               class="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-center rounded-lg font-bold hover:scale-110 hover:from-blue-700 hover:to-blue-500 transition-all duration-300">
-               Pesan Sekarang
-            </a>
-        </div>
-        </div>
+    <?php if ($result->num_rows > 0): ?>
+        <?php while ($menu = $result->fetch_assoc()): ?>
+            <div class="relative bg-white/50 border border-gray-200 rounded-xl shadow-lg overflow-hidden transform transition duration-500 hover:scale-105 hover:shadow-2xl group backdrop-blur-lg">
+                <div class="relative w-full h-64 overflow-hidden rounded-t-xl">
+                    <img src="../<?= !empty($menu['image']) ? htmlspecialchars($menu['image']) : 'default.jpg' ?>" 
+                         alt="<?= htmlspecialchars($menu['name']) ?>" 
+                         class="w-full h-full object-cover transition-all duration-500 group-hover:scale-110">
+                </div>
+                <div class="p-6 text-gray-900 flex flex-col flex-grow text-center">
+                    <h3 class="text-2xl font-semibold group-hover:text-blue-600 transition-colors duration-300">
+                        <?= htmlspecialchars($menu['name']) ?>
+                    </h3>
+                    <p class="text-lg text-green-600 font-bold mt-2">Rp <?= number_format($menu['price'], 0, ',', '.') ?></p>
+                    <a href="order.php?id=<?= $menu['id'] ?>" 
+                       class="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-center rounded-lg font-bold hover:scale-110 hover:from-blue-700 hover:to-blue-500 transition-all duration-300">
+                       Pesan Sekarang
+                    </a>
+                </div>
+            </div>
         <?php endwhile; ?>
-    </div>    </div>
+    <?php else: ?>
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
+            <div class="h-32 rounded bg-gray-300 lg:col-span-2"></div>
+            <div class="h-32 rounded bg-gray-300"></div>
+        </div>
+    <?php endif; ?>
+</div>
+    <!-- Pagination -->
+    <div class="flex justify-center mt-6">
+        <a href="?page=<?= max(1, $page - 1) ?>&search=<?= htmlspecialchars($search) ?>" class="px-4 py-2 border">Prev</a>
+        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+            <a href="?page=<?= $i ?>&search=<?= htmlspecialchars($search) ?>" class="px-4 py-2 <?= $i == $page ? 'bg-blue-500 text-white' : 'border' ?>"> <?= $i ?> </a>
+        <?php endfor; ?>
+        <a href="?page=<?= min($totalPages, $page + 1) ?>&search=<?= htmlspecialchars($search) ?>" class="px-4 py-2 border">Next</a>
+    </div>
+</div>
+  </div>
 </div>
 
 <footer class="bg-gray-50">

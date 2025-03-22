@@ -120,104 +120,57 @@
 
   <!-- PRODUK -->
   <section class="mx-auto max-w-screen-xl px-4 py-12">
-    <h2
-      class="text-3xl font-bold text-gray-900 text-center mb-8 scroll-fade opacity-0 translate-x-10 transition-all duration-[2500ms] delay-500 ease-in-out">
+    <h2 class="text-3xl font-bold text-gray-900 text-center mb-8" 
+        data-aos="fade-down" data-aos-duration="2500" data-aos-delay="500">
       MENU UNGGULAN
     </h2>
 
-    <span
-      class="relative flex justify-center scroll-fade opacity-0 translate-x-10 transition-all duration-700 ease-in-out">
-      <div
-        class="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-transparent bg-gradient-to-r from-transparent via-gray-500 to-transparent opacity-75">
+    <span class="relative flex justify-center" 
+        data-aos="zoom-in" data-aos-duration="1500" data-aos-delay="700">
+      <div class="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-transparent 
+                  bg-gradient-to-r from-transparent via-gray-500 to-transparent opacity-75">
       </div>
       <span class="relative z-10 bg-white px-6">Menu</span>
     </span>
+</section>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="text-center scroll-fade opacity-0 translate-x-10 transition-all duration-700 ease-in-out">
+    <div class="text-center" data-aos="fade-up" data-aos-duration="2000">
         <img class="h-69 w-full object-cover rounded-lg" src="../assets/images/mieayam.png" alt="Mie Ayam">
         <p class="mt-2 text-sm text-gray-700">Mie Ayam</p>
-      </div>
-      <div class="text-center scroll-fade opacity-0 translate-x-10 transition-all duration-700 ease-in-out">
+    </div>
+    <div class="text-center" data-aos="fade-down" data-aos-duration="2000">
         <img class="h-69 w-full object-cover rounded-lg" src="../assets/images/cendol.png" alt="Cendol">
         <p class="mt-2 text-sm text-gray-700">Cendol</p>
-      </div>
-      <div class="text-center scroll-fade opacity-0 translate-x-10 transition-all duration-700 ease-in-out">
+    </div>
+    <div class="text-center" data-aos="zoom-in" data-aos-duration="2000">
         <img class="h-69 w-full object-cover rounded-lg" src="../assets/images/sate.png" alt="Sate">
         <p class="mt-2 text-sm text-gray-700">Sate</p>
-      </div>
-      <div class="text-center scroll-fade opacity-0 translate-x-10 transition-all duration-700 ease-in-out">
+    </div>
+    <div class="text-center" data-aos="flip-left" data-aos-duration="2000">
         <img class="h-69 w-full object-cover rounded-lg" src="../assets/images/nasichiken.png" alt="Nasi Chicken">
         <p class="mt-2 text-sm text-gray-700">Nasi Chicken</p>
-      </div>
     </div>
+</div>
   </section>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const scrollElements = document.querySelectorAll(".scroll-fade");
+  <section class="relative opacity-0 translate-y-10 transition-all duration-[2500ms] delay-700 ease-in-out"
+  data-aos="fade-up" data-aos-duration="2000" data-aos-easing="ease-out-cubic">
 
-      function handleScrollAnimations() {
-        scrollElements.forEach((el) => {
-          const rect = el.getBoundingClientRect();
-          const windowHeight = window.innerHeight;
+  <img src="../assets/images/model.png" alt="Background Image" 
+    class="absolute inset-0 h-full w-full object-cover transform scale-105 transition-transform duration-[3000ms] ease-in-out group-hover:scale-110"
+    data-aos="zoom-in-up" data-aos-duration="2500" />
 
-          if (rect.top < windowHeight * 0.9 && rect.bottom > 0) {
-            el.classList.add("opacity-100", "translate-x-0");
-            el.classList.remove("opacity-0", "translate-x-10");
-          } else {
-            el.classList.add("opacity-0", "translate-x-10");
-            el.classList.remove("opacity-100", "translate-x-0");
-          }
-        });
-      }
+  <div class="absolute inset-0 bg-gray-900/75 sm:bg-transparent sm:from-gray-900/95 
+              sm:to-gray-900/25 sm:bg-gradient-to-r"
+    data-aos="fade" data-aos-duration="2000">
+  </div>
 
-      handleScrollAnimations();
-      window.addEventListener("scroll", handleScrollAnimations);
-    });
-  </script>
-
-  <section
-    class="relative animate-section opacity-0 translate-x-10 transition-all duration-[2500ms] delay-700 ease-in-out">
-    <img src="../assets/images/model.png" alt="Background Image" class="absolute inset-0 h-full w-full object-cover" />
-
-    <div
-      class="absolute inset-0 bg-gray-900/75 sm:bg-transparent sm:from-gray-900/95 sm:to-gray-900/25 sm:bg-gradient-to-r">
-    </div>
-
-    <div class="relative mx-auto max-w-screen-xl px-4 py-32 sm:px-6 lg:flex lg:h-screen lg:items-center lg:px-8">
-      <div class="max-w-xl text-center ltr:sm:text-left rtl:sm:text-right">
-      </div>
-    </div>
-  </section>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const sections = document.querySelectorAll(".animate-section");
-
-      function handleScrollAnimations() {
-        sections.forEach((section) => {
-          const rect = section.getBoundingClientRect();
-          const windowHeight = window.innerHeight;
-
-          if (rect.top < windowHeight * 0.9 && rect.bottom > 0) {
-            setTimeout(() => { // Tambahkan delay lebih lama
-              section.classList.add("opacity-100", "translate-x-0");
-              section.classList.remove("opacity-0", "translate-x-10");
-            }, 1000); // Delay 1 detik sebelum animasi dimulai
-          } else {
-            section.classList.add("opacity-0", "translate-x-10"); // Reset efek agar bisa muncul lagi
-            section.classList.remove("opacity-100", "translate-x-0");
-          }
-        });
-      }
-
-      window.addEventListener("scroll", handleScrollAnimations);
-      handleScrollAnimations();
-    });
-  </script>
-
-
+  <div class="relative mx-auto max-w-screen-xl px-4 py-32 sm:px-6 
+              lg:flex lg:h-screen lg:items-center lg:px-8"
+    data-aos="fade-up" data-aos-delay="1000" data-aos-duration="2000">
+  </div>
+</section>
 
   <!-- TESTIMONI -->
   <link href="https://cdn.jsdelivr.net/npm/keen-slider@6.8.6/keen-slider.min.css" rel="stylesheet" />
@@ -287,11 +240,17 @@
   keenSliderNext.addEventListener('click', () => keenSlider.next())
 </script>
 
-  <section class="bg-white">
-    <div class="mx-auto max-w-screen-xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16" data-aos="flip-down">
-      <h2 class="text-center text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-        PELANGGAN TERKENAL
-      </h2>
+<section class="bg-white">
+  <div class="mx-auto max-w-screen-xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
+    data-aos="fade-up" data-aos-duration="2000" data-aos-easing="ease-out-cubic">
+    
+    <h2 class="text-center text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl"
+      data-aos="zoom-in" data-aos-duration="1500">
+      PELANGGAN TERKENAL
+    </h2>
+    
+  </div>
+</section>
 
       <div class="mt-8">
         <div id="keen-slider" class="keen-slider">
@@ -562,7 +521,9 @@
 <!-- AOS JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 <script>
-  AOS.init();
+    AOS.init({
+        once: false // Animasi akan diputar ulang saat elemen masuk kembali ke viewport
+    });
 </script>
 
 <a href="https://wa.me/08586270297" target="_blank"
