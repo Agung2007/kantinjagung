@@ -10,10 +10,25 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 // Koneksi ke database
 include('db_connection.php');
 
+// Ambil daftar kategori dari database
+$categories = [];
+$category_query = "SELECT name FROM categories";
+$category_result = $conn->query($category_query);
+
+if (!$category_result) {
+    die("Query Error: " . $conn->error);
+}
+
+while ($cat = $category_result->fetch_assoc()) {
+    $categories[] = $cat['name']; // Sesuaikan dengan nama kolom di tabel categories
+}
+
+
 // Menambahkan menu baru
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_menu'])) {
     $name = $_POST['name'];
     $price = $_POST['price'];
+    $category = $_POST['category']; // Ambil kategori dari form
     $image = null;
 
     // Mengecek apakah ada gambar yang di-upload
@@ -31,17 +46,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_menu'])) {
 
     // Query untuk menambahkan menu ke database
     if (!empty($image)) {
-        $sql = "INSERT INTO menu (name, price, image) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO menu (name, price, category, image) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sis", $name, $price, $image); // "sis" → String, Integer, String
+        $stmt->bind_param("siss", $name, $price, $category, $image);
         $stmt->execute();
 
-        // Set pesan sukses
         $success_message = "Menu berhasil ditambahkan!";
     } else {
         echo "Gagal mengupload gambar.";
     }
-}// Mengambil daftar menu dari database
+}
 $sql = "SELECT * FROM menu";
 $result = $conn->query($sql);
 ?>
@@ -106,6 +120,18 @@ $result = $conn->query($sql);
                     </a>
                 </li>
                 <li>
+                    <a href="manage_categories.php"
+                        class="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                        </svg>
+                        Kategori
+                    </a>
+                </li>
+
+                <li>
                     <a href="manage_menu.php"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -158,6 +184,16 @@ $result = $conn->query($sql);
                             class="w-full p-3 mt-2 border border-gray-300 rounded-md" required>
                     </div>
                 </div>
+                <div>
+    <label for="category" class="block text-sm font-medium text-gray-700">Kategori</label>
+    <select name="category" id="category" class="w-full p-3 mt-2 border border-gray-300 rounded-md" required>
+        <option value="" disabled selected>Pilih Kategori</option>
+        <?php foreach ($categories as $category) : ?>
+            <option value="<?= htmlspecialchars($category) ?>"><?= htmlspecialchars($category) ?></option>
+        <?php endforeach; ?>
+    </select>
+</div>
+
                 <div class="mt-4">
                     <label for="image" class="block text-sm font-medium text-gray-700">Image (Optional)</label>
                     <input type="file" name="image" id="image"
@@ -173,43 +209,45 @@ $result = $conn->query($sql);
             <!-- Tabel Daftar Menu -->
             <div class="overflow-x-auto">
     <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
-        <thead class="bg-blue-500 text-white">
-            <tr>
-                <th class="px-6 py-3 text-center">No</th>
-                <th class="px-6 py-3 text-left">Menu Name</th>
-                <th class="px-6 py-3 text-center">Price</th>
-                <th class="px-6 py-3 text-center">Image</th>
-                <th class="px-6 py-3 text-center">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $no = 1;
-            while ($row = $result->fetch_assoc()) {
-                $image_path = !empty($row['image']) ? htmlspecialchars($row['image']) : 'assets/default.jpg';
-            ?>
-                <tr class="border-b hover:bg-gray-100">
-                    <td class="px-6 py-4 text-center"><?= $no ?></td>
-                    <td class="px-6 py-4"><?= htmlspecialchars($row['name']) ?></td>
-                    <td class="px-6 py-4 text-center">Rp <?= number_format($row['price'], 0, ',', '.') ?></td>
-                    <td class="px-6 py-4 flex justify-center">
-                        <img src="../<?= $image_path ?>" alt="Menu Image" class="w-16 h-16 object-cover rounded-md border">
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                        <a href="edit_menu.php?id=<?= $row['id'] ?>">
-                            <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200">Edit</button>
-                        </a>
-                        <button onclick="confirmDelete(<?= $row['id'] ?>)" 
-                            class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200 ml-2">
-                            Delete
-                        </button>
-                    </td>
-                </tr>
-            <?php
-                $no++;
-            }
-            ?>
-        </tbody>
+    <thead class="bg-blue-500 text-white">
+    <tr>
+        <th class="px-6 py-3 text-center">No</th>
+        <th class="px-6 py-3 text-left">Menu Name</th>
+        <th class="px-6 py-3 text-center">Kategori</th>
+        <th class="px-6 py-3 text-center">Price</th>
+        <th class="px-6 py-3 text-center">Image</th>
+        <th class="px-6 py-3 text-center">Actions</th>
+    </tr>
+</thead>
+<tbody>
+    <?php
+    $no = 1;
+    while ($row = $result->fetch_assoc()) {
+        $image_path = !empty($row['image']) ? htmlspecialchars($row['image']) : 'assets/default.jpg';
+    ?>
+        <tr class="border-b hover:bg-gray-100">
+            <td class="px-6 py-4 text-center"><?= $no ?></td>
+            <td class="px-6 py-4"><?= htmlspecialchars($row['name']) ?></td>
+            <td class="px-6 py-4 text-center"><?= htmlspecialchars($row['category']) ?></td> <!-- Menampilkan kategori -->
+            <td class="px-6 py-4 text-center">Rp <?= number_format($row['price'], 0, ',', '.') ?></td>
+            <td class="px-6 py-4 flex justify-center">
+                <img src="../<?= $image_path ?>" alt="Menu Image" class="w-16 h-16 object-cover rounded-md border">
+            </td>
+            <td class="px-6 py-4 text-center">
+                <a href="edit_menu.php?id=<?= $row['id'] ?>">
+                    <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200">Edit</button>
+                </a>
+                <button onclick="confirmDelete(<?= $row['id'] ?>)" 
+                    class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200 ml-2">
+                    Delete
+                </button>
+            </td>
+        </tr>
+    <?php
+        $no++;
+    }
+    ?>
+</tbody>
     </table>
 </div>
         </div>

@@ -24,9 +24,18 @@ if ($id) {
     if ($result->num_rows > 0) {
         $menu = $result->fetch_assoc();
     } else {
-        echo "Menu not found!";
+        echo "Menu tidak ditemukan!";
         exit;
     }
+}
+
+// Ambil daftar kategori dari tabel categories
+$categories = [];
+$category_query = "SELECT * FROM categories";
+$category_result = $conn->query($category_query);
+
+while ($cat = $category_result->fetch_assoc()) {
+    $categories[] = $cat;
 }
 
 // Update data menu
@@ -34,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
     $id = $_POST['id'];
     $name = $_POST['name'];
     $price = doubleval($_POST['price']);
+    $category = $_POST['category']; // Ambil kategori dari form
     $image = $_POST['old_image']; // Gunakan gambar lama jika tidak ada yang baru
 
     // Periksa apakah ada gambar baru yang di-upload
@@ -64,9 +74,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
     }
 
     // Update ke database
-    $sql = "UPDATE menu SET name = ?, price = ?, image = ? WHERE id = ?";
+    $sql = "UPDATE menu SET name = ?, price = ?, category = ?, image = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sdsi", $name, $price, $image, $id);
+    $stmt->bind_param("sdsii", $name, $price, $category, $image, $id);
 
     if ($stmt->execute()) {
         header("Location: manage_menu.php");
@@ -105,6 +115,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
                     <div class="mb-4">
                         <label for="price" class="block text-sm font-medium text-gray-700">Harga</label>
                         <input type="number" name="price" id="price" value="<?= htmlspecialchars($menu['price']) ?>" required class="w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="category" class="block text-sm font-medium text-gray-700">Kategori</label>
+                        <select name="category" id="category" class="w-full p-2 border border-gray-300 rounded-md">
+                            <?php foreach ($categories as $cat): ?>
+                                <option value="<?= htmlspecialchars($cat['name']) ?>" <?= $cat['name'] == $menu['category'] ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($cat['name']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="mb-4">

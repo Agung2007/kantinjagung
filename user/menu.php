@@ -11,35 +11,71 @@ if (!$conn) {
 $search = $_GET['search'] ?? '';
 $search_param = "%$search%";
 
+// Ambil kategori dari URL
+$selected_category = $_GET['category'] ?? '';
+
 // Pagination setup
 $limit = 4;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $start = ($page - 1) * $limit;
 
-// Ambil total menu untuk pagination
-$totalQuery = $conn->prepare("SELECT COUNT(id) AS total FROM menu WHERE name LIKE ?");
-$totalQuery->bind_param("s", $search_param);
-$totalQuery->execute();
-$totalResult = $totalQuery->get_result();
+// Ambil daftar kategori unik dari tabel menu
+$categories_query = "SELECT DISTINCT category FROM menu WHERE category IS NOT NULL AND category != ''";
+$categories_result = $conn->query($categories_query);
+
+// Buat query untuk menghitung total menu
+$totalQuery = "SELECT COUNT(id) AS total FROM menu WHERE name LIKE ?";
+$params = [$search_param];
+$types = "s";
+
+// Tambahkan filter kategori jika dipilih
+if ($selected_category) {
+    $totalQuery .= " AND category = ?";
+    $params[] = $selected_category;
+    $types .= "s";
+}
+
+$totalStmt = $conn->prepare($totalQuery);
+$totalStmt->bind_param($types, ...$params);
+$totalStmt->execute();
+$totalResult = $totalStmt->get_result();
 $totalRow = $totalResult->fetch_assoc();
 $totalMenu = $totalRow['total'];
 $totalPages = ceil($totalMenu / $limit);
 
-// Ambil menu sesuai halaman
-$sql = "SELECT id, name, price, image FROM menu WHERE name LIKE ? LIMIT ?, ?";
+// Ambil menu berdasarkan pencarian, kategori, dan pagination
+$sql = "SELECT id, name, price, image, category FROM menu WHERE name LIKE ?";
+$params = [$search_param];
+$types = "s";
+
+// Tambahkan filter kategori jika dipilih
+if ($selected_category) {
+    $sql .= " AND category = ?";
+    $params[] = $selected_category;
+    $types .= "s";
+}
+
+$sql .= " LIMIT ?, ?";
+$params[] = $start;
+$params[] = $limit;
+$types .= "ii";
+
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sii", $search_param, $start, $limit);
+$stmt->bind_param($types, ...$params);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Ambil data pengguna
+// Ambil data pengguna (jika login)
 $user_id = $_SESSION['user_id'] ?? null;
-$user_query = "SELECT username, profile_picture FROM users WHERE id = ?";
-$stmt_user = $conn->prepare($user_query);
-$stmt_user->bind_param("i", $user_id);
-$stmt_user->execute();
-$user_result = $stmt_user->get_result();
-$user = $user_result->fetch_assoc();
+$user = null;
+if ($user_id) {
+    $user_query = "SELECT username, profile_picture FROM users WHERE id = ?";
+    $stmt_user = $conn->prepare($user_query);
+    $stmt_user->bind_param("i", $user_id);
+    $stmt_user->execute();
+    $user_result = $stmt_user->get_result();
+    $user = $user_result->fetch_assoc();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -135,17 +171,31 @@ $user = $user_result->fetch_assoc();
         class="block px-4 py-2 hover:bg-gray-100 transition">Logout</a>
     </div>
 </nav>
-<!-- Main Content -->
+<!-- MAIN CONTENT -->
 <div class="max-w-7xl mx-auto p-6 mt-20 bg-white/50 backdrop-blur-md rounded-lg shadow-lg py-10">
-    <h2 class="text-4xl font-extrabold text-center mb-6 uppercase tracking-widest text-blue-700 animate-pulse">Menu Kantin</h2>
-    
-    <!-- Search Bar -->
-    <div class="flex justify-center mb-6 px-4">
-        <form method="GET" class="flex w-full max-w-md">
-            <input type="text" name="search" placeholder="Cari menu..." class="px-4 py-2 border rounded-l-md focus:outline-none w-full" value="<?= htmlspecialchars($search) ?>">
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-r-md">Cari</button>
-        </form>
-    </div>
+    <h2 class="text-4xl font-extrabold text-center mb-6 uppercase tracking-widest text-blue-700">Menu Kantin</h2>
+
+<!-- FILTER KATEGORI -->
+<div class="flex justify-center mb-6 px-4">
+    <select name="category" id="categoryFilter" class="px-4 py-2 border rounded-md focus:outline-none" onchange="filterCategory()">
+        <option value="">Semua Kategori</option>
+        <?php while ($category = $categories_result->fetch_assoc()): ?>
+            <option value="<?= htmlspecialchars($category['category']) ?>" 
+                <?= $selected_category == $category['category'] ? 'selected' : '' ?>>
+                <?= htmlspecialchars($category['category']) ?>
+            </option>
+        <?php endwhile; ?>
+    </select>
+</div>
+
+<!-- SEARCH FORM -->
+<div class="flex justify-center mb-6 px-4">
+    <form method="GET" class="flex w-full max-w-md space-x-2">
+        <input type="hidden" name="category" value="<?= htmlspecialchars($selected_category) ?>">
+        <input type="text" name="search" placeholder="Cari menu..." class="px-4 py-2 border rounded-md w-full" value="<?= htmlspecialchars($search) ?>">
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md">Cari</button>
+    </form>
+</div>
 <!-- produk dan harga -->
 <div id="menuContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4 opacity-0 scale-90 transition-all duration-700 ease-out">
     <?php if ($result->num_rows > 0): ?>
@@ -233,6 +283,12 @@ $user = $user_result->fetch_assoc();
             document.getElementById("menuContainer").classList.remove("opacity-0", "scale-90");
         }, 500); // Delay agar terasa lebih smooth setelah login
     });
+
+    function filterCategory() {
+        let selectedCategory = document.getElementById("categoryFilter").value;
+        window.location.href = "?category=" + encodeURIComponent(selectedCategory);
+    }
+
 
 </script>
 <a href="https://wa.me/08586270297" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg flex items-center space-x-2 transition hover:scale-110 hover:bg-green-600">

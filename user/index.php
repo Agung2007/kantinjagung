@@ -80,7 +80,7 @@
           <strong class="block font-extrabold text-yellow-300"> ANTI RIBET. </strong>
         </h1>
         <p class="mt-4 max-w-lg text-black sm:text-xl/relaxed">
-          Kantin IFSU Berkah adalah platform digital yang memudahkan siswa dan staf SMK Informatika Sumedang
+          DAPOER IFSU Berkah adalah platform digital yang memudahkan siswa dan staf SMK Informatika Sumedang
           dalam melihat menu, memesan makanan, dan mengetahui informasi terbaru tentang kantin sekolah.
         </p>
       </div>
