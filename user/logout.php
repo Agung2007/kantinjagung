@@ -4,6 +4,6 @@ session_unset();  // Hapus semua variabel sesi
 session_destroy(); // Hapus sesi pengguna
 
 // Redirect ke halaman login atau landing page
-header("Location: login.php");
+header("Location: index.php");
 exit;
 ?>
