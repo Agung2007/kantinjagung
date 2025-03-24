@@ -11,12 +11,14 @@ if (!$conn) {
 $search = $_GET['search'] ?? '';
 $search_param = "%$search%";
 
-// Ambil kategori dari URL
+// Ambil kategori dari URL dan hindari SQL Injection
 $selected_category = $_GET['category'] ?? '';
+$selected_category = mysqli_real_escape_string($conn, $selected_category);
 
 // Pagination setup
 $limit = 4;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = max(1, $page); // Hindari halaman < 1
 $start = ($page - 1) * $limit;
 
 // Ambil daftar kategori unik dari tabel menu
@@ -29,7 +31,7 @@ $params = [$search_param];
 $types = "s";
 
 // Tambahkan filter kategori jika dipilih
-if ($selected_category) {
+if (!empty($selected_category)) {
     $totalQuery .= " AND category = ?";
     $params[] = $selected_category;
     $types .= "s";
@@ -49,7 +51,7 @@ $params = [$search_param];
 $types = "s";
 
 // Tambahkan filter kategori jika dipilih
-if ($selected_category) {
+if (!empty($selected_category)) {
     $sql .= " AND category = ?";
     $params[] = $selected_category;
     $types .= "s";

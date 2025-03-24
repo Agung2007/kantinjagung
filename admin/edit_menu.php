@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
                     <div class="mb-6">
                         <h3 class="text-lg font-medium text-gray-700">Gambar Saat Ini:</h3>
                         <!-- Path gambar diperbaiki -->
-                        <img src="/kantinjagung/<?= htmlspecialchars($menu['image']) ?>" alt="Menu Image" class="w-16 h-16 object-cover rounded-md border">
+                        <img src="<?= htmlspecialchars($menu['image']) ?>" alt="Menu Image" class="w-16 h-16 object-cover rounded-md border">
 
                         <!-- Debugging Path -->
                         <p class="text-sm text-gray-500">Path: <?= htmlspecialchars($menu['image']) ?></p>

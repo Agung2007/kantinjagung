@@ -31,18 +31,19 @@ if ($result_transactions) {
     $total_transactions = $result_transactions->fetch_assoc()['total_transactions'];
 }
 
-// Mengambil total pendapatan dari transaksi
+// Mengambil total pendapatan berdasarkan tanggal tertentu
 $total_revenue = 0;
 $query_revenue = "SELECT SUM(total_price) AS total_revenue FROM transactions WHERE status = 'completed'";
 
-if (!empty($_GET['start_date']) && !empty($_GET['end_date'])) {
-    $query_revenue .= " AND transaction_date BETWEEN ? AND ?";
+// Jika ada input tanggal tertentu
+if (!empty($_GET['date'])) {
+    $query_revenue .= " AND DATE(transaction_date) = ?";
 }
 
 $stmt = $conn->prepare($query_revenue);
 
-if (!empty($_GET['start_date']) && !empty($_GET['end_date'])) {
-    $stmt->bind_param("ss", $_GET['start_date'], $_GET['end_date']);
+if (!empty($_GET['date'])) {
+    $stmt->bind_param("s", $_GET['date']);
 }
 
 $stmt->execute();
@@ -50,7 +51,6 @@ $result_revenue = $stmt->get_result();
 $row = $result_revenue->fetch_assoc();
 $total_revenue = $row['total_revenue'] ? $row['total_revenue'] : 0;
 $stmt->close();
-
 //produk terlaris
 $top_products_query = "
     SELECT m.id, m.name AS menu_name, m.image, SUM(od.quantity) AS total_quantity, m.price
@@ -221,14 +221,13 @@ $top_products_result = $conn->query($top_products_query);
 
                 </div>
                 <div class="mt-8 text-center">
-                    <form method="GET" action="" class="mb-6 flex gap-4 justify-center">
-                        <input type="date" name="start_date" class="p-2 border rounded"
-                            value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>" required>
-                        <input type="date" name="end_date" class="p-2 border rounded"
-                            value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>" required>
-                        <button type="submit"
-                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800">Filter</button>
-                    </form>
+                <form method="GET" action="dashboard.php" class="mb-4 flex items-center gap-4">
+    <label for="date" class="text-gray-700 font-semibold">Pilih Tanggal:</label>
+    <input type="date" id="date" name="date" class="border p-2 rounded-lg" value="<?php echo isset($_GET['date']) ? $_GET['date'] : ''; ?>">
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+        Filter
+    </button>
+</form>
                     <h3 class="text-2xl font-semibold text-gray-700">Total Pendapatan</h3>
                     <p class="text-5xl text-purple-700 font-bold mt-2">Rp
                         <?php echo number_format($total_revenue, 0, ',', '.'); ?></p>

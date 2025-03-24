@@ -51,6 +51,9 @@ $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
 $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
 
+// Ambil nilai tanggal dari filter (jika dipilih)
+$filter_date = isset($_GET['date']) ? $_GET['date'] : '';
+
 // Query dasar
 $query = "SELECT t.id, u.username AS user_name, 
        GROUP_CONCAT(m.name SEPARATOR ', ') AS menu_name, 
@@ -76,12 +79,11 @@ if (!empty($search)) {
     $types .= "sss";
 }
 
-// Tambahkan filter berdasarkan rentang tanggal jika diisi
-if (!empty($start_date) && !empty($end_date)) {
-    $query .= " AND (o.order_date BETWEEN ? AND ?)";
-    $params[] = $start_date;
-    $params[] = $end_date;
-    $types .= "ss";
+// Tambahkan filter berdasarkan tanggal jika ada
+if (!empty($filter_date)) {
+    $query .= " AND DATE(o.order_date) = ?";
+    $params[] = $filter_date;
+    $types .= "s";
 }
 
 $query .= " GROUP BY t.id, u.username, t.total_price, t.status, t.payment_method, o.order_date
@@ -101,7 +103,7 @@ $result = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Menu</title>
+    <title>Transaksi</title>
     <link rel="shortcut icon" href="../assets/images/bahanicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -194,15 +196,12 @@ $result = $stmt->get_result();
             <h2 class="text-3xl font-semibold text-gray-700 mb-6">Transaksi</h2>
             <form method="GET" class="mb-4 flex items-center space-x-2">
     <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Cari transaksi..." class="px-4 py-2 border rounded w-1/3">
-    
-    <label for="start_date" class="text-gray-700">Dari:</label>
-    <input type="date" name="start_date" value="<?= isset($_GET['start_date']) ? $_GET['start_date'] : '' ?>" class="px-4 py-2 border rounded">
-
-    <label for="end_date" class="text-gray-700">Sampai:</label>
-    <input type="date" name="end_date" value="<?= isset($_GET['end_date']) ? $_GET['end_date'] : '' ?>" class="px-4 py-2 border rounded">
-
     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Cari</button>
 </form>
+
+<!-- Filter tanggal tanpa button -->
+<label for="filter_date" class="text-gray-700">Filter berdasarkan tanggal:</label>
+<input type="date" id="filter_date" class="px-4 py-2 border rounded">
             <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
                 <thead class="bg-blue-600 text-white">
                     <tr>
@@ -289,6 +288,14 @@ $result = $stmt->get_result();
             }
         });
     }
+
+    document.getElementById('filter_date').addEventListener('change', function() {
+    const selectedDate = this.value;
+    if (selectedDate) {
+        window.location.href = 'transactions.php?date=' + selectedDate;
+    }
+});
+
 </script>
 
 
