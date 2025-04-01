@@ -3,7 +3,7 @@ session_start();
 include('db_connection.php');
 
 if (!isset($_SESSION['user_logged_in'])) {
-    header("Location: login.php");
+    header(header: "Location: login.php");
     exit;
 }
 
@@ -30,20 +30,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     try {
         // Ambil harga menu
-        $stmt_menu = $conn->prepare("SELECT price FROM menu WHERE id = ?");
+        $stmt_menu = $conn->prepare("SELECT price, stock FROM menu WHERE id = ?");
         $stmt_menu->bind_param("i", $menu_id);
         $stmt_menu->execute();
         $result_menu = $stmt_menu->get_result();
         $menu = $result_menu->fetch_assoc();
         $stmt_menu->close();
-
+        
         if (!$menu) {
             throw new Exception("Menu tidak ditemukan.");
         }
-
+        
+        if ($menu['stock'] < $quantity) {
+            throw new Exception("Stok tidak mencukupi.");
+        }
+        
         $total_price = $menu['price'] * $quantity;
-
-        // Simpan ke tabel `orders`
+                // Simpan ke tabel `orders`
         $stmt_order = $conn->prepare("INSERT INTO orders (user_id, total_price, order_date, status) VALUES (?, ?, NOW(), 'pending')");
         $stmt_order->bind_param("id", $user_id, $total_price);
         $stmt_order->execute();
@@ -61,6 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt_transaction->bind_param("iids", $user_id, $order_id, $total_price, $payment_method);
         $stmt_transaction->execute();
         $stmt_transaction->close();
+
+        $stmt_update_stock = $conn->prepare("UPDATE menu SET stock = stock - ? WHERE id = ?");
+$stmt_update_stock->bind_param("ii", $quantity, $menu_id);
+$stmt_update_stock->execute();
+$stmt_update_stock->close();
+
 
         // Commit transaksi
         $conn->commit();
@@ -94,6 +103,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 });
             <?php } ?>
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+    const menuSelect = document.querySelector("select[name='menu_id']");
+    const quantityInput = document.querySelector("#quantity");
+
+    menuSelect.addEventListener("change", function () {
+        let selectedOption = menuSelect.options[menuSelect.selectedIndex];
+        let stok = parseInt(selectedOption.getAttribute("data-stock")) || 0;
+        
+        quantityInput.max = stok;
+        if (stok === 0) {
+            quantityInput.value = 0;
+            quantityInput.disabled = true;
+        } else {
+            quantityInput.disabled = false;
+        }
+    });
+});
+
     </script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen" 
@@ -109,9 +137,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <select name="menu_id" required 
         class="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
         <?php while ($menu = $menu_result->fetch_assoc()) { ?>
-            <option value="<?= $menu['id'] ?>" class="text-sm md:text-base lg:text-lg">
-                <?= htmlspecialchars($menu['name']) ?> - Rp<?= number_format($menu['price'], 0, ',', '.') ?>
-            </option>
+            <option value="<?= $menu['id'] ?>" <?= ($menu['stock'] == 0) ? 'disabled' : '' ?>>
+    <?= htmlspecialchars($menu['name']) ?> - Rp<?= number_format($menu['price'], 0, ',', '.') ?> 
+    (Stok: <?= $menu['stock'] ?>)
+</option>
         <?php } ?>
     </select>
 </div>
@@ -120,7 +149,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div>
                 <label class="block text-sm font-medium text-gray-700">Jumlah:</label>
                 <input type="number" name="quantity" required min="1" value="1"
-                    class="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+
+                class="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Metode Pembayaran -->

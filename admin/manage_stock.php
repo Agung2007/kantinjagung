@@ -1,37 +1,8 @@
 <?php
-session_start();
-
-// Cek apakah pengguna sudah login sebagai admin
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header("Location: login.php");
-    exit;
-}
-
-// Menyertakan koneksi database
 include('db_connection.php');
-
-// Ambil data pengguna dari database
-$sql = "SELECT * FROM users";
-$result = $conn->query($sql);
-
-// Proses hapus data jika ada parameter delete_id
-if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id'])) {
-    $delete_id = $_GET['delete_id'];
-
-    // Siapkan query untuk menghindari SQL Injection
-    $delete_sql = "DELETE FROM users WHERE id = ?";
-    $stmt = $conn->prepare($delete_sql);
-    $stmt->bind_param("i", $delete_id);
-
-    if ($stmt->execute()) {
-        // Redirect setelah berhasil menghapus
-        header("Location: manage_users.php?deleted=success");
-        exit;
-    } else {
-        echo "<script>alert('Gagal menghapus user!');</script>";
-    }
-}
+$result = $conn->query("SELECT id, name, stock FROM menu");
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -39,10 +10,10 @@ if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Users</title>
-    <link rel="shortcut icon" href="../assets/images/bahanicon.png">
+    <title>Kelola Kategori</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="shortcut icon" href="../assets/images/bahanicon.png">
 
 </head>
 
@@ -51,15 +22,13 @@ if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id'])) {
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <div class="w-64 bg-blue-900 text-white p-6 fixed h-screen">
-
             <!-- Logo Kantin -->
-             
             <div class="flex items-center justify-center mb-6">
                 <img src="../assets/images/ifsu.png" alt="Kantin Logo" class="w-24 h-24 object-cover rounded-full">
             </div>
             <h2 class="text-3xl font-bold mb-6 text-center">DAPOER IFSU</h2>
             <ul class="space-y-4">
-            <li>
+                <li>
                     <a href="dashboard.php"
                         class="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -143,105 +112,65 @@ if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id'])) {
                 </li>
             </ul>
         </div>
-        <!-- Main Content -->
-        <div class="flex-1 p-8 ml-64">
-            <div class="bg-white p-6 rounded-lg shadow-xl mb-8">
-                <h2 class="text-3xl font-semibold text-gray-700 mb-4">Kelola User</h2>
 
-                <!-- Tabel Pengguna -->
+
+        <!-- Main Content -->
+        <div class="flex-1 ml-64 p-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Manajemen Stok Menu</h2>
                 <div class="overflow-x-auto">
-                    <table class="min-w-full table-auto bg-white border border-gray-200 rounded-lg shadow-lg">
-                        <thead class="bg-blue-500 text-white">
+                    <table class="w-full border border-gray-300 rounded-lg">
+                        <thead class="bg-blue-600 text-white">
                             <tr>
-                                <th class="py-3 px-4 border-b text-left">ID</th>
-                                <th class="py-3 px-4 border-b text-left">Username</th>
-                                <th class="py-3 px-4 border-b text-left">Role</th>
-                                <th class="py-3 px-4 border-b text-center">Actions</th>
+                                <th class="border border-gray-300 px-6 py-3 text-left">Nama Menu</th>
+                                <th class="border border-gray-300 px-6 py-3 text-center">Stok</th>
+                                <th class="border border-gray-300 px-6 py-3 text-center">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <?php 
-                        $no = 1; // Inisialisasi nomor urut
-                        while ($user = $result->fetch_assoc()): ?>
-                            <tr class="border-b hover:bg-gray-100">
-                                <td class="py-3 px-4"><?php echo $no; ?></td> <!-- Menampilkan nomor urut -->
-                                <td class="py-3 px-4"><?php echo htmlspecialchars($user['username']); ?></td>
-                                <td class="py-3 px-4"><?php echo ucfirst(htmlspecialchars($user['role'])); ?></td>
-                                <td class="py-3 px-4 text-center">
-                                <?php if ($user['role'] !== 'admin'): ?>
-    <a href="edit_user.php?id=<?php echo $user['id']; ?>">
-        <button class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600">Edit</button>
-    </a>
-    <button
-            class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 ml-2"
-            onclick="confirmDelete(<?php echo $user['id']; ?>)">
-            Delete
-        </button>
-    <?php endif; ?>
-</td>
+                        <tbody class="bg-gray-50">
+                            <?php while ($row = $result->fetch_assoc()) { ?>
+                            <tr class="hover:bg-gray-100">
+                                <td class="border border-gray-300 px-6 py-3"><?= htmlspecialchars($row['name']) ?></td>
+                                <td class="border border-gray-300 px-6 py-3 text-center">
+                                    <input type="number" id="stock-<?= $row['id'] ?>" value="<?= $row['stock'] ?>" min="0"
+                                        class="w-20 p-2 border border-gray-300 rounded text-center focus:outline-none focus:ring focus:ring-blue-300">
+                                </td>
+                                <td class="border border-gray-300 px-6 py-3 text-center">
+                                    <button onclick="updateStock(<?= $row['id'] ?>)"
+                                        class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
+                                        Update
+                                    </button>
+                                </td>
                             </tr>
-                            <?php 
-                          $no++; // Tambah nomor urut setiap iterasi
-                            endwhile; ?>
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-</body>
 
-<script>
-function confirmDelete(userId) {
-    Swal.fire({
-        title: "Apakah yakin ingin menghapus?",
-        text: "Data tidak dapat dikembalikan setelah dihapus!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "hapus",
-        cancelButtonText: "Batal"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = "manage_users.php?delete_id=" + userId;
+    <script>
+        function updateStock(menuId) {
+            let stockValue = document.getElementById(`stock-${menuId}`).value;
+
+            fetch('update_stock.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `menu_id=${menuId}&stock=${stockValue}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data === "success") {
+                    Swal.fire("Berhasil!", "Stok diperbarui!", "success");
+                } else {
+                    Swal.fire("Gagal!", "Gagal memperbarui stok.", "error");
+                }
+            });
         }
-    });
-}
-
-// Cek apakah ada parameter deleted di URL dan tampilkan notifikasi
-document.addEventListener("DOMContentLoaded", function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('deleted')) {
-        Swal.fire({
-            title: "Berhasil!",
-            text: "Pengguna berhasil di dihapus.",
-            icon: "success",
-            confirmButtonColor: "#3085d6",
-            confirmButtonText: "OK"
-        }).then(() => {
-            // Hapus parameter dari URL setelah ditampilkan
-            window.history.replaceState(null, null, window.location.pathname);
-        });
-    }
-});
-
-
-    function confirmLogout() {
-        Swal.fire({
-            title: "Apa kamu yakin?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Ya, logout!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "logout.php"; // Redirect ke logout jika dikonfirmasi
-            }
-        });
-    }
-
-</script>
+    </script>
+</body>
 
 </html>

@@ -10,15 +10,15 @@ if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) 
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
-    if (!isset($username) || !isset($password)) {
-        $login_status = "error|Username and password are required!";
+    if (empty($email) || empty($password)) {
+        $login_status = "error|Email dan password harus diisi!";
     } else {
-        $sql = "SELECT * FROM users WHERE username = ? AND role = 'user'";
+        $sql = "SELECT * FROM users WHERE email = ? AND role = 'user'";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $username);
+        $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -28,12 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (password_verify($password, $user['password'])) {
                 $_SESSION['user_logged_in'] = true;
                 $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_email'] = $user['email'];
                 $login_status = "success|Login Berhasil!";
             } else {
-                $login_status = "error|Password Salah!";
+                $login_status = "error|Password salah!";
             }
         } else {
-            $login_status = "error|User tidak di temukan!";
+            $login_status = "error|Email tidak ditemukan!";
         }
     }
 }
@@ -84,11 +85,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form method="POST">
     <!-- Input Username -->
     <div class="mb-4">
-        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-        <input type="text" id="username" name="username" required
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input type="email" id="email" name="email" required
             class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none">
     </div>
-
     <!-- Input Password dengan Toggle -->
     <div class="mb-6 relative">
         <label for="password" class="block text-sm font-medium text-gray-700">Password</label>

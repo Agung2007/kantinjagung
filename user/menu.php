@@ -46,7 +46,7 @@ $totalMenu = $totalRow['total'];
 $totalPages = ceil($totalMenu / $limit);
 
 // Ambil menu berdasarkan pencarian, kategori, dan pagination
-$sql = "SELECT id, name, price, image, category FROM menu WHERE name LIKE ?";
+$sql = "SELECT id, name, price, image, category, stock FROM menu WHERE name LIKE ?";
 $params = [$search_param];
 $types = "s";
 
@@ -79,6 +79,20 @@ if ($user_id) {
     $user = $user_result->fetch_assoc();
 }
 ?>
+
+<?php
+// Ambil 5 pelanggan dengan jumlah pesanan terbanyak
+$top_customers_query = "
+    SELECT u.username, u.profile_picture, COUNT(o.id) as total_orders
+    FROM users u
+    JOIN orders o ON u.id = o.user_id
+    GROUP BY u.id
+    ORDER BY total_orders DESC
+    LIMIT 5
+";
+$top_customers_result = $conn->query($top_customers_query);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -149,14 +163,30 @@ if ($user_id) {
             <?php endif; ?>
 
             <div class="hidden md:flex items-center space-x-6">
-                <a href="order_history.php" class="text-white hover:text-yellow-300 transition">Riwayat Pemesanan</a>
+    <a href="order_history.php" class="text-white hover:text-yellow-300 transition">Riwayat Pemesanan</a>
 
-                <a href="javascript:void(0);" onclick="confirmLogout()" 
-                class="px-4 py-2 bg-red-600 rounded-full hover:bg-red-700 transition font-bold text-white">
-                    Logout
+    <!-- Dropdown Pelanggan Setia -->
+    <div class="relative group">
+        <button class="text-white hover:text-yellow-300 transition focus:outline-none">
+            Pelanggan Setia ▼
+        </button>
+        <div class="absolute hidden group-hover:block bg-white text-black border rounded-lg shadow-lg w-48 mt-2">
+            <?php while ($customer = $top_customers_result->fetch_assoc()): ?>
+                <a href="profile.php?user=<?= htmlspecialchars($customer['username']) ?>" 
+                   class="flex items-center px-4 py-2 hover:bg-gray-100">
+                    <img src="<?= htmlspecialchars($customer['profile_picture'] ?? '../assets/images/avatar.jpeg') ?>" 
+                         class="w-8 h-8 rounded-full border mr-2">
+                    <span class="text-sm font-semibold"><?= htmlspecialchars($customer['username']) ?></span>
                 </a>
-            </div>
+            <?php endwhile; ?>
+        </div>
+    </div>
 
+    <a href="javascript:void(0);" onclick="confirmLogout()" 
+       class="px-4 py-2 bg-red-600 rounded-full hover:bg-red-700 transition font-bold text-white">
+        Logout
+    </a>
+</div>
             <!-- Tombol Menu Mobile -->
             <button id="menu-toggle" class="md:hidden text-white text-2xl focus:outline-none">
                 ☰
@@ -213,10 +243,18 @@ if ($user_id) {
                         <?= htmlspecialchars($menu['name']) ?>
                     </h3>
                     <p class="text-lg text-green-600 font-bold mt-2">Rp <?= number_format($menu['price'], 0, ',', '.') ?></p>
-                    <a href="order.php?id=<?= $menu['id'] ?>" 
-                       class="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-center rounded-lg font-bold hover:scale-110 hover:from-blue-700 hover:to-blue-500 transition-all duration-300">
-                       Pesan Sekarang
-                    </a>
+                    <?php if ($menu['stock'] > 0): ?>
+    <p class="text-sm text-gray-700">Stok: <?= $menu['stock'] ?></p>
+    <a href="order.php?id=<?= $menu['id'] ?>" 
+       class="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-center rounded-lg font-bold hover:scale-110 hover:from-blue-700 hover:to-blue-500 transition-all duration-300">
+       Pesan Sekarang
+    </a>
+<?php else: ?>
+    <p class="text-sm text-red-500 font-semibold">Stok Habis</p>
+    <button class="mt-4 px-6 py-3 bg-gray-400 text-white text-center rounded-lg font-bold cursor-not-allowed" disabled>
+        Tidak Tersedia
+    </button>
+<?php endif; ?>
                 </div>
             </div>
         <?php endwhile; ?>
