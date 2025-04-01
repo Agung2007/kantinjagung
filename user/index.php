@@ -10,7 +10,9 @@
   <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
   <!-- AOS CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
   @keyframes wiggle {
@@ -154,6 +156,66 @@
 </div>
   </section>
 
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      AOS.init({ duration: 500, easing: "ease-in-out" });
+      
+      new Typed("#typed-text", {
+        strings: [
+          "Nasi Timbel adalah hidangan khas Sunda yang terdiri dari nasi putih yang dibungkus daun pisang, sehingga memberikan aroma khas yang menggugah selera.",
+          "Biasanya disajikan dengan lauk seperti ayam goreng, ikan asin, tahu, tempe, sambal, dan lalapan segar.",
+          "Cocok dinikmati saat makan siang atau malam, Nasi Timbel menghadirkan cita rasa autentik yang sederhana namun kaya akan kelezatan khas Nusantara."
+        ],
+        typeSpeed: 30,
+        backSpeed: 20,
+        backDelay: 1000,
+        startDelay: 500,
+        loop: false,
+        showCursor: true,
+      });
+    });
+  </script>
+
+  <section id="hero" class="relative" data-aos="zoom-in">
+    <img src="../assets/images/orange2.png" alt="Background Image" class="absolute inset-0 h-full w-full object-cover" data-aos="fade-left" data-aos-duration="2500" />
+    <img src="../assets/images/timbel.png" alt="Center Yellow" class="absolute right-16 bottom-10 h-2/3 opacity-100" data-aos="fade-right" data-aos-duration="2500" />
+
+    <div class="absolute inset-0 bg-gray-900/75 sm:bg-transparent sm:from-gray-900/95 sm:to-gray-900/25 sm:bg-gradient-to-r">
+    </div>
+
+    <div class="relative mx-auto max-w-screen-xl px-4 py-32 sm:px-6 lg:flex lg:h-screen lg:items-center lg:px-8">
+      <div class="max-w-xl text-center sm:text-left opacity 100 translate-y-10 transition-all duration-1000 ease-in-out" data-aos="fade-up">
+        <p id="typed-text" class="mt-4 max-w-lg text-gray 100 sm:text-xl/relaxed"></p>
+      </div>
+    </div>
+  </section>
+
+  
+
+<section id="hero" class="relative" data-aos="fade-up">
+  <img src="../assets/images/merah.png" alt="Background Image" class="absolute inset-0 h-full w-full object-cover" data-aos="zoom-out" data-aos-duration="2500" />
+  
+  <div class="absolute inset-0 bg-gray-900/75 sm:bg-transparent sm:from-gray-900/95 sm:to-gray-900/25 sm:bg-gradient-to-r">
+  </div>
+
+  <div class="relative mx-auto max-w-screen-xl px-4 py-32 sm:px-6 lg:flex lg:h-screen lg:items-center lg:px-8 lg:flex-row-reverse">
+    
+<!-- Teks di kanan -->
+<div class="lg:w-1/2 text-center sm:text-left opacity-0 translate-y-10 transition-all duration-700 ease-in-out" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200" data-aos-once="true">
+  <p class="mt-4 max-w-lg text-gray 100 sm:text-xl/relaxed">
+    Cireng SMK Informatika Sumedang adalah salah satu makanan favorit yang tersedia di kantin sekolah. Cireng ini dibuat dengan bahan berkualitas, menghasilkan tekstur yang renyah di luar dan kenyal di dalam. Disajikan dengan berbagai pilihan saus, mulai dari pedas hingga manis, menjadikannya camilan yang cocok untuk menemani waktu istirahat siswa dan staf. Selain enak, cireng ini juga menjadi ikon khas kantin sekolah karena cita rasanya yang unik dan selalu segar setiap hari.      
+  </p>
+</div>
+
+    <!-- Gambar di kiri -->
+    <div class="lg:w-1/2 flex justify-center">
+      <img src="../assets/images/cireng2.png" alt="Cireng Image" class="h-2/3 opacity-100" data-aos="flip-left" data-aos-duration="2500" />
+    </div>
+
+  </div>
+</section>
+
+
   <section class="relative opacity-0 translate-y-10 transition-all duration-[2500ms] delay-700 ease-in-out"
   data-aos="fade-up" data-aos-duration="2000" data-aos-easing="ease-out-cubic">
 
@@ -171,6 +233,7 @@
     data-aos="fade-up" data-aos-delay="1000" data-aos-duration="2000">
   </div>
 </section>
+
 
   <!-- TESTIMONI -->
   <link href="https://cdn.jsdelivr.net/npm/keen-slider@6.8.6/keen-slider.min.css" rel="stylesheet" />
@@ -441,7 +504,7 @@
   <div class="space-y-3 max-w-md mx-auto">
     <details class="group rounded-lg bg-gray-50 p-4 [&_summary::-webkit-details-marker]:hidden" open data-aos="fade-up">
       <summary class="flex cursor-pointer items-center justify-between gap-1 text-gray-900">
-        <h2 class="font-medium text-sm">Jam berapa kantin tutup?</h2>
+        <h2 class="font-medium text-sm">Apa itu website kantin?</h2>
         <span class="relative size-4 shrink-0">
           <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 size-4 opacity-100 group-open:opacity-0"
             fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -455,14 +518,14 @@
         </span>
       </summary>
       <p class="mt-2 text-sm text-gray-700">
-        Kantin Buka setiap hari, Buka Pukul 08.00 dan Tutup 16.00
+      Website kantin adalah platform online yang memungkinkan pengguna untuk melihat menu, memesan makanan, dan melakukan pembayaran secara langsung melalui internet. Website ini biasanya digunakan oleh kantin sekolah, kantor, atau tempat makan lainnya untuk memberikan kemudahan bagi pengunjung dalam memesan makanan.
       </p>
     </details>
 
     <details class="group rounded-lg bg-gray-50 p-4 [&_summary::-webkit-details-marker]:hidden" data-aos="fade-up"
       data-aos-delay="100">
       <summary class="flex cursor-pointer items-center justify-between gap-1 text-gray-900">
-        <h2 class="font-medium text-sm">Kapan website bisa di gunakan?</h2>
+        <h2 class="font-medium text-sm">Bagaimana cara memesan makanan di website kantin?</h2>
         <span class="relative size-4 shrink-0">
           <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 size-4 opacity-100 group-open:opacity-0"
             fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -476,14 +539,14 @@
         </span>
       </summary>
       <p class="mt-2 text-sm text-gray-700">
-        Website dapat di gunakan hanya satu jam sebelum istirahat.
-      </p>
+      Pengguna dapat memesan makanan melalui menu yang tersedia di halaman utama website, memilih item makanan atau minuman yang diinginkan, menambahkannya ke keranjang belanja, dan melanjutkan ke halaman pembayaran untuk menyelesaikan transaksi.
+</p>
     </details>
 
     <details class="group rounded-lg bg-gray-50 p-4 [&_summary::-webkit-details-marker]:hidden" data-aos="fade-up"
       data-aos-delay="100">
       <summary class="flex cursor-pointer items-center justify-between gap-1 text-gray-900">
-        <h2 class="font-medium text-sm">Website ini di buat siapa?</h2>
+        <h2 class="font-medium text-sm"> Apakah website kantin bisa menunjukkan stok makanan?</h2>
         <span class="relative size-4 shrink-0">
           <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 size-4 opacity-100 group-open:opacity-0"
             fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -497,8 +560,8 @@
         </span>
       </summary>
       <p class="mt-2 text-sm text-gray-700">
-        Agung Ganteng.
-      </p>
+      Ya, website kantin dapat dilengkapi dengan fitur stok yang menampilkan jumlah persediaan setiap menu. Jika stok suatu item habis, menu tersebut bisa diberi label "Stok Habis" atau dihapus sementara dari daftar pilihan.
+</p>
     </details>
   </div>
 
