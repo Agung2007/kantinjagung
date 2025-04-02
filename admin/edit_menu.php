@@ -46,37 +46,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
     $category = $_POST['category']; // Ambil kategori dari form
     $image = $_POST['old_image']; // Gunakan gambar lama jika tidak ada yang baru
 
-    // Periksa apakah ada gambar baru yang di-upload
-    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-        $target_dir = "images/"; // Gunakan path relatif tanpa "../"
-        $new_filename = time() . "_" . basename($_FILES['image']['name']);
-        $target_file = $target_dir . $new_filename;
-        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+// Periksa apakah ada gambar baru yang di-upload
+if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+    $target_dir = "../images/"; // Pindah ke luar folder admin
+    $new_filename = time() . "_" . basename($_FILES['image']['name']);
+    $target_file = $target_dir . $new_filename;
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-        // Pastikan folder images ada
-        if (!is_dir($target_dir)) {
-            mkdir($target_dir, 0777, true);
-        }
+    // Pastikan folder images ada
+    if (!is_dir($target_dir)) {
+        mkdir($target_dir, 0777, true);
+    }
 
-        // Validasi tipe file
-        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
-        if (in_array($imageFileType, $allowed_types)) {
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-                $image = $target_file; // Simpan path baru
-            } else {
-                echo "Gagal mengunggah gambar.";
-                exit;
-            }
+    // Validasi tipe file
+    $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+    if (in_array($imageFileType, $allowed_types)) {
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+            $image = "images/" . $new_filename; // Simpan path yang benar
         } else {
-            echo "Format gambar tidak didukung! Gunakan JPG, JPEG, PNG, atau GIF.";
+            echo "Gagal mengunggah gambar.";
             exit;
         }
+    } else {
+        echo "Format gambar tidak didukung! Gunakan JPG, JPEG, PNG, atau GIF.";
+        exit;
     }
+}
 
     // Update ke database
     $sql = "UPDATE menu SET name = ?, price = ?, category = ?, image = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sdsii", $name, $price, $category, $image, $id);
+    $stmt->bind_param("sdssi", $name, $price, $category, $image, $id);
 
     if ($stmt->execute()) {
         header("Location: manage_menu.php");
@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
                     <div class="mb-6">
                         <h3 class="text-lg font-medium text-gray-700">Gambar Saat Ini:</h3>
                         <!-- Path gambar diperbaiki -->
-                        <img src="<?= htmlspecialchars($menu['image']) ?>" alt="Menu Image" class="w-16 h-16 object-cover rounded-md border">
+                        <img src="/images/<?= urlencode(basename($menu['image'])) ?>" alt="Menu Image" onerror="this.onerror=null; this.src='/images/default.png';">
 
                         <!-- Debugging Path -->
                         <p class="text-sm text-gray-500">Path: <?= htmlspecialchars($menu['image']) ?></p>
