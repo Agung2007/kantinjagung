@@ -41,42 +41,43 @@ while ($cat = $category_result->fetch_assoc()) {
 // Update data menu
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
     $id = $_POST['id'];
-    $name = $_POST['name'];
+    $name = trim($_POST['name']);
     $price = doubleval($_POST['price']);
-    $category = $_POST['category']; // Ambil kategori dari form
+    $category = trim($_POST['category']);
+    $description = trim($_POST['description'] ?? ''); // Menambahkan deskripsi
     $image = $_POST['old_image']; // Gunakan gambar lama jika tidak ada yang baru
 
-// Periksa apakah ada gambar baru yang di-upload
-if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-    $target_dir = "../images/"; // Pindah ke luar folder admin
-    $new_filename = time() . "_" . basename($_FILES['image']['name']);
-    $target_file = $target_dir . $new_filename;
-    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    // Periksa apakah ada gambar baru yang di-upload
+    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+        $target_dir = "../images/";
+        $new_filename = time() . "_" . basename($_FILES['image']['name']);
+        $target_file = $target_dir . $new_filename;
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-    // Pastikan folder images ada
-    if (!is_dir($target_dir)) {
-        mkdir($target_dir, 0777, true);
-    }
+        // Pastikan folder images ada
+        if (!is_dir($target_dir)) {
+            mkdir($target_dir, 0777, true);
+        }
 
-    // Validasi tipe file
-    $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
-    if (in_array($imageFileType, $allowed_types)) {
-        if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-            $image = "images/" . $new_filename; // Simpan path yang benar
+        // Validasi tipe file
+        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+        if (in_array($imageFileType, $allowed_types)) {
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+                $image = "images/" . $new_filename;
+            } else {
+                echo "Gagal mengunggah gambar.";
+                exit;
+            }
         } else {
-            echo "Gagal mengunggah gambar.";
+            echo "Format gambar tidak didukung! Gunakan JPG, JPEG, PNG, atau GIF.";
             exit;
         }
-    } else {
-        echo "Format gambar tidak didukung! Gunakan JPG, JPEG, PNG, atau GIF.";
-        exit;
     }
-}
 
-    // Update ke database
-    $sql = "UPDATE menu SET name = ?, price = ?, category = ?, image = ? WHERE id = ?";
+    // Update ke database (dengan deskripsi)
+    $sql = "UPDATE menu SET name = ?, price = ?, category = ?, description = ?, image = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sdssi", $name, $price, $category, $image, $id);
+    $stmt->bind_param("sdsssi", $name, $price, $category, $description, $image, $id);
 
     if ($stmt->execute()) {
         header("Location: manage_menu.php");
@@ -102,7 +103,6 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
             <div class="bg-white p-6 rounded-lg shadow-xl mb-8">
                 <h2 class="text-3xl font-semibold text-gray-700 mb-4">Edit Menu</h2>
 
-                <!-- Form untuk mengedit menu -->
                 <form method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="id" value="<?= htmlspecialchars($menu['id']) ?>">
                     <input type="hidden" name="old_image" value="<?= htmlspecialchars($menu['image']) ?>">
@@ -128,17 +128,20 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
                         </select>
                     </div>
 
+                    <!-- Tambahkan input untuk deskripsi -->
+                    <div class="mb-4">
+                        <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
+                        <textarea name="description" id="description" rows="4" class="w-full p-2 border border-gray-300 rounded-md"><?= htmlspecialchars($menu['description'] ?? '') ?></textarea>
+                    </div>
+
                     <div class="mb-4">
                         <label for="image" class="block text-sm font-medium text-gray-700">Gambar Menu</label>
-                        <input type="file" name="image" id="image" class="w-full p-2 border border-gray-300 rounded-md">
+                        <input type="file" name="image" id="image" class="w-full p-2 border border-gray-300 rounded-md" onchange="previewImage(event)">
                     </div>
 
                     <div class="mb-6">
                         <h3 class="text-lg font-medium text-gray-700">Gambar Saat Ini:</h3>
-                        <!-- Path gambar diperbaiki -->
-                        <img src="/images/<?= urlencode(basename($menu['image'])) ?>" alt="Menu Image" onerror="this.onerror=null; this.src='/images/default.png';">
-
-                        <!-- Debugging Path -->
+                        <img id="preview" src="/<?= htmlspecialchars($menu['image']) ?>" alt="Menu Image" class="w-32 h-32 object-cover border rounded-md" onerror="this.onerror=null; this.src='/images/default.png';">
                         <p class="text-sm text-gray-500">Path: <?= htmlspecialchars($menu['image']) ?></p>
                     </div>
 
@@ -147,5 +150,16 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
             </div>
         </div>
     </div>
+
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('preview');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
 </body>
 </html>

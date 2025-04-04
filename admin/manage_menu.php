@@ -29,7 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_menu'])) {
     $name = $_POST['name'];
     $price = $_POST['price'];
     $category = $_POST['category'];
-    $stock = $_POST['stock']; // Ambil stok dari form
+    $stock = $_POST['stock'];
+    $description = $_POST['description']; // Ambil deskripsi
     $image = null;
 
     if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
@@ -43,20 +44,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_menu'])) {
     }
 
     if (!empty($image)) {
-        $sql = "INSERT INTO menu (name, price, category, stock, image) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO menu (name, price, category, stock, description, image) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sisis", $name, $price, $category, $stock, $image);
+        $stmt->bind_param("sissss", $name, $price, $category, $stock, $description, $image);
     } else {
-        $sql = "INSERT INTO menu (name, price, category, stock) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO menu (name, price, category, stock, description) VALUES (?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sisi", $name, $price, $category, $stock);
+        $stmt->bind_param("sisss", $name, $price, $category, $stock, $description);
     }
 
     if ($stmt->execute()) {
         $success_message = "Menu berhasil ditambahkan!";
     }
 }
-
 $sql = "SELECT * FROM menu";
 $result = $conn->query($sql);
 ?>
@@ -215,6 +215,13 @@ $result = $conn->query($sql);
         class="w-full p-3 mt-2 border border-gray-300 rounded-md" required>
 </div>
 
+<div>
+    <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
+    <textarea name="description" id="description"
+        class="w-full p-3 mt-2 border border-gray-300 rounded-md" required></textarea>
+</div>
+
+
 
                 <div class="mt-4">
                     <label for="image" class="block text-sm font-medium text-gray-700">Image (Optional)</label>
@@ -231,48 +238,52 @@ $result = $conn->query($sql);
             <!-- Tabel Daftar Menu -->
             <div class="overflow-x-auto">
     <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg">
-    <thead class="bg-blue-500 text-white">
-    <tr>
-        <th class="px-6 py-3 text-center">No</th>
-        <th class="px-6 py-3 text-left">Menu Name</th>
-        <th class="px-6 py-3 text-center">Kategori</th>
-        <th class="px-6 py-3 text-center">Price</th>
-        <th class="px-6 py-3 text-center">Image</th>
-        <th class="px-6 py-3 text-center">Stock</th>
-        <th class="px-6 py-3 text-center">Actions</th>
-    </tr>
-</thead>
-<tbody>
-    <?php
-    $no = 1;
-    while ($row = $result->fetch_assoc()) {
-        $image_path = !empty($row['image']) ? htmlspecialchars($row['image']) : 'assets/default.jpg';
-    ?>
-        <tr class="border-b hover:bg-gray-100">
-            <td class="px-6 py-4 text-center"><?= $no ?></td>
-            <td class="px-6 py-4"><?= htmlspecialchars($row['name']) ?></td>
-            <td class="px-6 py-4 text-center"><?= htmlspecialchars($row['category']) ?></td> <!-- Menampilkan kategori -->
-            <td class="px-6 py-4 text-center">Rp <?= number_format($row['price'], 0, ',', '.') ?></td>
-            <td class="px-6 py-4 flex justify-center">
-                <img src="../<?= $image_path ?>" alt="Menu Image" class="w-16 h-16 object-cover rounded-md border">
-            </td>
-            <td class="px-6 py-4 text-center"><?= htmlspecialchars($row['stock']) ?></td>
-
-            <td class="px-6 py-4 text-center">
-                <a href="edit_menu.php?id=<?= $row['id'] ?>">
-                    <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200">Edit</button>
-                </a>
-                <button onclick="confirmDelete(<?= $row['id'] ?>)" 
-                    class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200 ml-2">
-                    Delete
-                </button>
-            </td>
-        </tr>
-    <?php
-        $no++;
-    }
-    ?>
-</tbody>
+        <thead class="bg-blue-500 text-white">
+            <tr>
+                <th class="px-6 py-3 text-center">No</th>
+                <th class="px-6 py-3 text-left">Menu Name</th>
+                <th class="px-6 py-3 text-center">Kategori</th>
+                <th class="px-6 py-3 text-center">Price</th>
+                <th class="px-6 py-3 text-center">Image</th>
+                <th class="px-6 py-3 text-center">Stock</th>
+                <th class="px-6 py-3 text-left">Deskripsi</th> <!-- Tambahkan kolom Deskripsi -->
+                <th class="px-6 py-3 text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $no = 1;
+            while ($row = $result->fetch_assoc()) {
+                $image_path = !empty($row['image']) ? htmlspecialchars($row['image']) : 'assets/default.jpg';
+            ?>
+                <tr class="border-b hover:bg-gray-100">
+                    <td class="px-6 py-4 text-center"><?= $no ?></td>
+                    <td class="px-6 py-4"><?= htmlspecialchars($row['name']) ?></td>
+                    <td class="px-6 py-4 text-center"><?= htmlspecialchars($row['category']) ?></td>
+                    <td class="px-6 py-4 text-center">Rp <?= number_format($row['price'], 0, ',', '.') ?></td>
+                    <td class="px-6 py-4 flex justify-center">
+                        <img src="../<?= $image_path ?>" alt="Menu Image" class="w-16 h-16 object-cover rounded-md border">
+                    </td>
+                    <td class="px-6 py-4 text-center"><?= htmlspecialchars($row['stock']) ?></td>
+                    <td class="px-6 py-4"><?= nl2br(htmlspecialchars($row['description'] ?? '')) ?></td>
+                    <td class="px-6 py-4 text-center">
+                    <div class="flex gap-2">
+    <a href="edit_menu.php?id=<?= $row['id'] ?>" class="w-full">
+        <button class="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200">
+            Edit
+        </button>
+    </a>
+    <button onclick="confirmDelete(<?= $row['id'] ?>)" 
+        class="w-full px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200">
+        Delete
+    </button>
+                    </td>
+                </tr>
+            <?php
+                $no++;
+            }
+            ?>
+        </tbody>
     </table>
 </div>
         </div>

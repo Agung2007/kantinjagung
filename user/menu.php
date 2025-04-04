@@ -46,7 +46,7 @@ $totalMenu = $totalRow['total'];
 $totalPages = ceil($totalMenu / $limit);
 
 // Ambil menu berdasarkan pencarian, kategori, dan pagination
-$sql = "SELECT id, name, price, image, category, stock FROM menu WHERE name LIKE ?";
+$sql = "SELECT id, name, price, image, category, stock, description FROM menu WHERE name LIKE ?";
 $params = [$search_param];
 $types = "s";
 
@@ -244,6 +244,10 @@ $top_customers_result = $conn->query($top_customers_query);
                     </h3>
                     <p class="text-lg text-green-600 font-bold mt-2">Rp <?= number_format($menu['price'], 0, ',', '.') ?></p>
                     <?php if ($menu['stock'] > 0): ?>
+                        <p class="text-sm text-gray-700 mt-2">
+    <?= !empty($menu['description']) ? nl2br(htmlspecialchars($menu['description'])) : 'Tidak ada deskripsi'; ?>
+</p>
+
     <p class="text-sm text-gray-700">Stok: <?= $menu['stock'] ?></p>
     <a href="order.php?id=<?= $menu['id'] ?>" 
        class="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-center rounded-lg font-bold hover:scale-110 hover:from-blue-700 hover:to-blue-500 transition-all duration-300">
@@ -257,6 +261,7 @@ $top_customers_result = $conn->query($top_customers_query);
 <?php endif; ?>
                 </div>
             </div>
+            
         <?php endwhile; ?>
     <?php else: ?>
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
