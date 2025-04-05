@@ -218,7 +218,7 @@ $result = $conn->query($sql);
 <div>
     <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
     <textarea name="description" id="description"
-        class="w-full p-3 mt-2 border border-gray-300 rounded-md" required></textarea>
+        class="w-full p-3 mt-2 border border-gray-300 rounded-md"></textarea>
 </div>
 
 
