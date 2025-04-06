@@ -287,7 +287,7 @@ $top_customers_result = $conn->query($top_customers_query);
     <div class="sm:flex sm:items-center sm:justify-between">
 
       <p class="mt-4 text-center text-sm text-gray-500 lg:mt-0 lg:text-right">
-        Copyright &copy; 2025. Kantin Ifsu berkah.
+        Copyright &copy; 2025. Dapoer Ifsu.
       </p>
     </div>
   </div>

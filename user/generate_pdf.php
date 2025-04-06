@@ -19,8 +19,11 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $order_id = intval($_GET['id']);
 
-// Ambil data pesanan
-$query = "SELECT total_price, order_date, status FROM orders WHERE id = ?";
+// Ambil data pesanan dengan status dari tabel transactions
+$query = "SELECT o.total_price, o.order_date, t.status 
+          FROM orders o 
+          LEFT JOIN transactions t ON o.id = t.order_id 
+          WHERE o.id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $order_id);
 $stmt->execute();
@@ -29,7 +32,6 @@ $order_info = $stmt->get_result()->fetch_assoc();
 if (!$order_info) {
     die("Pesanan tidak ditemukan.");
 }
-
 // Ambil detail pesanan 
 $query = "SELECT md.name, od.quantity, od.price 
           FROM order_details od 
@@ -43,7 +45,7 @@ $result = $stmt->get_result();
 // Buat objek PDF
 $pdf = new TCPDF();
 $pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor('Restoran');
+$pdf->SetAuthor('Kantin Ifsu');
 $pdf->SetTitle('Invoice Pesanan');
 $pdf->SetMargins(10, 10, 10);
 $pdf->AddPage();
