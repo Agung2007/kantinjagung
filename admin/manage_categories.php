@@ -138,12 +138,32 @@ $result = $conn->query("SELECT * FROM categories");
         <div class="flex-1 p-8 ml-64">
             <h2 class="text-3xl font-semibold text-gray-700 mb-6">Kelola Kategori</h2>
 
-            <!-- Form Tambah Kategori -->
-            <form method="POST" class="bg-white p-6 rounded-lg shadow-md mb-8">
-                <label for="name" class="block text-sm font-medium text-gray-700">Nama Kategori</label>
-                <input type="text" name="name" id="name" class="w-full p-3 mt-2 border rounded-md" required>
-                <button type="submit" name="add_category" class="mt-4 w-full py-3 bg-blue-600 text-white rounded-md hover:bg-blue-500">Tambah Kategori</button>
-            </form>
+<!-- Modal Form Tambah Kategori -->
+<div id="categoryModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+    <div id="categoryModalContent" class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl transform scale-95 opacity-0 transition-all duration-300">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Tambah Kategori</h2>
+        <form method="POST">
+            <label for="name" class="block text-sm font-medium text-gray-700">Nama Kategori</label>
+            <input type="text" name="name" id="name"
+                class="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+
+            <div class="mt-6 flex justify-end gap-2">
+                <button type="button" onclick="closeModal()"
+                    class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition">Batal</button>
+                <button type="submit" name="add_category"
+                    class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+            <!-- Tombol buka modal -->
+            <div class="flex justify-end mb-4">
+    <button onclick="openModal()" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-500 transition">
+        + Tambah Kategori
+    </button>
+</div>
+
 
             <!-- Tabel Kategori -->
             <div class="overflow-x-auto">
@@ -256,6 +276,36 @@ $result = $conn->query("SELECT * FROM categories");
         });
         <?php unset($_SESSION['error_message']); ?>
     <?php endif; ?>
+
+    function openModal() {
+    document.getElementById('categoryModal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('categoryModal').classList.add('hidden');
+}
+
+function openModal() {
+        const modal = document.getElementById('categoryModal');
+        const content = document.getElementById('categoryModalContent');
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('categoryModal');
+        const content = document.getElementById('categoryModalContent');
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+
 
     </script>
 </body>

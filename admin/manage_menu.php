@@ -186,54 +186,107 @@ $result = $conn->query($sql);
         <div class="flex-1 p-8 ml-64">
         <h2 class="text-3xl font-semibold text-gray-700 mb-6">Kelola Menu</h2>
 
-            <!-- Form untuk menambah menu baru -->
-            <form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md mb-8">
+<!-- Tombol tambah menu dengan posisi kanan & spacing -->
+<div class="flex justify-end mt-10 mb-6">
+    <button onclick="openModal()"
+        class="px-7 py-3 bg-green-600 text-white font-semibold rounded-lg shadow hover:bg-green-500 transition-all duration-300">
+        + Tambah Menu
+    </button>
+</div>
+
+<!-- Modal -->
+<div id="menuModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div id="menuModalContent"
+        class="bg-white w-full max-w-2xl rounded-xl shadow-xl overflow-hidden transform scale-95 opacity-0 transition-all duration-300">
+        <div class="flex justify-between items-center px-6 py-4 border-b">
+            <h3 class="text-xl font-bold text-gray-800">Tambah Menu Baru</h3>
+            <button onclick="closeModal()" class="text-gray-500 hover:text-red-500 text-2xl">&times;</button>
+        </div>
+        <div class="p-6 overflow-y-auto max-h-[80vh]">
+            <!-- Form tambah menu -->
+            <form method="POST" enctype="multipart/form-data">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700">Menu Name</label>
+                        <label for="name" class="block text-sm font-medium text-gray-700">Nama Menu</label>
                         <input type="text" name="name" id="name"
-                            class="w-full p-3 mt-2 border border-gray-300 rounded-md" required>
+                            class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                            required>
                     </div>
                     <div>
-                        <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+                        <label for="price" class="block text-sm font-medium text-gray-700">Harga</label>
                         <input type="number" name="price" id="price"
-                            class="w-full p-3 mt-2 border border-gray-300 rounded-md" required>
+                            class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                            required>
                     </div>
                 </div>
-                <div>
-    <label for="category" class="block text-sm font-medium text-gray-700">Kategori</label>
-    <select name="category" id="category" class="w-full p-3 mt-2 border border-gray-300 rounded-md" required>
-        <option value="" disabled selected>Pilih Kategori</option>
-        <?php foreach ($categories as $category) : ?>
-            <option value="<?= htmlspecialchars($category) ?>"><?= htmlspecialchars($category) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-<div>
-    <label for="stock" class="block text-sm font-medium text-gray-700">Stock</label>
-    <input type="number" name="stock" id="stock" min="0"
-        class="w-full p-3 mt-2 border border-gray-300 rounded-md" required>
-</div>
-
-<div>
-    <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
-    <textarea name="description" id="description"
-        class="w-full p-3 mt-2 border border-gray-300 rounded-md"></textarea>
-</div>
-
-
 
                 <div class="mt-4">
-                    <label for="image" class="block text-sm font-medium text-gray-700">Image (Optional)</label>
-                    <input type="file" name="image" id="image"
-                        class="w-full p-3 mt-2 border border-gray-300 rounded-md">
+                    <label for="category" class="block text-sm font-medium text-gray-700">Kategori</label>
+                    <select name="category" id="category"
+                        class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                        required>
+                        <option value="" disabled selected>Pilih Kategori</option>
+                        <?php foreach ($categories as $category) : ?>
+                            <option value="<?= htmlspecialchars($category) ?>"><?= htmlspecialchars($category) ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
+
+                <div class="mt-4">
+                    <label for="stock" class="block text-sm font-medium text-gray-700">Stok</label>
+                    <input type="number" name="stock" id="stock" min="0"
+                        class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                        required>
+                </div>
+
+                <div class="mt-4">
+                    <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
+                    <textarea name="description" id="description"
+                        class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                        rows="3"></textarea>
+                </div>
+
+                <div class="mt-4">
+                    <label for="image" class="block text-sm font-medium text-gray-700">Gambar (Opsional)</label>
+                    <input type="file" name="image" id="image"
+                        class="w-full mt-2 p-3 border border-gray-300 rounded-lg">
+                </div>
+
                 <div class="mt-6">
                     <button type="submit" name="add_menu"
-                        class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-500 transition-colors">Tambahkan
-                        Menu</button>
+                        class="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500 transition">
+                        Tambahkan Menu
+                    </button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Animasi Buka/Tutup Modal -->
+<script>
+    function openModal() {
+        const modal = document.getElementById('menuModal');
+        const content = document.getElementById('menuModalContent');
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('menuModal');
+        const content = document.getElementById('menuModalContent');
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+</script>
+
+            
 
             <!-- Tabel Daftar Menu -->
             <div class="overflow-x-auto">
