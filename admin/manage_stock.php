@@ -117,7 +117,7 @@ $result = $conn->query("SELECT id, name, stock FROM menu");
         <!-- Main Content -->
         <div class="flex-1 ml-64 p-8">
             <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Manajemen Stok Menu</h2>
+                <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Kelola Stok Menu</h2>
                 <div class="overflow-x-auto">
                     <table class="w-full border border-gray-300 rounded-lg">
                         <thead class="bg-blue-600 text-white">

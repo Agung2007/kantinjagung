@@ -183,8 +183,8 @@ $result = $conn->query($sql);
             </ul>
         </div>
         <!-- Main Content -->
-        <div class="flex-1 p-8 ml-64">
-        <h2 class="text-3xl font-semibold text-gray-700 mb-6">Kelola Menu</h2>
+        <div class="flex-1 p-8 ml-64 mt-8">
+    <h2 class="text-3xl font-semibold text-gray-700 mb-6">Kelola Menu</h2>
 
 <!-- Tombol tambah menu dengan posisi kanan & spacing -->
 <div class="flex justify-end mt-10 mb-6">
