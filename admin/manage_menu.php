@@ -92,11 +92,17 @@ $result = $conn->query($sql);
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <div class="w-64 bg-blue-900 text-white p-6 fixed h-screen">
-        <!-- Logo Kantin -->
-            <div class="flex items-center justify-center mb-6">
-                <img src="../assets/images/ifsu.png" alt="Kantin Logo" class="w-24 h-24 object-cover rounded-full">
-            </div>
-            <h2 class="text-3xl font-bold mb-6 text-center">DAPOER IFSU</h2>
+<!-- Logo dan Judul -->
+<div class="flex items-center justify-center mb-4 gap-2">
+    <!-- Gambar Logo -->
+    <img src="../assets/images/ifsu.png" alt="Kantin Logo" class="w-16 h-16 object-cover rounded-full">
+
+    <!-- Judul -->
+    <h1 class="text-xl font-bold leading-tight">DAPOER IFSU</h1>
+</div>
+
+<!-- Divider -->
+<hr class="border-t border-white/30 mb-4">
             <ul class="space-y-4">
             <li>
                     <a href="dashboard.php"
