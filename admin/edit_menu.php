@@ -100,7 +100,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
 <body class="bg-gray-50">
     <div class="flex min-h-screen">
         <div class="flex-1 p-10">
-            <div class="bg-white p-6 rounded-lg shadow-xl mb-8">
+
+            <div class="bg-white p-6 rounded-lg shadow-xl mb-8 relative">
+    <!-- Tombol X untuk kembali -->
+    <a href="manage_menu.php" class="absolute top-4 right-4 text-gray-500 hover:text-red-500 transition duration-200" title="Kembali">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    </a>
+
                 <h2 class="text-3xl font-semibold text-gray-700 mb-4">Edit Menu</h2>
 
                 <form method="POST" enctype="multipart/form-data">
