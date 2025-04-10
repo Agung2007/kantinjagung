@@ -245,9 +245,22 @@ $top_products_result = $conn->query($top_products_query);
                 <form method="GET" action="dashboard.php" class="mb-4 flex items-center gap-4">
     <label for="date" class="text-gray-700 font-semibold">Pilih Tanggal:</label>
     <input type="date" id="date" name="date" class="border p-2 rounded-lg" value="<?php echo isset($_GET['date']) ? $_GET['date'] : ''; ?>">
-    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-        Filter
-    </button>
+    <button type="submit"
+    class="inline-flex items-center gap-2 px-5 py-2 
+           bg-gradient-to-r from-blue-500 to-indigo-600 
+           text-white font-semibold rounded-lg 
+           hover:shadow-md hover:scale-105 active:scale-95 
+           transition-all duration-300 ease-in-out ring-1 ring-blue-400">
+
+    <!-- Ikon filter -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" 
+         viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 12.414V19a1 1 0 01-1.447.894l-4-2A1 1 0 019 17v-4.586L3.293 6.707A1 1 0 013 6V4z" />
+    </svg>
+
+    Filter
+</button>
 </form>
                     <h3 class="text-2xl font-semibold text-gray-700">Total Pendapatan</h3>
                     <p class="text-5xl text-purple-700 font-bold mt-2">Rp

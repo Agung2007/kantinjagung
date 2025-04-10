@@ -71,9 +71,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </select>
                 </div>
                 <div class="flex justify-between gap-4">
-                    <button type="submit" class="w-full py-2 bg-blue-500 text-white rounded-lg">Update User</button>
-                    <a href="manage_users.php" class="w-full py-2 bg-gray-300 text-gray-700 rounded-lg text-center hover:bg-gray-400 transition duration-200">Batal</a>
-                </div>
+    <!-- Tombol Update User -->
+    <button type="submit"
+        class="w-full flex items-center justify-center gap-2 py-2 
+               bg-gradient-to-r from-blue-500 to-indigo-600 
+               text-white font-semibold rounded-lg 
+               hover:shadow-md hover:scale-105 active:scale-95 
+               transition-all duration-300 ease-in-out ring-1 ring-blue-400">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5 13l4 4L19 7" />
+        </svg>
+        Update User
+    </button>
+
+    <!-- Tombol Batal -->
+    <a href="manage_users.php"
+        class="w-full flex items-center justify-center gap-2 py-2 
+               bg-gradient-to-r from-gray-300 to-gray-400 
+               text-gray-800 font-semibold rounded-lg 
+               hover:shadow-md hover:scale-105 active:scale-95 
+               transition-all duration-300 ease-in-out ring-1 ring-gray-400 text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        Batal
+    </a>
+</div>
             </form>
         </div>
     </div>

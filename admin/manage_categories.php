@@ -153,12 +153,39 @@ $result = $conn->query("SELECT * FROM categories");
             <input type="text" name="name" id="name"
                 class="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
 
-            <div class="mt-6 flex justify-end gap-2">
-                <button type="button" onclick="closeModal()"
-                    class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition">Batal</button>
-                <button type="submit" name="add_category"
-                    class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition">Simpan</button>
-            </div>
+                <div class="mt-6 flex justify-end gap-2">
+    <!-- Tombol Batal -->
+    <button type="button" onclick="closeModal()"
+        class="inline-flex items-center gap-1 px-4 py-2 
+               bg-gradient-to-r from-gray-200 to-gray-300 
+               text-gray-800 font-medium rounded-lg 
+               hover:shadow-md hover:scale-105 active:scale-95 
+               transition-all duration-300 ease-in-out ring-1 ring-gray-400">
+        <!-- Ikon X -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        Batal
+    </button>
+
+    <!-- Tombol Simpan -->
+    <button type="submit" name="add_category"
+        class="inline-flex items-center gap-1 px-5 py-2 
+               bg-gradient-to-r from-blue-600 to-indigo-500 
+               text-white font-semibold rounded-lg 
+               hover:shadow-md hover:scale-105 active:scale-95 
+               transition-all duration-300 ease-in-out ring-1 ring-blue-400">
+        <!-- Ikon Simpan -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5 13l4 4L19 7" />
+        </svg>
+        Simpan
+    </button>
+</div>
         </form>
     </div>
 </div>

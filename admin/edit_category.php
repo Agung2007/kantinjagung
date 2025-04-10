@@ -60,8 +60,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_category'])) {
             <input type="text" name="name" id="name" class="w-full p-3 mt-2 border rounded-md" value="<?= htmlspecialchars($category['name']) ?>" required>
             
             <div class="flex gap-3 mt-4">
-    <button type="submit" name="update_category" class="w-1/2 py-3 bg-blue-600 text-white rounded-md">Update</button>
-    <a href="manage_categories.php" class="w-1/2 py-3 text-center bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition duration-200">Batal</a>
+    <!-- Tombol Update -->
+    <button type="submit" name="update_category"
+        class="w-1/2 flex justify-center items-center gap-2 py-3 
+               bg-gradient-to-r from-blue-600 to-indigo-600 
+               text-white font-semibold rounded-lg 
+               hover:shadow-md hover:scale-105 active:scale-95 
+               transition-all duration-300 ease-in-out ring-1 ring-blue-400">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5 13l4 4L19 7" />
+        </svg>
+        Update
+    </button>
+
+    <!-- Tombol Batal -->
+    <a href="manage_categories.php"
+        class="w-1/2 flex justify-center items-center gap-2 py-3 
+               bg-gradient-to-r from-gray-300 to-gray-400 
+               text-gray-800 font-semibold rounded-lg 
+               hover:shadow-md hover:scale-105 active:scale-95 
+               transition-all duration-300 ease-in-out ring-1 ring-gray-400">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        Batal
+    </a>
 </div>
 </body>
 

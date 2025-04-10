@@ -271,11 +271,21 @@ $result = $conn->query($sql);
                 </div>
 
                 <div class="mt-6">
-                    <button type="submit" name="add_menu"
-                        class="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500 transition">
-                        Tambahkan Menu
-                    </button>
-                </div>
+    <button type="submit" name="add_menu"
+        class="w-full flex justify-center items-center gap-2 py-3 
+               bg-gradient-to-r from-blue-600 to-indigo-600 
+               text-white font-semibold rounded-lg 
+               hover:shadow-md hover:scale-105 active:scale-95 
+               transition-all duration-300 ease-in-out ring-1 ring-blue-400">
+        <!-- Ikon Plus -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 4v16m8-8H4" />
+        </svg>
+        Tambahkan Menu
+    </button>
+</div>
             </form>
         </div>
     </div>
