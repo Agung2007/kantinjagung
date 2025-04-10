@@ -44,14 +44,38 @@
           </div>
         </div>
         <div class="flex items-center gap-3">
-          <a href="login.php"
-            class="text-sm px-3 py-2 border border-gray-200 bg-white text-gray-900 transition hover:text-gray-700">
-            Login
-          </a>
-          <a href="register.php" class="text-sm px-4 py-2 bg-indigo-600 text-white transition hover:bg-indigo-700">
-            Register
-          </a>
-        </div>
+  <!-- Tombol Login -->
+  <a href="login.php"
+    class="inline-flex items-center gap-2 px-4 py-2 
+           bg-white border border-gray-300 
+           text-gray-800 font-semibold rounded-lg 
+           hover:shadow-md hover:scale-105 active:scale-95 
+           transition-all duration-300 ease-in-out">
+    <!-- Ikon Login -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+         viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M15 12H3m0 0l4-4m-4 4l4 4m13-4a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    Login
+  </a>
+
+  <!-- Tombol Register -->
+  <a href="register.php"
+    class="inline-flex items-center gap-2 px-4 py-2 
+           bg-gradient-to-r from-indigo-600 to-purple-600 
+           text-white font-semibold rounded-lg 
+           hover:shadow-md hover:scale-105 active:scale-95 
+           transition-all duration-300 ease-in-out ring-1 ring-indigo-400">
+    <!-- Ikon Register -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+         viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M5 13l4 4L19 7M12 4v16" />
+    </svg>
+    Register
+  </a>
+</div>
       </div>
     </div>
   </header>
