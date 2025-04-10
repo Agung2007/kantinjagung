@@ -194,10 +194,22 @@ $result = $conn->query($sql);
 
 <!-- Tombol tambah menu dengan posisi kanan & spacing -->
 <div class="flex justify-end mt-10 mb-6">
-    <button onclick="openModal()"
-        class="px-7 py-3 bg-green-600 text-white font-semibold rounded-lg shadow hover:bg-green-500 transition-all duration-300">
-        + Tambah Menu
-    </button>
+<button onclick="openModal()"
+    class="inline-flex items-center gap-2 px-6 py-3 
+           bg-gradient-to-r from-green-600 to-emerald-500 
+           text-white font-semibold rounded-lg shadow-md 
+           hover:shadow-lg hover:scale-105 active:scale-95 
+           transition-all duration-300 ease-in-out ring-1 ring-green-400">
+    
+    <!-- Ikon Plus -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" 
+         viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M12 4v16m8-8H4" />
+    </svg>
+    
+    Tambah Menu
+</button>
 </div>
 
 <!-- Modal -->
@@ -327,15 +339,40 @@ $result = $conn->query($sql);
                     <td class="px-6 py-4"><?= nl2br(htmlspecialchars($row['description'] ?? '')) ?></td>
                     <td class="px-6 py-4 text-center">
                     <div class="flex gap-2">
-    <a href="edit_menu.php?id=<?= $row['id'] ?>" class="w-full">
-        <button class="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200">
-            Edit
-        </button>
-    </a>
-    <button onclick="confirmDelete(<?= $row['id'] ?>)" 
-        class="w-full px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200">
-        Delete
+<!-- Tombol Edit -->
+<a href="edit_menu.php?id=<?= $row['id'] ?>">
+    <button class="flex items-center justify-center gap-2 px-4 py-2 
+                   bg-gradient-to-r from-blue-500 to-indigo-500 
+                   text-white font-semibold rounded-lg 
+                   shadow-md hover:shadow-xl 
+                   hover:scale-105 active:scale-95 
+                   transition-all duration-300 ease-in-out 
+                   ring-1 ring-blue-400 w-fit">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" 
+             viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z" />
+        </svg>
+        Edit
     </button>
+</a>
+
+<!-- Tombol Delete -->
+<button onclick="confirmDelete(<?= $row['id'] ?>)" 
+    class="flex items-center justify-center gap-2 px-4 py-2 
+           bg-gradient-to-r from-red-500 to-pink-500 
+           text-white font-semibold rounded-lg 
+           shadow-md hover:shadow-xl 
+           hover:scale-105 active:scale-95 
+           transition-all duration-300 ease-in-out 
+           ring-1 ring-red-400 w-fit ml-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" 
+         viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 0a1 1 0 00-1 1v1h6V4a1 1 0 00-1-1m-4 0h4" />
+    </svg>
+    Delete
+</button>
                     </td>
                 </tr>
             <?php

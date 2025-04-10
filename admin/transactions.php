@@ -270,19 +270,35 @@ $result = $stmt->get_result();
                         </td>
                         <td class="py-3 px-4"> <?= htmlspecialchars($row['status']) ?> </td>
                         <td class="py-3 px-4"> <?= $row['created_at'] ?> </td>
-                        <td class="py-3 px-4">
+                        <td class="py-2 px-4 align-middle">
     <?php if ($row['status'] != 'canceled') { ?>
-        <form method="POST" class="flex space-x-2">
+        <form method="POST" class="flex items-center space-x-2">
             <input type="hidden" name="transaction_id" value="<?= $row['id'] ?>">
-            <select name="status" class="border rounded px-2 py-1">
+            
+            <select name="status" 
+                class="border rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <option value="pending" <?= $row['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
                 <option value="processed" <?= $row['status'] == 'processed' ? 'selected' : '' ?>>Processed</option>
                 <option value="completed" <?= $row['status'] == 'completed' ? 'selected' : '' ?>>Completed</option>
             </select>
-            <button type="submit" name="update_status" class="bg-green-500 text-white px-3 py-1 rounded">Update</button>
+            
+            <button type="submit" name="update_status"
+                class="inline-flex items-center gap-1 px-3 py-1 
+                       bg-gradient-to-r from-green-500 to-emerald-500 
+                       text-white text-sm font-medium rounded 
+                       shadow hover:shadow-md 
+                       hover:scale-105 active:scale-95 
+                       transition-all duration-200 ring-1 ring-green-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" 
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M5 13l4 4L19 7" />
+                </svg>
+                Update
+            </button>
         </form>
     <?php } else { ?>
-        <span class="text-red-500 font-bold">Canceled</span>
+        <span class="text-red-500 font-semibold text-sm">Canceled</span>
     <?php } ?>
 </td>
                     </tr>

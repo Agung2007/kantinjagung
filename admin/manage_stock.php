@@ -141,12 +141,25 @@ $result = $conn->query("SELECT id, name, stock FROM menu");
                                     <input type="number" id="stock-<?= $row['id'] ?>" value="<?= $row['stock'] ?>" min="0"
                                         class="w-20 p-2 border border-gray-300 rounded text-center focus:outline-none focus:ring focus:ring-blue-300">
                                 </td>
-                                <td class="border border-gray-300 px-6 py-3 text-center">
-                                    <button onclick="updateStock(<?= $row['id'] ?>)"
-                                        class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
-                                        Update
-                                    </button>
-                                </td>
+                                <td class="border border-gray-300 px-6 py-2 text-center align-middle">
+    <button onclick="updateStock(<?= $row['id'] ?>)"
+        class="inline-flex items-center gap-1 px-3 py-1.5 
+               bg-gradient-to-r from-blue-500 to-indigo-500 
+               text-white text-sm font-medium rounded 
+               shadow hover:shadow-md 
+               hover:scale-105 active:scale-95 
+               transition-all duration-300 ease-in-out">
+        
+        <!-- Ikon refresh/update kecil -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" 
+             viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 4v5h.582M20 20v-5h-.581M5.636 18.364A9 9 0 105.637 5.636M19 12h2M12 19v2" />
+        </svg>
+
+        Update
+    </button>
+</td>
                             </tr>
                             <?php } ?>
                         </tbody>

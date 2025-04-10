@@ -153,44 +153,56 @@ if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id'])) {
             <div class="bg-white p-6 rounded-lg shadow-xl mb-8">
                 <h2 class="text-3xl font-semibold text-gray-700 mb-4">Kelola User</h2>
 
-                <!-- Tabel Pengguna -->
-                <div class="overflow-x-auto">
-                    <table class="min-w-full table-auto bg-white border border-gray-200 rounded-lg shadow-lg">
-                        <thead class="bg-blue-500 text-white">
-                            <tr>
-                                <th class="py-3 px-4 border-b text-left">ID</th>
-                                <th class="py-3 px-4 border-b text-left">Username</th>
-                                <th class="py-3 px-4 border-b text-left">Role</th>
-                                <th class="py-3 px-4 border-b text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                        $no = 1; // Inisialisasi nomor urut
-                        while ($user = $result->fetch_assoc()): ?>
-                            <tr class="border-b hover:bg-gray-100">
-                                <td class="py-3 px-4"><?php echo $no; ?></td> <!-- Menampilkan nomor urut -->
-                                <td class="py-3 px-4"><?php echo htmlspecialchars($user['username']); ?></td>
-                                <td class="py-3 px-4"><?php echo ucfirst(htmlspecialchars($user['role'])); ?></td>
-                                <td class="py-3 px-4 text-center">
-                                <?php if ($user['role'] !== 'admin'): ?>
-    <a href="edit_user.php?id=<?php echo $user['id']; ?>">
-        <button class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600">Edit</button>
-    </a>
-    <button
-            class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 ml-2"
-            onclick="confirmDelete(<?php echo $user['id']; ?>)">
-            Delete
-        </button>
+<!-- Tabel Pengguna -->
+<div class="overflow-x-auto">
+    <table class="min-w-full table-auto bg-white border border-gray-200 rounded-lg shadow-lg">
+        <thead class="bg-blue-500 text-white">
+            <tr>
+                <th class="py-3 px-4 border-b text-left">ID</th>
+                <th class="py-3 px-4 border-b text-left">Username</th>
+                <th class="py-3 px-4 border-b text-left">Role</th>
+                <th class="py-3 px-4 border-b text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php 
+            $no = 1; // Inisialisasi nomor urut
+            while ($user = $result->fetch_assoc()): ?>
+                <tr class="border-b hover:bg-gray-100">
+                    <td class="py-3 px-4"><?php echo $no++; ?></td>
+                    <td class="py-3 px-4"><?php echo htmlspecialchars($user['username']); ?></td>
+                    <td class="py-3 px-4"><?php echo ucfirst(htmlspecialchars($user['role'])); ?></td>
+                    <td class="py-3 px-4 text-center">
+    <?php if ($user['role'] !== 'admin'): ?>
+        <div class="flex justify-center gap-2">
+            <!-- Tombol Edit -->
+            <a href="edit_user.php?id=<?php echo $user['id']; ?>">
+                <button class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 active:scale-95 transition-all duration-200 flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M11 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                    Edit
+                </button>
+            </a>
+
+            <!-- Tombol Delete -->
+            <button onclick="confirmDelete(<?php echo $user['id']; ?>)"
+                class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 active:scale-95 transition-all duration-200 flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-3h4m-4 0a1 1 0 00-1 1v1h6V5a1 1 0 00-1-1m-4 0h4" />
+                </svg>
+                Delete
+            </button>
+        </div>
     <?php endif; ?>
 </td>
-                            </tr>
-                            <?php 
-                          $no++; // Tambah nomor urut setiap iterasi
-                            endwhile; ?>
-                        </tbody>
-                    </table>
-                </div>
+                </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
+</div>
             </div>
         </div>
     </div>
