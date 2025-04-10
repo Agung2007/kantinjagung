@@ -58,9 +58,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_category'])) {
             <h2 class="text-2xl font-semibold mb-4">Edit Kategori</h2>
             <label for="name" class="block text-sm font-medium text-gray-700">Nama Kategori</label>
             <input type="text" name="name" id="name" class="w-full p-3 mt-2 border rounded-md" value="<?= htmlspecialchars($category['name']) ?>" required>
-            <button type="submit" name="update_category" class="mt-4 w-full py-3 bg-blue-600 text-white rounded-md">Update</button>
-        </form>
-    </div>
+            
+            <div class="flex gap-3 mt-4">
+    <button type="submit" name="update_category" class="w-1/2 py-3 bg-blue-600 text-white rounded-md">Update</button>
+    <a href="manage_categories.php" class="w-1/2 py-3 text-center bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition duration-200">Batal</a>
+</div>
+</body>
+
 
     <!-- SweetAlert untuk Notifikasi -->
     <?php if (isset($_SESSION['success_message'])) : ?>

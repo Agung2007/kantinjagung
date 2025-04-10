@@ -70,11 +70,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <option value="user" <?php echo $user['role'] == 'user' ? 'selected' : ''; ?>>User</option>
                     </select>
                 </div>
-                <button type="submit" class="w-full py-2 bg-blue-500 text-white rounded-lg">Update User</button>
+                <div class="flex justify-between gap-4">
+                    <button type="submit" class="w-full py-2 bg-blue-500 text-white rounded-lg">Update User</button>
+                    <a href="manage_users.php" class="w-full py-2 bg-gray-300 text-gray-700 rounded-lg text-center hover:bg-gray-400 transition duration-200">Batal</a>
+                </div>
             </form>
         </div>
     </div>
-
+</body>
     <?php if (isset($_SESSION['update_success'])): ?>
         <script>
             Swal.fire({
