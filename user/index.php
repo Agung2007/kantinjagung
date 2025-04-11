@@ -76,7 +76,7 @@
     Register
   </a>
 </div>
-      </div>
+                                                                                    </div>
     </div>
   </header>
 

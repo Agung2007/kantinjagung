@@ -84,39 +84,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <form method="POST">
     <!-- Input Username -->
-    <div class="mb-4">
-        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-        <input type="email" id="email" name="email" required
-            class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none">
+<!-- Input Email -->
+<div class="mb-4">
+    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+    <div class="relative">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-red-500">
+            <!-- Icon Gmail Style -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M20 4H4a2 2 0 00-2 2v12c0 1.1.9 2 2 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 2v.01L12 13 4 6.01V6h16z" />
+            </svg>
+        </span>
+        <input type="email" id="email" name="email" placeholder="agungstecu@gmail.com"
+            class="mt-1 block w-full pl-10 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm"
+            required>
     </div>
-    <!-- Input Password dengan Toggle -->
-    <div class="mb-6 relative">
-        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-        <div class="relative">
-            <input type="password" id="password" name="password" required
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none pr-10">
-            <button type="button" id="togglePassword" class="absolute inset-y-0 right-2 flex items-center">
-                <!-- Icon Mata Terbuka -->
-                <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M12 4.5c-7.5 0-9.75 7.5-9.75 7.5s2.25 7.5 9.75 7.5 9.75-7.5 9.75-7.5-2.25-7.5-9.75-7.5Zm0 10.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
-                </svg>
-                <!-- Icon Mata Tertutup (Hidden Default) -->
-                <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500 hidden">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M3 12s2.25 7.5 9.75 7.5S21.75 12 21.75 12s-2.25-7.5-9.75-7.5S3 12 3 12ZM9 9l6 6m0-6-6 6" />
-                </svg>
-            </button>
-        </div>
+</div>
+
+<!-- Input Password -->
+<div class="mb-6">
+    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+    <div class="relative">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-500">
+            <!-- Icon Gembok Modern -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M17 8h-1V6a4 4 0 10-8 0v2H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V10a2 2 0 00-2-2zm-6 9a1 1 0 112 0 1 1 0 01-2 0zm3-9H10V6a2 2 0 114 0v2z" />
+            </svg>
+        </span>
+        <input type="password" id="password" name="password" placeholder="Masukkan password"
+            class="mt-1 block w-full pl-10 pr-10 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm"
+            required>
+        <button type="button" id="togglePassword" class="absolute inset-y-0 right-2 flex items-center text-gray-500">
+            <!-- Mata terbuka -->
+            <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 4.5C4.5 4.5 2.25 12 2.25 12S4.5 19.5 12 19.5 21.75 12 21.75 12 19.5 4.5 12 4.5Zm0 10.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
+            </svg>
+            <!-- Mata tertutup -->
+            <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden" fill="none"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 3l18 18m-6.364-6.364A4.5 4.5 0 0112 16.5c-7.5 0-9.75-7.5-9.75-7.5a14.846 14.846 0 012.834-4.327m3.671-1.922a14.83 14.83 0 014.515 0M9.88 9.88a3 3 0 004.24 4.24" />
+            </svg>
+        </button>
     </div>
+</div>
 
     <!-- Tombol Login -->
     <button type="submit"
-        class="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200">
-        Login
-    </button>
+    class="w-full py-2 px-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-md hover:from-blue-600 hover:to-blue-700 hover:shadow-lg active:scale-95 transition duration-300 ease-in-out flex items-center justify-center gap-2">
+    <!-- Ikon login -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+        viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M15 12H3m0 0l4-4m-4 4l4 4m9-10h2a2 2 0 012 2v12a2 2 0 01-2 2h-2" />
+    </svg>
+    <span>Login</span>
+</button>
 </form>
 
 <!-- Link ke Register -->

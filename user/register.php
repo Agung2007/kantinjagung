@@ -73,34 +73,81 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         <h2 class="text-2xl font-bold text-center mb-6">Daftar Pengguna</h2>
         <form method="POST">
-            <div class="mb-4">
-                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                <input type="text" id="username" name="username" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-            </div>
-            <div class="mb-4">
-                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" id="email" name="email" required class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-            </div>
-            <div class="mb-6 relative">
-    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+<!-- Username -->
+<div class="mb-4 relative">
+    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
     <div class="relative">
-        <input type="password" id="password" name="password" required
-            class="mt-1 block w-full p-2 border border-gray-300 rounded-md pr-10">
-        <button type="button" id="togglePassword" class="absolute inset-y-0 right-2 flex items-center">
-            <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M12 4.5c-7.5 0-9.75 7.5-9.75 7.5s2.25 7.5 9.75 7.5 9.75-7.5 9.75-7.5-2.25-7.5-9.75-7.5Zm0 10.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
+        <input type="text" id="username" name="username" placeholder="Masukkan username"
+            class="mt-1 block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none">
+        <div class="absolute inset-y-0 left-2 flex items-center pointer-events-none">
+            <!-- Ikon User -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5.121 17.804A9.003 9.003 0 0112 15c2.45 0 4.668.99 6.243 2.596M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500 hidden">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3 12s2.25 7.5 9.75 7.5S21.75 12 21.75 12s-2.25-7.5-9.75-7.5S3 12 3 12ZM9 9l6 6m0-6-6 6" />
-            </svg>
-        </button>
+        </div>
     </div>
 </div>
-            <button type="submit" class="w-full py-2 bg-blue-500 text-white rounded-lg">Register</button>
+
+<!-- Email -->
+<div class="mb-4 relative">
+  <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+  <div class="relative">
+    <input type="email" id="email" name="email" placeholder="agungstecu@gmail.com" required
+      class="mt-1 block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none">
+    <div class="absolute inset-y-0 left-2 flex items-center pointer-events-none">
+      <!-- Ikon Amplop Email -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M20 4H4a2 2 0 00-2 2v12c0 1.1.9 2 2 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 2v.01L12 13 4 6.01V6h16z" />
+            </svg>
+    </div>
+  </div>
+</div>
+
+<!-- Password -->
+<div class="mb-6 relative">
+  <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+  <div class="relative">
+    <input type="password" id="password" name="password" placeholder="••••••••" required
+      class="mt-1 block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none">
+    
+    <!-- Ikon Kunci -->
+    <div class="absolute inset-y-0 left-2 flex items-center pointer-events-none">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M17 8h-1V6a4 4 0 10-8 0v2H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V10a2 2 0 00-2-2zm-6 9a1 1 0 112 0 1 1 0 01-2 0zm3-9H10V6a2 2 0 114 0v2z" />
+            </svg>
+    </div>
+
+    <!-- Tombol Toggle -->
+    <button type="button" id="togglePassword" class="absolute inset-y-0 right-2 flex items-center">
+      <!-- Mata Terbuka -->
+      <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500" fill="none"
+        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 4.5c-7.5 0-9.75 7.5-9.75 7.5s2.25 7.5 9.75 7.5 9.75-7.5 9.75-7.5-2.25-7.5-9.75-7.5Zm0 10.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
+      </svg>
+      <!-- Mata Tertutup -->
+      <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500 hidden" fill="none"
+        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M3 12s2.25 7.5 9.75 7.5S21.75 12 21.75 12s-2.25-7.5-9.75-7.5S3 12 3 12ZM9 9l6 6m0-6-6 6" />
+      </svg>
+    </button>
+  </div>
+</div>
+<button type="submit"
+    class="w-full py-2 px-4 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold rounded-xl shadow-md hover:from-purple-600 hover:to-indigo-600 hover:shadow-lg active:scale-95 transition duration-300 ease-in-out flex items-center justify-center gap-2">
+    <!-- Ikon Register -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+            d="M16 21v-2a4 4 0 00-3-3.87M12 7a4 4 0 100 8 4 4 0 000-8zm4-3h6m-3-3v6" />
+    </svg>
+    <span>Register</span>
+</button>
         </form>
         <p class="mt-4 text-center">Sudah punya akun? <a href="login.php" class="text-blue-500">Login</a></p>
     </div>
