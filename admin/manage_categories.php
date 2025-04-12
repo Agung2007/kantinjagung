@@ -146,12 +146,17 @@ $result = $conn->query("SELECT * FROM categories");
 
 <!-- Modal Form Tambah Kategori -->
 <div id="categoryModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-    <div id="categoryModalContent" class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl transform scale-95 opacity-0 transition-all duration-300">
+    <div id="categoryModalContent"
+        class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl transform scale-95 opacity-0 transition-all duration-300">
+        
         <h2 class="text-2xl font-bold text-gray-800 mb-4">Tambah Kategori</h2>
+        
         <form method="POST">
             <label for="name" class="block text-sm font-medium text-gray-700">Nama Kategori</label>
-            <input type="text" name="name" id="name"
-                class="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            <input type="text" name="name" id="name" placeholder="Contoh: Minuman, Makanan, Snack..."
+                class="w-full p-3 mt-2 border border-gray-300 rounded-lg 
+                       focus:outline-none focus:ring-2 focus:ring-blue-500 
+                       transition duration-200 shadow-sm" required>
 
                 <div class="mt-6 flex justify-end gap-2">
     <!-- Tombol Batal -->

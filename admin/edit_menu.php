@@ -109,67 +109,88 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_menu'])) {
         </svg>
     </a>
 
-                <h2 class="text-3xl font-semibold text-gray-700 mb-4">Edit Menu</h2>
+    <h2 class="text-3xl font-semibold text-gray-700 mb-4">Edit Menu</h2>
 
-                <form method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="id" value="<?= htmlspecialchars($menu['id']) ?>">
-                    <input type="hidden" name="old_image" value="<?= htmlspecialchars($menu['image']) ?>">
+<form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="<?= htmlspecialchars($menu['id']) ?>">
+    <input type="hidden" name="old_image" value="<?= htmlspecialchars($menu['image']) ?>">
 
-                    <div class="mb-4">
-                        <label for="name" class="block text-sm font-medium text-gray-700">Nama Menu</label>
-                        <input type="text" name="name" id="name" value="<?= htmlspecialchars($menu['name']) ?>" required class="w-full p-2 border border-gray-300 rounded-md">
-                    </div>
+    <div class="mb-4">
+        <label for="name" class="block text-sm font-medium text-gray-700">Nama Menu</label>
+        <input type="text" name="name" id="name" 
+               placeholder="Contoh: Ayam Geprek" 
+               value="<?= htmlspecialchars($menu['name']) ?>" 
+               required
+               class="w-full p-3 border border-gray-300 rounded-lg 
+                      focus:ring-2 focus:ring-blue-400 outline-none shadow-sm">
+    </div>
 
-                    <div class="mb-4">
-                        <label for="price" class="block text-sm font-medium text-gray-700">Harga</label>
-                        <input type="number" name="price" id="price" value="<?= htmlspecialchars($menu['price']) ?>" required class="w-full p-2 border border-gray-300 rounded-md">
-                    </div>
+    <div class="mb-4">
+        <label for="price" class="block text-sm font-medium text-gray-700">Harga</label>
+        <input type="number" name="price" id="price" 
+               placeholder="Contoh: 15000"
+               value="<?= htmlspecialchars($menu['price']) ?>" 
+               required
+               class="w-full p-3 border border-gray-300 rounded-lg 
+                      focus:ring-2 focus:ring-blue-400 outline-none shadow-sm">
+    </div>
 
-                    <div class="mb-4">
-                        <label for="category" class="block text-sm font-medium text-gray-700">Kategori</label>
-                        <select name="category" id="category" class="w-full p-2 border border-gray-300 rounded-md">
-                            <?php foreach ($categories as $cat): ?>
-                                <option value="<?= htmlspecialchars($cat['name']) ?>" <?= $cat['name'] == $menu['category'] ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($cat['name']) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
+    <div class="mb-4">
+        <label for="category" class="block text-sm font-medium text-gray-700">Kategori</label>
+        <select name="category" id="category"
+                class="w-full p-3 border border-gray-300 rounded-lg 
+                       focus:ring-2 focus:ring-blue-400 outline-none shadow-sm">
+            <?php foreach ($categories as $cat): ?>
+                <option value="<?= htmlspecialchars($cat['name']) ?>" 
+                        <?= $cat['name'] == $menu['category'] ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($cat['name']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
 
-                    <!-- Tambahkan input untuk deskripsi -->
-                    <div class="mb-4">
-                        <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
-                        <textarea name="description" id="description" rows="4" class="w-full p-2 border border-gray-300 rounded-md"><?= htmlspecialchars($menu['description'] ?? '') ?></textarea>
-                    </div>
+    <div class="mb-4">
+        <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
+        <textarea name="description" id="description" rows="4"
+                  placeholder="Deskripsi singkat menu..."
+                  class="w-full p-3 border border-gray-300 rounded-lg 
+                         focus:ring-2 focus:ring-blue-400 outline-none shadow-sm"><?= htmlspecialchars($menu['description'] ?? '') ?></textarea>
+    </div>
 
-                    <div class="mb-4">
-                        <label for="image" class="block text-sm font-medium text-gray-700">Gambar Menu</label>
-                        <input type="file" name="image" id="image" class="w-full p-2 border border-gray-300 rounded-md" onchange="previewImage(event)">
-                    </div>
+    <div class="mb-4">
+        <label for="image" class="block text-sm font-medium text-gray-700">Gambar Menu</label>
+        <input type="file" name="image" id="image"
+               class="w-full p-3 border border-gray-300 rounded-lg 
+                      focus:ring-2 focus:ring-blue-400 outline-none shadow-sm"
+               onchange="previewImage(event)">
+    </div>
 
-                    <div class="mb-6">
-                        <h3 class="text-lg font-medium text-gray-700">Gambar Saat Ini:</h3>
-                        <img id="preview" src="/<?= htmlspecialchars($menu['image']) ?>" alt="Menu Image" class="w-32 h-32 object-cover border rounded-md" onerror="this.onerror=null; this.src='/images/default.png';">
-                        <p class="text-sm text-gray-500">Path: <?= htmlspecialchars($menu['image']) ?></p>
-                    </div>
+    <div class="mb-6">
+        <h3 class="text-lg font-medium text-gray-700">Gambar Saat Ini:</h3>
+        <img id="preview" src="/<?= htmlspecialchars($menu['image']) ?>" 
+             alt="Menu Image" 
+             class="w-32 h-32 object-cover border rounded-md mt-2" 
+             onerror="this.onerror=null; this.src='/images/default.png';">
+        <p class="text-sm text-gray-500 mt-1">Path: <?= htmlspecialchars($menu['image']) ?></p>
+    </div>
 
-                    <button type="submit" name="update_menu"
-    class="inline-flex items-center gap-2 px-5 py-2 
-           bg-gradient-to-r from-blue-500 to-indigo-600 
-           text-white font-semibold rounded-lg 
-           hover:shadow-lg hover:scale-105 active:scale-95 
-           transition-all duration-300 ease-in-out ring-1 ring-blue-400">
-    
-    <!-- Ikon edit -->
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" 
-         viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z" />
-    </svg>
+    <button type="submit" name="update_menu"
+        class="inline-flex items-center gap-2 px-6 py-3 
+               bg-gradient-to-r from-blue-500 to-indigo-600 
+               text-white font-semibold rounded-lg 
+               hover:shadow-lg hover:scale-105 active:scale-95 
+               transition-all duration-300 ease-in-out ring-1 ring-blue-400">
+        
+        <!-- Ikon edit -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" 
+             viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z" />
+        </svg>
 
-    Update Menu
-</button>
-                </form>
+        Update Menu
+    </button>
+</form>
             </div>
         </div>
     </div>
