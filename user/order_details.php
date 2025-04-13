@@ -104,11 +104,14 @@ $result = $stmt->get_result();
 
         <!-- Tombol Download PDF -->
         <div class="mt-6 text-center">
-            <a href="generate_pdf.php?id=<?= $order_id ?>" 
-                class="px-6 py-3 bg-green-500 text-white rounded-lg font-semibold shadow-md hover:bg-green-600 transition flex items-center justify-center gap-2">
-                📄 Download PDF
-            </a>
-        </div>
+    <a href="generate_pdf.php?id=<?= $order_id ?>" 
+        class="px-6 py-3 bg-green-500 text-white rounded-lg font-semibold shadow-md hover:bg-green-600 transition flex items-center justify-center gap-2 group">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white transition-transform duration-300 group-hover:-translate-y-1" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 2a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6H6zm7 1.5L18.5 9H13a1 1 0 01-1-1V3.5zM8 13h1.5v3H8v-3zm2.5 0H12v3h-1.5v-3zm2.5 0H14a1 1 0 011 1v1a1 1 0 01-1 1h-1.5v-3z" />
+        </svg>
+        Download PDF
+    </a>
+</div>
     </div>
 </body>
 </html>

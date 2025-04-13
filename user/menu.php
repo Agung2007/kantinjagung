@@ -224,8 +224,25 @@ $top_customers_result = $conn->query($top_customers_query);
 <div class="flex justify-center mb-6 px-4">
     <form method="GET" class="flex w-full max-w-md space-x-2">
         <input type="hidden" name="category" value="<?= htmlspecialchars($selected_category) ?>">
-        <input type="text" name="search" placeholder="Cari menu..." class="px-4 py-2 border rounded-md w-full" value="<?= htmlspecialchars($search) ?>">
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md">Cari</button>
+        <input type="text" name="search" placeholder="Cari menu..." 
+            class="px-4 py-2 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-400 focus:outline-none transition">
+
+        <button type="submit"
+            class="inline-flex items-center gap-2 px-4 py-2 
+                   bg-gradient-to-r from-blue-500 to-indigo-600 
+                   text-white font-semibold rounded-md 
+                   hover:shadow-md hover:scale-105 active:scale-95 
+                   transition-all duration-300 ease-in-out ring-1 ring-blue-400">
+            
+            <!-- Ikon cari -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 103.5 10.5a7.5 7.5 0 0013.65 6.15z" />
+            </svg>
+
+            Cari
+        </button>
     </form>
 </div>
 <!-- produk dan harga -->
@@ -239,12 +256,12 @@ $top_customers_result = $conn->query($top_customers_query);
                          class="w-full h-full object-cover transition-all duration-500 group-hover:scale-110">
                 </div>
                 <div class="p-6 text-gray-900 flex flex-col flex-grow text-center">
-                    <h3 class="text-2xl font-semibold group-hover:text-blue-600 transition-colors duration-300">
-                        <?= htmlspecialchars($menu['name']) ?>
-                    </h3>
+                <h3 class="text-2xl font-semibold truncate group-hover:text-blue-600 transition-colors duration-300">
+    <?= htmlspecialchars($menu['name']) ?>
+</h3>
                     <p class="text-lg text-green-600 font-bold mt-2">Rp <?= number_format($menu['price'], 0, ',', '.') ?></p>
                     <?php if ($menu['stock'] > 0): ?>
-                        <p class="text-sm text-gray-700 mt-2">
+                        <p class="text-sm text-gray-700 mt-2 line-clamp-2">
     <?= !empty($menu['description']) ? nl2br(htmlspecialchars($menu['description'])) : 'Tidak ada deskripsi'; ?>
 </p>
 

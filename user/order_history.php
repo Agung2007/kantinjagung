@@ -87,9 +87,12 @@ $result = $stmt->get_result();
         </h2>
 
         <div class="mb-6 text-center">
-            <a href="menu.php" class="px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold shadow-md hover:bg-blue-600 transition">
-                ⬅ Kembali ke Menu
-            </a>
+        <a href="menu.php" class="inline-flex items-center px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold shadow-md hover:bg-blue-600 transition">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg>
+    Kembali ke Menu
+</a>
         </div>
 
         <div class="overflow-x-auto">
@@ -129,15 +132,41 @@ $result = $stmt->get_result();
                             </td>
                             <td class="px-5 py-3 text-center"><?= htmlspecialchars($row['order_date']) ?></td>
                             <td class="px-5 py-3 text-center flex justify-center space-x-2">
-                                <button onclick="showOrderDetails(<?= $row['id'] ?>)" 
-                                    class="px-5 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 shadow-md transition">
-                                    🔍 Lihat Detail
-                                </button>
+                            <button onclick="showOrderDetails(<?= $row['id'] ?>)" 
+    class="inline-flex items-center gap-2 px-5 py-2 
+           bg-gradient-to-r from-sky-500 to-blue-600 
+           text-white font-semibold rounded-lg 
+           hover:shadow-lg hover:scale-105 active:scale-95 
+           transition-all duration-300 ease-in-out ring-1 ring-sky-300">
+    
+    <!-- Ikon eye -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" 
+         viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+    </svg>
+
+    Lihat Detail
+</button>
                                 <?php if ($row['status'] == 'pending'): ?>
-    <button onclick="confirmCancel(<?= $row['id'] ?>)" 
-        class="px-5 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 shadow-md transition">
-        ❌ Batalkan
-    </button>
+                                    <button onclick="confirmCancel(<?= $row['id'] ?>)" 
+    class="inline-flex items-center gap-2 px-5 py-2 
+           bg-gradient-to-r from-red-500 to-red-700 
+           text-white font-semibold rounded-lg 
+           hover:shadow-lg hover:scale-105 active:scale-95 
+           transition-all duration-300 ease-in-out ring-1 ring-red-400">
+    
+    <!-- Ikon X-circle -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" 
+         viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M6 18L18 6M6 6l12 12" />
+    </svg>
+
+    Batalkan
+</button>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -153,9 +182,12 @@ $result = $stmt->get_result();
             <h3 class="text-2xl font-bold mb-4 text-gray-800">Detail Pesanan</h3>
             <div id="order-detail-content" class="text-gray-700"></div>
             <button onclick="closeModal()" 
-                class="mt-4 px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition">
-                 Tutup
-            </button>
+    class="mt-4 px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition flex items-center justify-center gap-2 group">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform duration-300 group-hover:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+    Tutup
+</button>
         </div>
     </div>
     <a href="https://wa.me/08586270297" target="_blank"

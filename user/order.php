@@ -174,16 +174,42 @@ $stmt_update_stock->close();
     </label>
 </div>
 
-            <!-- Tombol -->
-            <div class="flex justify-between items-center">
-                <a href="menu.php" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-all">
-                    Kembali
-                </a>
-                <button type="submit" 
-                    class="px-6 py-2 bg-blue-500 text-white rounded-md font-semibold hover:bg-blue-600 transition-all">
-                    Pesan
-                </button>
-            </div>
+<p class="text-sm text-black/60 italic mt-2">* Harga sudah termasuk biaya ongkir</p>
+
+
+<!-- Tombol -->
+<div class="flex justify-between items-center mt-6">
+    <!-- Tombol Kembali -->
+    <a href="menu.php" 
+       class="inline-flex items-center gap-2 px-5 py-2 rounded-lg 
+              bg-gradient-to-r from-gray-300 to-gray-400 text-gray-800 
+              font-medium shadow hover:shadow-md hover:scale-105 active:scale-95 
+              transition-all duration-300 ease-in-out">
+        <!-- Ikon panah -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Kembali
+    </a>
+
+    <!-- Tombol Pesan -->
+<!-- Tombol Pesan -->
+<button type="submit"
+    class="inline-flex items-center gap-2 px-6 py-2 rounded-lg 
+           bg-gradient-to-r from-blue-500 to-indigo-600 text-white 
+           font-semibold shadow hover:shadow-lg hover:scale-105 active:scale-95 
+           transition-all duration-300 ease-in-out ring-1 ring-blue-300">
+    
+    <!-- Ikon keranjang -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" 
+         viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.3 5.2a1 1 0 001 1.3h10.6a1 1 0 001-1.3L17 13M9 21h.01M15 21h.01" />
+    </svg>
+
+    Pesan
+</button>
+</div>
         </form>
     </div>
     <a href="https://wa.me/08586270297" target="_blank"

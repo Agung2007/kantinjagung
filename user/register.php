@@ -77,8 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <div class="mb-4 relative">
     <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
     <div class="relative">
-        <input type="text" id="username" name="username" placeholder="Masukkan username"
-            class="mt-1 block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none">
+        <input type="text" id="username" name="username" placeholder="AgungRpl1"
+            class="mt-1 block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md 
+                   focus:ring-2 focus:ring-blue-400 focus:outline-none">
         <div class="absolute inset-y-0 left-2 flex items-center pointer-events-none">
             <!-- Ikon User -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
@@ -88,6 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </svg>
         </div>
     </div>
+    <!-- Teks peringatan samar -->
+    <p class="mt-1 text-sm text-gray-500 italic">* Wajib Menyertakan Kelas di belakang username</p>
 </div>
 
 <!-- Email -->
