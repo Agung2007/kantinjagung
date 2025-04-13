@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $menu_id = $_POST['menu_id'];
     $quantity = $_POST['quantity'];
     $payment_method = $_POST['payment_method'];
+    $catatan = isset($_POST['catatan']) ? trim($_POST['catatan']) : null;
+
 
     // Validasi input
     if (empty($menu_id) || empty($quantity) || $quantity <= 0 || empty($payment_method)) {
@@ -60,9 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt_details->close();
 
         // Simpan ke tabel `transactions` dengan metode pembayaran
-        $stmt_transaction = $conn->prepare("INSERT INTO transactions (user_id, order_id, total_price, payment_method, status, created_at) VALUES (?, ?, ?, ?, 'pending', NOW())");
-        $stmt_transaction->bind_param("iids", $user_id, $order_id, $total_price, $payment_method);
-        $stmt_transaction->execute();
+        $stmt_transaction = $conn->prepare("INSERT INTO transactions (user_id, order_id, total_price, payment_method, status, created_at, catatan) VALUES (?, ?, ?, ?, 'pending', NOW(), ?)");
+        $stmt_transaction->bind_param("iidss", $user_id, $order_id, $total_price, $payment_method, $catatan);
+                $stmt_transaction->execute();
         $stmt_transaction->close();
 
         $stmt_update_stock = $conn->prepare("UPDATE menu SET stock = stock - ? WHERE id = ?");
@@ -173,6 +175,16 @@ $stmt_update_stock->close();
         <span class="text-sm text-gray-700 mt-1 peer-checked:text-blue-500">COD</span>
     </label>
 </div>
+
+<!-- Catatan -->
+<div>
+    <label class="block text-sm font-medium text-gray-700">Kelas atau alamat pengantaran:</label>
+    <textarea name="catatan" rows="3" 
+        class="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+        placeholder="Contoh: 12 Rpl 1, Rps, Tefa, Masjid"
+        required maxlength="10"></textarea>
+</div>
+
 
 <p class="text-sm text-black/60 italic mt-2">* Harga sudah termasuk biaya ongkir</p>
 

@@ -55,10 +55,17 @@ $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
 $filter_date = isset($_GET['date']) ? $_GET['date'] : '';
 
 // Query dasar
-$query = "SELECT t.id, u.username AS user_name, 
-       GROUP_CONCAT(m.name SEPARATOR ', ') AS menu_name, 
-       SUM(od.quantity) AS total_quantity, 
-       t.total_price, t.status, t.payment_method, o.order_date AS created_at
+$query = "SELECT 
+    t.id, 
+    u.username AS user_name, 
+    GROUP_CONCAT(m.name SEPARATOR ', ') AS menu_name, 
+    SUM(od.quantity) AS total_quantity, 
+    t.total_price, 
+    t.status, 
+    t.payment_method, 
+    o.order_date AS created_at,
+    t.catatan
+
 FROM transactions t
 JOIN users u ON t.user_id = u.id
 JOIN orders o ON t.order_id = o.id
@@ -86,7 +93,7 @@ if (!empty($filter_date)) {
     $types .= "s";
 }
 
-$query .= " GROUP BY t.id, u.username, t.total_price, t.status, t.payment_method, o.order_date
+$query .= " GROUP BY t.id, u.username, t.total_price, t.status, t.payment_method, o.order_date, t.catatan
 ORDER BY o.order_date DESC";
 
 // Eksekusi query dengan parameter yang sesuai
@@ -247,6 +254,7 @@ $result = $stmt->get_result();
                         <th class="py-3 px-4 text-left">Jumlah</th>
                         <th class="py-3 px-4 text-left">Total Harga</th>
                         <th class="py-3 px-4 text-left">Metode Pembayaran</th> <!-- Tambahan -->
+                        <th class="py-3 px-4 text-left">Lokasi</th>
                         <th class="py-3 px-4 text-left">Status</th>
                         <th class="py-3 px-4 text-left">Tanggal</th>
                         <th class="py-3 px-4 text-left">Aksi</th>
@@ -283,6 +291,9 @@ $result = $stmt->get_result();
             echo " $payment_method";
             ?>
                         </td>
+                        <td class="py-3 px-4"><?= nl2br(htmlspecialchars($row['catatan'] ?? '')) ?></td>
+
+
                         <td class="py-3 px-4"> <?= htmlspecialchars($row['status']) ?> </td>
                         <td class="py-3 px-4"> <?= $row['created_at'] ?> </td>
                         <td class="py-2 px-4 align-middle">
