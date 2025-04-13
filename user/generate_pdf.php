@@ -56,7 +56,7 @@ $pdf->Cell(0, 10, 'Invoice Pesanan', 0, 1, 'C');
 
 // Info pesanan
 $pdf->SetFont('helvetica', '', 12);
-$pdf->Cell(0, 10, "Total Harga: $" . number_format($order_info['total_price'], 2), 0, 1);
+$pdf->Cell(0, 10, "Total Harga: Rp" . number_format($order_info['total_price'], 2), 0, 1);
 $pdf->Cell(0, 10, "Tanggal Pesanan: " . $order_info['order_date'], 0, 1);
 $pdf->Cell(0, 10, "Status: " . ucfirst($order_info['status']), 0, 1);
 $pdf->Ln(5);
@@ -72,7 +72,7 @@ $pdf->SetFont('helvetica', '', 12);
 while ($row = $result->fetch_assoc()) {
     $pdf->Cell(80, 10, $row['name'], 1, 0);
     $pdf->Cell(30, 10, $row['quantity'], 1, 0, 'C');
-    $pdf->Cell(40, 10, "$" . number_format($row['price'], 2), 1, 1, 'R');
+    $pdf->Cell(40, 10, "Rp" . number_format($row['price'], 2), 1, 1, 'R');
 }
 
 // Output PDF
