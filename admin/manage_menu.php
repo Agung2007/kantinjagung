@@ -57,7 +57,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_menu'])) {
         $success_message = "Menu berhasil ditambahkan!";
     }
 }
+$search = isset($_GET['search']) ? $_GET['search'] : '';
 $sql = "SELECT * FROM menu";
+
+if (!empty($search)) {
+    $search_safe = $conn->real_escape_string($search);
+    $sql .= " WHERE name LIKE '%$search_safe%'";
+}
+
 $result = $conn->query($sql);
 ?>
 
@@ -311,7 +318,31 @@ $result = $conn->query($sql);
         }, 300);
     }
 </script>
+<form method="GET" class="mb-6 flex items-center justify-start gap-2 w-full md:w-1/2">
+  <div class="relative w-full">
+    <input type="text" name="search" placeholder="Cari nama menu..."
+      value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>"
+      class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" />
+    
+    <!-- Ikon search di dalam input (kiri) -->
+    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+      <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2"
+        viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+    </span>
 
+    <!-- Tombol submit dengan ikon search (kanan) -->
+    <button type="submit" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-blue-600">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+        viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+    </button>
+  </div>
+</form>
             
 
             <!-- Tabel Daftar Menu -->

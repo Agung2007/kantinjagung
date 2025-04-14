@@ -1,6 +1,13 @@
 <?php
 include('db_connection.php');
-$result = $conn->query("SELECT id, name, stock FROM menu");
+$search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+$query = "SELECT id, name, stock, image FROM menu";
+
+if (!empty($search)) {
+    $query .= " WHERE name LIKE '%$search%'";
+}
+
+$result = $conn->query($query);
 ?>
 
 
@@ -10,7 +17,7 @@ $result = $conn->query("SELECT id, name, stock FROM menu");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Kategori</title>
+    <title>Kelola Stok</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="shortcut icon" href="../assets/images/bahanicon.png">
@@ -124,45 +131,72 @@ $result = $conn->query("SELECT id, name, stock FROM menu");
         <div class="flex-1 ml-64 p-8">
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Kelola Stok Menu</h2>
+                <form method="GET" class="mb-6 flex items-center justify-start gap-2 w-full md:w-1/2">
+  <div class="relative w-full">
+    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+      <!-- Ikon Search -->
+      <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2"
+        viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+    </span>
+    <input type="text" name="search" placeholder="Cari nama menu..."
+      value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>"
+      class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" />
+    <button type="submit" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-blue-500">
+      <!-- Ikon Tombol Search -->
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+        viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+    </button>
+  </div>
+</form>
+
                 <div class="overflow-x-auto">
                     <table class="w-full border border-gray-300 rounded-lg">
-                        <thead class="bg-blue-500 text-white">
-                            <tr>
-                                <th class="border border-gray-300 px-6 py-3 text-left">Nama Menu</th>
-                                <th class="border border-gray-300 px-6 py-3 text-center">Stok</th>
-                                <th class="border border-gray-300 px-6 py-3 text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-gray-50">
-                            <?php while ($row = $result->fetch_assoc()) { ?>
-                            <tr class="hover:bg-gray-100">
-                                <td class="border border-gray-300 px-6 py-3"><?= htmlspecialchars($row['name']) ?></td>
-                                <td class="border border-gray-300 px-6 py-3 text-center">
-                                    <input type="number" id="stock-<?= $row['id'] ?>" value="<?= $row['stock'] ?>" min="0"
-                                        class="w-20 p-2 border border-gray-300 rounded text-center focus:outline-none focus:ring focus:ring-blue-300">
-                                </td>
-                                <td class="border border-gray-300 px-6 py-2 text-center align-middle">
-    <button onclick="updateStock(<?= $row['id'] ?>)"
-        class="inline-flex items-center gap-1 px-3 py-1.5 
-               bg-gradient-to-r from-blue-500 to-indigo-500 
-               text-white text-sm font-medium rounded 
-               shadow hover:shadow-md 
-               hover:scale-105 active:scale-95 
-               transition-all duration-300 ease-in-out">
-        
-        <!-- Ikon refresh/update kecil -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" 
-             viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M4 4v5h.582M20 20v-5h-.581M5.636 18.364A9 9 0 105.637 5.636M19 12h2M12 19v2" />
-        </svg>
-
-        Update
-    </button>
-</td>
-                            </tr>
-                            <?php } ?>
-                        </tbody>
+                    <thead class="bg-blue-500 text-white">
+    <tr>
+        <th class="border border-gray-300 px-6 py-3 text-left">Image</th>
+        <th class="border border-gray-300 px-6 py-3 text-left">Nama Menu</th>
+        <th class="border border-gray-300 px-6 py-3 text-center">Stok</th>
+        <th class="border border-gray-300 px-6 py-3 text-center">Aksi</th>
+    </tr>
+</thead>
+<tbody class="bg-gray-50">
+    <?php while ($row = $result->fetch_assoc()) { ?>
+    <tr class="hover:bg-gray-100">
+        <td class="border border-gray-300 px-4 py-3 text-center">
+            <img src="../<?= htmlspecialchars($row['image']) ?>" 
+                 alt="<?= htmlspecialchars($row['name']) ?>" 
+                 class="w-14 h-14 object-cover rounded-md mx-auto shadow" />
+        </td>
+        <td class="border border-gray-300 px-6 py-3"><?= htmlspecialchars($row['name']) ?></td>
+        <td class="border border-gray-300 px-6 py-3 text-center">
+            <input type="number" id="stock-<?= $row['id'] ?>" value="<?= $row['stock'] ?>" min="0"
+                class="w-20 p-2 border border-gray-300 rounded text-center focus:outline-none focus:ring focus:ring-blue-300">
+        </td>
+        <td class="border border-gray-300 px-6 py-2 text-center align-middle">
+            <button onclick="updateStock(<?= $row['id'] ?>)"
+                class="inline-flex items-center gap-1 px-3 py-1.5 
+                       bg-gradient-to-r from-blue-500 to-indigo-500 
+                       text-white text-sm font-medium rounded 
+                       shadow hover:shadow-md 
+                       hover:scale-105 active:scale-95 
+                       transition-all duration-300 ease-in-out">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" 
+                     viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 4v5h.582M20 20v-5h-.581M5.636 18.364A9 9 0 105.637 5.636M19 12h2M12 19v2" />
+                </svg>
+                Update
+            </button>
+        </td>
+    </tr>
+    <?php } ?>
+</tbody>
                     </table>
                 </div>
             </div>

@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
     <!-- Teks peringatan samar -->
-    <p class="mt-1 text-sm text-gray-500 italic">* Wajib Menyertakan Kelas di belakang username</p>
+    <p class="mt-1 text-sm text-gray-500 italic">* Username wajib asli</p>
 </div>
 
 <!-- Email -->
