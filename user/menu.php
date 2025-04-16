@@ -260,18 +260,20 @@ $top_customers_result = $conn->query($top_customers_query);
     <?= htmlspecialchars($menu['name']) ?>
 </h3>
                     <p class="text-lg text-green-600 font-bold mt-2">Rp <?= number_format($menu['price'], 0, ',', '.') ?></p>
-                    <?php if ($menu['stock'] > 0): ?>
-                        <p class="text-sm text-gray-700 mt-2 line-clamp-2">
+<!-- Deskripsi selalu ditampilkan -->
+<p class="text-sm text-gray-700 mt-2 line-clamp-2">
     <?= !empty($menu['description']) ? nl2br(htmlspecialchars($menu['description'])) : 'Tidak ada deskripsi'; ?>
 </p>
 
+<!-- Kondisi Stok -->
+<?php if ($menu['stock'] > 0): ?>
     <p class="text-sm text-gray-700">Stok: <?= $menu['stock'] ?></p>
     <a href="order.php?id=<?= $menu['id'] ?>" 
        class="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-center rounded-lg font-bold hover:scale-110 hover:from-blue-700 hover:to-blue-500 transition-all duration-300">
        Pesan Sekarang
     </a>
 <?php else: ?>
-    <p class="text-sm text-red-500 font-semibold">Stok Habis</p>
+    <p class="text-sm text-red-500 font-semibold mt-2">Stok Habis</p>
     <button class="mt-4 px-6 py-3 bg-gray-400 text-white text-center rounded-lg font-bold cursor-not-allowed" disabled>
         Tidak Tersedia
     </button>

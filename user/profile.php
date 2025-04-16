@@ -94,29 +94,62 @@ style="background: url('../assets/images/new.jpg') no-repeat center center/cover
             ✖
         </a>
 
-        <h2 class="text-3xl font-semibold text-center mb-6">Edit Profil</h2>
+<h2 class="text-3xl font-semibold text-center mb-6">Edit Profil</h2>
 
-        <form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md">
-            <div class="mb-4">
-                <label for="name" class="block text-sm font-medium text-gray-700">Nama</label>
-                <input type="text" name="username" id="username" value="<?= htmlspecialchars($user['username']) ?>" class="w-full p-3 border border-gray-300 rounded-md" required>
-            </div>
+<form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md space-y-4">
+    <!-- Nama -->
+    <div>
+        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
+        <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <!-- User Icon -->
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A4 4 0 019 16h6a4 4 0 013.879 1.804M15 11a3 3 0 10-6 0 3 3 0 006 0z" />
+                </svg>
+            </span>
+            <input type="text" name="username" id="username"
+                   value="<?= htmlspecialchars($user['username']) ?>"
+                   class="w-full pl-10 p-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-200" required>
+        </div>
+    </div>
 
-            <div class="mb-4">
-                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" name="email" id="email" value="<?= htmlspecialchars($user['email']) ?>" class="w-full p-3 border border-gray-300 rounded-md" required>
-            </div>
+    <!-- Email -->
+    <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <!-- Mail Icon -->
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 12H8m0 0l4-4m-4 4l4 4" />
+                </svg>
+            </span>
+            <input type="email" name="email" id="email"
+                   value="<?= htmlspecialchars($user['email']) ?>"
+                   class="w-full pl-10 p-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-200" required>
+        </div>
+    </div>
 
-            <div class="mb-4">
-                <label for="profile_picture" class="block text-sm font-medium text-gray-700">Foto Profil</label>
-                <input type="file" name="profile_picture" id="profile_picture" class="w-full p-3 border border-gray-300 rounded-md">
-                <?php if ($user['profile_picture']) { ?>
-                    <img src="<?= htmlspecialchars($user['profile_picture']) ?>" alt="Profile Picture" class="w-24 h-24 mt-4 rounded-full object-cover">
-                <?php } ?>
-            </div>
+    <!-- Foto Profil -->
+    <div>
+        <label for="profile_picture" class="block text-sm font-medium text-gray-700 mb-1">Foto Profil</label>
+        <input type="file" name="profile_picture" id="profile_picture"
+               class="w-full p-3 border border-gray-300 rounded-md">
+        <?php if ($user['profile_picture']) { ?>
+            <img src="<?= htmlspecialchars($user['profile_picture']) ?>" alt="Profile Picture"
+                 class="w-24 h-24 mt-4 rounded-full object-cover">
+        <?php } ?>
+    </div>
 
-            <button type="submit" class="w-full py-2 bg-blue-500 text-white rounded-lg">Simpan Profil</button>
-        </form>
+    <!-- Tombol Submit -->
+    <button type="submit"
+            class="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 transition">
+        <!-- Save Icon -->
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+        Simpan Profil
+    </button>
+</form>
     </div>
     <a href="https://wa.me/08586270297" target="_blank"
   class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg flex items-center space-x-2 transition hover:scale-110 hover:bg-green-600">

@@ -18,13 +18,38 @@ $result = $conn->query($sql);
 if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id'])) {
     $delete_id = $_GET['delete_id'];
 
-    // Siapkan query untuk menghindari SQL Injection
+    // 1. Ambil semua order_id yang dimiliki user ini
+    $order_stmt = $conn->prepare("SELECT id FROM orders WHERE user_id = ?");
+    $order_stmt->bind_param("i", $delete_id);
+    $order_stmt->execute();
+    $order_result = $order_stmt->get_result();
+
+    $order_ids = [];
+    while ($row = $order_result->fetch_assoc()) {
+        $order_ids[] = $row['id'];
+    }
+
+    // 2. Hapus transaksi yang terkait dengan order_id tadi
+    if (!empty($order_ids)) {
+        $placeholders = implode(',', array_fill(0, count($order_ids), '?'));
+        $types = str_repeat('i', count($order_ids));
+        $query = "DELETE FROM transactions WHERE order_id IN ($placeholders)";
+        $stmt_trans = $conn->prepare($query);
+        $stmt_trans->bind_param($types, ...$order_ids);
+        $stmt_trans->execute();
+    }
+
+    // 3. Hapus orders dari user
+    $stmt_orders = $conn->prepare("DELETE FROM orders WHERE user_id = ?");
+    $stmt_orders->bind_param("i", $delete_id);
+    $stmt_orders->execute();
+
+    // 4. Baru hapus user-nya
     $delete_sql = "DELETE FROM users WHERE id = ?";
     $stmt = $conn->prepare($delete_sql);
     $stmt->bind_param("i", $delete_id);
 
     if ($stmt->execute()) {
-        // Redirect setelah berhasil menghapus
         header("Location: manage_users.php?deleted=success");
         exit;
     } else {
