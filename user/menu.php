@@ -11,15 +11,33 @@ if (!$conn) {
 $search = $_GET['search'] ?? '';
 $search_param = "%$search%";
 
-// Ambil kategori dari URL dan hindari SQL Injection
-$selected_category = $_GET['category'] ?? '';
-$selected_category = mysqli_real_escape_string($conn, $selected_category);
-
 // Pagination setup
 $limit = 4;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $page = max(1, $page); // Hindari halaman < 1
 $start = ($page - 1) * $limit;
+
+
+$totalPages = 1; // Default 1 halaman (tidak digunakan jika filter aktif)
+
+if (empty($selected_category) && empty($search)) {
+    $totalQuery = "SELECT COUNT(id) AS total FROM menu WHERE name LIKE ?";
+    $params = [$search_param];
+    $types = "s";
+
+    $totalStmt = $conn->prepare($totalQuery);
+    $totalStmt->bind_param($types, ...$params);
+    $totalStmt->execute();
+    $totalResult = $totalStmt->get_result();
+    $totalRow = $totalResult->fetch_assoc();
+    $totalMenu = $totalRow['total'];
+    $totalPages = ceil($totalMenu / $limit);
+}
+
+
+// Ambil kategori dari URL dan hindari SQL Injection
+$selected_category = $_GET['category'] ?? '';
+$selected_category = mysqli_real_escape_string($conn, $selected_category);
 
 // Ambil daftar kategori unik dari tabel menu
 $categories_query = "SELECT DISTINCT category FROM menu WHERE category IS NOT NULL AND category != ''";
@@ -57,10 +75,12 @@ if (!empty($selected_category)) {
     $types .= "s";
 }
 
-$sql .= " LIMIT ?, ?";
-$params[] = $start;
-$params[] = $limit;
-$types .= "ii";
+if (empty($selected_category) && empty($search)) {
+    $sql .= " LIMIT ?, ?";
+    $params[] = $start;
+    $params[] = $limit;
+    $types .= "ii";
+}
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param($types, ...$params);
@@ -167,20 +187,41 @@ $top_customers_result = $conn->query($top_customers_query);
 
     <!-- Dropdown Pelanggan Setia -->
     <div class="relative group">
-        <button class="text-white hover:text-yellow-300 transition focus:outline-none">
-            Pelanggan Setia ▼
-        </button>
-        <div class="absolute hidden group-hover:block bg-white text-black border rounded-lg shadow-lg w-48 mt-2">
-            <?php while ($customer = $top_customers_result->fetch_assoc()): ?>
-                <a href="profile.php?user=<?= htmlspecialchars($customer['username']) ?>" 
-                   class="flex items-center px-4 py-2 hover:bg-gray-100">
+    <button class="text-white hover:text-yellow-300 transition focus:outline-none">
+        Pelanggan Setia ▼
+    </button>
+    <div class="absolute hidden group-hover:block bg-white text-black border rounded-lg shadow-lg w-56 mt-2 z-10">
+        <?php 
+        $position = 1;
+        while ($customer = $top_customers_result->fetch_assoc()): 
+            // Tentukan SVG mahkota berdasarkan posisi
+            $crown = '';
+            if ($position == 1) {
+                $crown = '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3l2.39 4.78L18 8.33l-4.5 4.39L14.78 18 10 15.27 5.22 18l1.28-5.28L2 8.33l5.61-.55L10 3z" /></svg>';
+            } elseif ($position == 2) {
+                $crown = '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3l2.39 4.78L18 8.33l-4.5 4.39L14.78 18 10 15.27 5.22 18l1.28-5.28L2 8.33l5.61-.55L10 3z" /></svg>';
+            } elseif ($position == 3) {
+                $crown = '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3l2.39 4.78L18 8.33l-4.5 4.39L14.78 18 10 15.27 5.22 18l1.28-5.28L2 8.33l5.61-.55L10 3z" /></svg>';
+            } else {
+                $crown = '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3l2 4 4 .5-3 3 .9 4.5L10 13l-3.9 2 1-4.5-3-3 4-.5 2-4z" /></svg>';
+            }
+        ?>
+            <a href="profile.php?user=<?= htmlspecialchars($customer['username']) ?>" 
+               class="flex items-center px-4 py-2 hover:bg-gray-100">
+                <div class="flex items-center gap-2">
+                    <?= $crown ?>
                     <img src="<?= htmlspecialchars($customer['profile_picture'] ?? '../assets/images/avatar.jpeg') ?>" 
-                         class="w-8 h-8 rounded-full border mr-2">
-                    <span class="text-sm font-semibold"><?= htmlspecialchars($customer['username']) ?></span>
-                </a>
-            <?php endwhile; ?>
-        </div>
+                         class="w-8 h-8 rounded-full border">
+                    <div class="text-sm font-semibold">
+                        <?= htmlspecialchars($position) ?>. <?= htmlspecialchars($customer['username']) ?>
+                    </div>
+                </div>
+            </a>
+        <?php 
+            $position++;
+        endwhile; ?>
     </div>
+</div>
 
     <a href="javascript:void(0);" onclick="confirmLogout()" 
        class="px-4 py-2 bg-red-600 rounded-full hover:bg-red-700 transition font-bold text-white">
@@ -283,20 +324,21 @@ $top_customers_result = $conn->query($top_customers_query);
             
         <?php endwhile; ?>
     <?php else: ?>
-        <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
-            <div class="h-32 rounded bg-gray-300 lg:col-span-2"></div>
-            <div class="h-32 rounded bg-gray-300"></div>
-        </div>
+        <div class="col-span-full text-center py-10">
+    <p class="text-gray-600 text-lg font-semibold">Menu tidak ditemukan.</p>
+</div>
     <?php endif; ?>
 </div>
     <!-- Pagination -->
+    <?php if (empty($selected_category) && empty($search)): ?>
     <div class="flex justify-center mt-6">
-        <a href="?page=<?= max(1, $page - 1) ?>&search=<?= htmlspecialchars($search) ?>" class="px-4 py-2 border">Prev</a>
+        <a href="?page=<?= max(1, $page - 1) ?>" class="px-4 py-2 border">Prev</a>
         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-            <a href="?page=<?= $i ?>&search=<?= htmlspecialchars($search) ?>" class="px-4 py-2 <?= $i == $page ? 'bg-blue-500 text-white' : 'border' ?>"> <?= $i ?> </a>
+            <a href="?page=<?= $i ?>" class="px-4 py-2 <?= $i == $page ? 'bg-blue-500 text-white' : 'border' ?>"> <?= $i ?> </a>
         <?php endfor; ?>
-        <a href="?page=<?= min($totalPages, $page + 1) ?>&search=<?= htmlspecialchars($search) ?>" class="px-4 py-2 border">Next</a>
+        <a href="?page=<?= min($totalPages, $page + 1) ?>" class="px-4 py-2 border">Next</a>
     </div>
+<?php endif; ?>
 </div>
   </div>
 </div>
