@@ -130,7 +130,7 @@ $result = $conn->query($query);
         <!-- Main Content -->
         <div class="flex-1 ml-64 p-8">
             <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Kelola Stok Menu</h2>
+            <h2 class="text-3xl font-semibold text-gray-700 mb-4">Kelola Stok Menu</h2>
                 <form method="GET" class="mb-6 flex items-center justify-start gap-2 w-full md:w-1/2">
   <div class="relative w-full">
     <span class="absolute inset-y-0 left-0 flex items-center pl-3">

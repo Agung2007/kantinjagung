@@ -56,6 +56,9 @@ $top_products_query = "
     SELECT m.id, m.name AS menu_name, m.image, SUM(od.quantity) AS total_quantity, m.price
     FROM order_details od
     JOIN menu m ON od.menu_id = m.id
+    JOIN orders o ON od.order_id = o.id
+    JOIN transactions t ON t.order_id = o.id
+    WHERE t.status = 'completed'
     GROUP BY m.id, m.name, m.image, m.price
     ORDER BY total_quantity DESC
     LIMIT 5";
@@ -241,6 +244,8 @@ $top_products_result = $conn->query($top_products_query);
                     </div>
 
                 </div>
+
+                <!-- pendapatan -->
                 <div class="mt-8 text-center">
                 <form method="GET" action="dashboard.php" class="mb-4 flex items-center gap-4">
     <label for="date" class="text-gray-700 font-semibold">Pilih Tanggal:</label>
@@ -270,7 +275,7 @@ $top_products_result = $conn->query($top_products_query);
                         sampai <?php echo date("d M Y", strtotime($_GET['end_date'])); ?></p>
                     <?php endif; ?>
                 </div>
-
+                <!-- Produk terlaris -->
                 <div class="mt-8 p-6 bg-white shadow-md rounded-lg">
                     <h3 class="text-2xl font-semibold text-gray-700 mb-4">Produk Terlaris</h3>
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">

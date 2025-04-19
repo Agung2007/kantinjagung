@@ -329,12 +329,16 @@ $result = $stmt->get_result();
         <form method="POST" class="flex items-center space-x-2">
             <input type="hidden" name="transaction_id" value="<?= $row['id'] ?>">
             
-            <select name="status" 
-                class="border rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
-                <option value="pending" <?= $row['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
-                <option value="processed" <?= $row['status'] == 'processed' ? 'selected' : '' ?>>Processed</option>
-                <option value="completed" <?= $row['status'] == 'completed' ? 'selected' : '' ?>>Completed</option>
-            </select>
+<select name="status"
+    class="border rounded-md px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-400 transition shadow-sm
+        <?= $row['status'] == 'pending' ? 'bg-yellow-50 text-yellow-700 border-yellow-300' : '' ?>
+        <?= $row['status'] == 'processed' ? 'bg-blue-50 text-blue-700 border-blue-300' : '' ?>
+        <?= $row['status'] == 'completed' ? 'bg-green-50 text-green-700 border-green-300' : '' ?>">
+    
+    <option value="pending" <?= $row['status'] == 'pending' ? 'selected' : '' ?>>🕒 Pending</option>
+    <option value="processed" <?= $row['status'] == 'processed' ? 'selected' : '' ?>>⚙️ Processed</option>
+    <option value="completed" <?= $row['status'] == 'completed' ? 'selected' : '' ?>>✅ Completed</option>
+</select>
             
             <button type="submit" name="update_status"
                 class="inline-flex items-center gap-1 px-3 py-1 
