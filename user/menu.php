@@ -250,15 +250,60 @@ $top_customers_result = $conn->query($top_customers_query);
 
 <!-- FILTER KATEGORI -->
 <div class="flex justify-center mb-6 px-4">
-    <select name="category" id="categoryFilter" class="px-4 py-2 border rounded-md focus:outline-none" onchange="filterCategory()">
-        <option value="">Semua Kategori</option>
-        <?php while ($category = $categories_result->fetch_assoc()): ?>
-            <option value="<?= htmlspecialchars($category['category']) ?>" 
-                <?= $selected_category == $category['category'] ? 'selected' : '' ?>>
-                <?= htmlspecialchars($category['category']) ?>
-            </option>
-        <?php endwhile; ?>
-    </select>
+    <div class="relative inline-flex">
+        <span class="inline-flex divide-x divide-gray-300 overflow-hidden rounded border border-gray-300 bg-white shadow-sm">
+            <button
+                type="button"
+                class="px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 focus:relative"
+                aria-haspopup="true"
+                aria-expanded="false"
+            >
+                <?php echo empty($selected_category) ? "Semua Kategori" : htmlspecialchars($selected_category); ?>
+            </button>
+
+            <button
+                type="button"
+                class="px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 focus:relative"
+                aria-label="Menu"
+                onclick="document.getElementById('categoryDropdown').classList.toggle('hidden')"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-4"
+                >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>
+            </button>
+        </span>
+
+        <div
+            id="categoryDropdown"
+            role="menu"
+            class="absolute left-1/2 transform -translate-x-1/2 top-12 z-50 w-56 overflow-hidden rounded border border-gray-300 bg-white shadow-sm hidden"
+            >
+            <a
+                href="?category="
+                class="block px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
+                role="menuitem"
+            >
+                Semua Kategori
+            </a>
+            <?php while ($category = $categories_result->fetch_assoc()): ?>
+                <a
+                    href="?category=<?= urlencode($category['category']) ?>"
+                    class="block px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
+                    role="menuitem"
+                    <?= $selected_category == $category['category'] ? 'style="background-color: #E5E7EB;"' : '' ?>
+                >
+                    <?= htmlspecialchars($category['category']) ?>
+                </a>
+            <?php endwhile; ?>
+        </div>
+    </div>
 </div>
 
 <!-- SEARCH FORM -->

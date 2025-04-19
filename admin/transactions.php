@@ -17,6 +17,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status'])) {
         die("Status tidak valid!");
     }
 
+    // Ambil status sebelumnya
+    $stmt_old = $conn->prepare("SELECT status, order_id FROM transactions WHERE id = ?");
+    $stmt_old->bind_param("i", $transaction_id);
+    $stmt_old->execute();
+    $result_old = $stmt_old->get_result();
+    $trans = $result_old->fetch_assoc();
+    $old_status = $trans['status'];
+    $order_id = $trans['order_id'];
+    $stmt_old->close();
+
+    // Jika status baru adalah 'completed' dan sebelumnya bukan, kurangi stok
+    if ($status === 'completed' && $old_status !== 'completed') {
+        $stmt_items = $conn->prepare("SELECT menu_id, quantity FROM order_details WHERE order_id = ?");
+        $stmt_items->bind_param("i", $order_id);
+        $stmt_items->execute();
+        $items = $stmt_items->get_result();
+
+        while ($item = $items->fetch_assoc()) {
+            $update = $conn->prepare("UPDATE menu SET stock = stock - ? WHERE id = ?");
+            $update->bind_param("ii", $item['quantity'], $item['menu_id']);
+            $update->execute();
+            $update->close();
+        }
+
+        $stmt_items->close();
+    }
+
     // Update status di database
     $stmt = $conn->prepare("UPDATE transactions SET status = ? WHERE id = ?");
     $stmt->bind_param("si", $status, $transaction_id);
@@ -42,9 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status'])) {
             });
         </script>";
     }
-    
+
     $stmt->close();
 }
+
 
 // Ambil data transaksi
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';

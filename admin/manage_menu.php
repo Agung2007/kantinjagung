@@ -74,7 +74,7 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Menu</title>
+    <title>Kelola Menu</title>
     <link rel="shortcut icon" href="../assets/images/bahanicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -237,11 +237,13 @@ $result = $conn->query($sql);
                 required>
         </div>
         <div>
-            <label for="price" class="block text-sm font-semibold text-gray-700">Harga (Rp)</label>
-            <input type="number" name="price" id="price" placeholder="Contoh: 15000"
-                class="w-full mt-2 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition duration-200"
-                required>
-        </div>
+    <label for="price" class="block text-sm font-semibold text-gray-700">Harga (Rp)</label>
+    <input type="number" name="price" id="price" placeholder="Contoh: 15000"
+        class="w-full mt-2 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition duration-200"
+        required>
+    <p class="text-sm mt-2 text-blue-900 bg-blue-50 border border-blue-200 rounded-md p-2 shadow-sm">
+Harga sudah termasuk ongkir    </p>
+</div>
     </div>
 
     <div class="mt-4">
@@ -351,11 +353,11 @@ $result = $conn->query($sql);
         <thead class="bg-blue-500 text-white">
             <tr>
                 <th class="px-6 py-3 text-center">No</th>
-                <th class="px-6 py-3 text-left">Menu Name</th>
+                <th class="px-6 py-3 text-left">Nama Menu</th>
                 <th class="px-6 py-3 text-center">Kategori</th>
-                <th class="px-6 py-3 text-center">Price</th>
+                <th class="px-6 py-3 text-center">Harga</th>
                 <th class="px-6 py-3 text-center">Image</th>
-                <th class="px-6 py-3 text-center">Stock</th>
+                <th class="px-6 py-3 text-center">Stok</th>
                 <th class="px-6 py-3 text-left">Deskripsi</th> <!-- Tambahkan kolom Deskripsi -->
                 <th class="px-6 py-3 text-center">Actions</th>
             </tr>

@@ -9,10 +9,23 @@ if (!isset($_SESSION['user_logged_in'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Ambil daftar menu dari database
-$menu_query = "SELECT * FROM menu";
-$menu_result = $conn->query($menu_query);
+$menu_id_from_url = isset($_GET['id']) ? intval($_GET['id']) : null;
 
+if (!$menu_id_from_url) {
+    die("Menu tidak ditemukan!");
+}
+
+// Ambil data menu berdasarkan ID
+$stmt = $conn->prepare("SELECT * FROM menu WHERE id = ?");
+$stmt->bind_param("i", $menu_id_from_url);
+$stmt->execute();
+$result = $stmt->get_result();
+$selected_menu = $result->fetch_assoc();
+$stmt->close();
+
+if (!$selected_menu) {
+    die("Menu tidak tersedia!");
+}
 $success = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -31,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn->begin_transaction();
 
     try {
+        
         // Ambil harga menu
         $stmt_menu = $conn->prepare("SELECT price, stock FROM menu WHERE id = ?");
         $stmt_menu->bind_param("i", $menu_id);
@@ -67,10 +81,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt_transaction->execute();
         $stmt_transaction->close();
 
-        $stmt_update_stock = $conn->prepare("UPDATE menu SET stock = stock - ? WHERE id = ?");
-$stmt_update_stock->bind_param("ii", $quantity, $menu_id);
-$stmt_update_stock->execute();
-$stmt_update_stock->close();
+        // Pr Stok
+//         $stmt_update_stock = $conn->prepare("UPDATE menu SET stock = stock - ? WHERE id = ?");
+// $stmt_update_stock->bind_param("ii", $quantity, $menu_id);
+// $stmt_update_stock->execute();
+// $stmt_update_stock->close();
 
 
         // Commit transaksi
@@ -134,17 +149,27 @@ $stmt_update_stock->close();
         
         <form method="POST" class="space-y-5">
             <!-- Pilih Menu -->
-<div>
-    <label class="block text-sm font-medium text-gray-700">Pilih Menu:</label>
-    <select name="menu_id" required 
-        class="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-        <?php while ($menu = $menu_result->fetch_assoc()) { ?>
-            <option value="<?= $menu['id'] ?>" <?= ($menu['stock'] == 0) ? 'disabled' : '' ?>>
-    <?= htmlspecialchars($menu['name']) ?> - Rp<?= number_format($menu['price'], 0, ',', '.') ?> 
-    (Stok: <?= $menu['stock'] ?>)
-</option>
-        <?php } ?>
-    </select>
+            <div class="mb-4">
+    <label class="block text-sm font-semibold text-gray-700 mb-2">Pilih Menu:</label>
+    <input type="hidden" name="menu_id" value="<?= $selected_menu['id'] ?>">
+
+    <div class="flex items-center justify-between bg-white border border-gray-300 rounded-lg shadow-sm p-4">
+        <!-- Informasi menu -->
+        <div class="flex-1">
+            <p class="text-lg font-semibold text-gray-800"><?= htmlspecialchars($selected_menu['name']) ?></p>
+            <p class="text-sm text-gray-600">Harga: <span class="text-blue-600 font-medium">Rp<?= number_format($selected_menu['price'], 0, ',', '.') ?></span></p>
+            <p class="text-sm text-gray-600">Stok Tersisa: 
+                <span class="font-semibold <?= $selected_menu['stock'] > 0 ? 'text-green-600' : 'text-red-600' ?>">
+                    <?= $selected_menu['stock'] ?>
+                </span>
+            </p>
+        </div>
+
+        <!-- Gambar menu -->
+        <div class="ml-4">
+            <img src="../<?= htmlspecialchars($selected_menu['image']) ?>" alt="<?= htmlspecialchars($selected_menu['name']) ?>" class="w-20 h-20 object-cover rounded-lg shadow">
+        </div>
+    </div>
 </div>
 
             <!-- Jumlah -->
