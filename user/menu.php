@@ -68,13 +68,16 @@ $sql = "SELECT id, name, price, image, category, stock, description FROM menu WH
 $params = [$search_param];
 $types = "s";
 
-// Tambahkan filter kategori jika dipilih
 if (!empty($selected_category)) {
     $sql .= " AND category = ?";
     $params[] = $selected_category;
     $types .= "s";
 }
 
+// Urutkan produk terbaru
+$sql .= " ORDER BY id DESC";
+
+// Pagination hanya jika tidak pakai filter
 if (empty($selected_category) && empty($search)) {
     $sql .= " LIMIT ?, ?";
     $params[] = $start;
@@ -353,17 +356,25 @@ $top_customers_result = $conn->query($top_customers_query);
 
 <!-- Kondisi Stok -->
 <?php if ($menu['stock'] > 0): ?>
-    <p class="text-sm text-gray-700">Stok: <?= $menu['stock'] ?></p>
+    <p class="text-sm font-medium <?= $menu['stock'] < 11 ? 'text-red-600' : 'text-gray-700' ?>">
+        Stok: <?= $menu['stock'] ?>
+        <?php if ($menu['stock'] < 5): ?>
+            <span class="ml-2 px-2 py-0.5 bg-red-100 text-red-600 text-xs rounded-full">⚠ Hampir Habis</span>
+        <?php endif; ?>
+    </p>
+
+    <!-- Tombol Pesan -->
     <a href="order.php?id=<?= $menu['id'] ?>" 
-       class="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-center rounded-lg font-bold hover:scale-110 hover:from-blue-700 hover:to-blue-500 transition-all duration-300">
+       class="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-center rounded-lg font-bold hover:scale-110 hover:from-blue-700 hover:to-blue-500 transition-all duration-300 block text-sm">
        Pesan Sekarang
     </a>
 <?php else: ?>
     <p class="text-sm text-red-500 font-semibold mt-2">Stok Habis</p>
-    <button class="mt-4 px-6 py-3 bg-gray-400 text-white text-center rounded-lg font-bold cursor-not-allowed" disabled>
+    <button class="mt-4 px-6 py-3 bg-gray-400 text-white text-center rounded-lg font-bold cursor-not-allowed text-sm" disabled>
         Tidak Tersedia
     </button>
 <?php endif; ?>
+
                 </div>
             </div>
             

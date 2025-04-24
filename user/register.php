@@ -65,13 +65,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </style>
 
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen" style="background: url('../assets/images/new,jpg') no-repeat center center/cover;">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+<body class="bg-gradient-to-r from-blue-600 via-blue-400 to-yellow-300 flex items-center justify-center min-h-screen">
+<div class="p-8 rounded-lg shadow-lg w-96 bg-cover bg-center" style="background-image: url('../assets/images/reg.jpg');">
         <div class="flex justify-center mb-6">
         <img src="../assets/images/ifsu.png" alt="Logo Kantin" class="w-20 h-20 wave">
         </div>
         
-        <h2 class="text-2xl font-bold text-center mb-6">Daftar Pengguna</h2>
+        <h2 class="text-3xl font-bold text-center text-white drop-shadow-md mb-2">Daftar Pengguna
+</h2>
         <form method="POST">
 <!-- Username -->
 <div class="mb-4 relative">
@@ -90,7 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
     <!-- Teks peringatan samar -->
-    <p class="mt-1 text-sm text-gray-500 italic">* Username wajib asli</p>
+    <p class="mt-1 text-sm text-white font-medium italic drop-shadow-sm">
+    * Username wajib asli
+</p>
 </div>
 
 <!-- Email -->
@@ -152,7 +155,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <span>Register</span>
 </button>
         </form>
-        <p class="mt-4 text-center">Sudah punya akun? <a href="login.php" class="text-blue-500">Login</a></p>
+        <p class="mt-6 text-center text-white text-sm">
+    Sudah punya akun?
+    <a href="login.php" class="text-blue-400 hover:text-blue-600 font-semibold underline transition duration-200">
+        Login
+    </a>
+</p>
     </div>
 
     <script>

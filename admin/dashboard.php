@@ -222,7 +222,7 @@ $top_products_result = $conn->query($top_products_query);
                             </svg>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-xl font-semibold text-gray-700">Menu Items</h3>
+                            <h3 class="text-xl font-semibold text-gray-700">Total Menu</h3>
                             <p class="text-4xl text-green-700 font-bold mt-1"><?php echo $total_menu; ?></p>
                         </div>
                     </div>
@@ -238,7 +238,7 @@ $top_products_result = $conn->query($top_products_query);
                             </svg>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-xl font-semibold text-gray-700">Total Transactions</h3>
+                            <h3 class="text-xl font-semibold text-gray-700">Total Transaksi</h3>
                             <p class="text-4xl text-yellow-700 font-bold mt-1"><?php echo $total_transactions; ?></p>
                         </div>
                     </div>
@@ -263,7 +263,6 @@ $top_products_result = $conn->query($top_products_query);
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
               d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 12.414V19a1 1 0 01-1.447.894l-4-2A1 1 0 019 17v-4.586L3.293 6.707A1 1 0 013 6V4z" />
     </svg>
-
     Filter
 </button>
 </form>

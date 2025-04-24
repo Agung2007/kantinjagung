@@ -359,7 +359,7 @@ Harga sudah termasuk ongkir    </p>
                 <th class="px-6 py-3 text-center">Image</th>
                 <th class="px-6 py-3 text-center">Stok</th>
                 <th class="px-6 py-3 text-left">Deskripsi</th> <!-- Tambahkan kolom Deskripsi -->
-                <th class="px-6 py-3 text-center">Actions</th>
+                <th class="px-6 py-3 text-center">Aksi</th>
             </tr>
         </thead>
         <tbody>

@@ -126,18 +126,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     const quantityInput = document.querySelector("#quantity");
 
     menuSelect.addEventListener("change", function () {
-        let selectedOption = menuSelect.options[menuSelect.selectedIndex];
-        let stok = parseInt(selectedOption.getAttribute("data-stock")) || 0;
-        
-        quantityInput.max = stok;
-        if (stok === 0) {
-            quantityInput.value = 0;
-            quantityInput.disabled = true;
-        } else {
-            quantityInput.disabled = false;
+    let selectedOption = menuSelect.options[menuSelect.selectedIndex];
+    let stok = parseInt(selectedOption.getAttribute("data-stock")) || 0;
+
+    quantityInput.max = stok;
+
+    if (stok === 0) {
+        quantityInput.value = 0;
+        quantityInput.disabled = true;
+    } else {
+        quantityInput.disabled = false;
+        if (parseInt(quantityInput.value) > stok) {
+            quantityInput.value = stok; // batasin kalau sebelumnya kelebihan
         }
-    });
+        ubahJumlah(0); // panggil fungsi agar tombol + dan - tetap sinkron
+    }
 });
+});
+
+function ubahJumlah(delta) {
+        const input = document.getElementById("jumlahInput");
+        let current = parseInt(input.value);
+        if (!isNaN(current)) {
+            let newVal = current + delta;
+            if (newVal >= 1) {
+                input.value = newVal;
+            }
+        }
+    }
+
 
     </script>
 </head>
@@ -172,13 +189,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 </div>
 
-            <!-- Jumlah -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Jumlah:</label>
-                <input type="number" name="quantity" required min="1" value="1"
+<div class="flex items-center justify-between gap-3">
+    <label class="text-sm font-medium text-gray-700 whitespace-nowrap">Jumlah:</label>
+    
+    <div class="flex items-center border border-gray-300 rounded-full overflow-hidden bg-white shadow-sm">
+        <!-- Tombol kurang -->
+        <button type="button" onclick="ubahJumlah(-1)" class="px-3 py-2 hover:bg-gray-100">
+            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+            </svg>
+        </button>
 
-                class="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-            </div>
+        <!-- Input jumlah -->
+        <input type="number" name="quantity" id="jumlahInput" value="1" min="1" max="<?= $selected_menu['stock'] ?>" required
+    class="w-12 text-center border-0 focus:ring-0 text-sm font-medium text-gray-800 bg-transparent" />
+
+        <!-- Tombol tambah -->
+        <button type="button" onclick="ubahJumlah(1)" class="px-3 py-2 hover:bg-gray-100">
+            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+        </button>
+    </div>
+</div>
 
             <!-- Metode Pembayaran -->
             <div class="grid grid-cols-3 gap-4">

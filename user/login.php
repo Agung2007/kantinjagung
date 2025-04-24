@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </style>
 
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body class="bg-gradient-to-r from-blue-600 to-yellow-300 flex items-center justify-center min-h-screen">
         <!-- Loading Screen -->
         <div id="loadingScreen" class="fixed inset-0 flex items-center justify-center bg-white z-50">
         <div role="status">
@@ -74,13 +74,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
-    <div class="bg-white p-8 rounded-lg shadow-xl w-96">
-        <div class="flex justify-center mb-6">
+<div class="bg-[url('../assets/images/anggunreg.jpg')] bg-cover p-8 rounded-lg shadow-xl w-96"
+     style="background-position: center top 70%;">
+    <div class="flex justify-center mb-6">
         <img src="../assets/images/ifsu.png" alt="Logo Kantin" class="w-20 h-20 wave">
         </div>
 
-        <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Login</h2>
-        <p class="text-center text-gray-500 mb-6">Masuk untuk melanjutkan</p>
+        <h2 class="text-3xl font-bold text-center text-white drop-shadow-md mb-2">Login Pengguna</h2>
+<p class="text-center text-gray-100 mb-6">Masuk untuk melanjutkan</p>
 
         <form method="POST">
     <!-- Input Username -->
@@ -117,17 +118,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             required>
         <button type="button" id="togglePassword" class="absolute inset-y-0 right-2 flex items-center text-gray-500">
             <!-- Mata terbuka -->
-            <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
-                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M12 4.5C4.5 4.5 2.25 12 2.25 12S4.5 19.5 12 19.5 21.75 12 21.75 12 19.5 4.5 12 4.5Zm0 10.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
-            </svg>
-            <!-- Mata tertutup -->
-            <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden" fill="none"
-                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3 3l18 18m-6.364-6.364A4.5 4.5 0 0112 16.5c-7.5 0-9.75-7.5-9.75-7.5a14.846 14.846 0 012.834-4.327m3.671-1.922a14.83 14.83 0 014.515 0M9.88 9.88a3 3 0 004.24 4.24" />
-            </svg>
+            <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500" fill="none"
+        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 4.5c-7.5 0-9.75 7.5-9.75 7.5s2.25 7.5 9.75 7.5 9.75-7.5 9.75-7.5-2.25-7.5-9.75-7.5Zm0 10.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
+      </svg>
+      <!-- Mata Tertutup -->
+      <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500 hidden" fill="none"
+        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M3 12s2.25 7.5 9.75 7.5S21.75 12 21.75 12s-2.25-7.5-9.75-7.5S3 12 3 12ZM9 9l6 6m0-6-6 6" />
+      </svg>
         </button>
     </div>
 </div>
@@ -146,9 +147,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </form>
 
 <!-- Link ke Register -->
-<p class="mt-4 text-center text-gray-600">
-    Belum punya akun? 
-    <a href="register.php" class="text-blue-500 hover:underline">Daftar dulu</a>
+<p class="mt-4 text-center text-white drop-shadow-sm">
+    Belum punya akun?
+    <a href="register.php" class="text-blue-300 hover:text-blue-400 underline font-semibold">
+        Daftar
+    </a>
 </p>
     </div>
 

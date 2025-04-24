@@ -94,9 +94,30 @@ style="background: url('../assets/images/new.jpg') no-repeat center center/cover
             ✖
         </a>
 
-<h2 class="text-3xl font-semibold text-center mb-6">Edit Profil</h2>
+        <h2 class="text-3xl font-semibold text-center mb-6">Edit Profil</h2>
 
-<form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md space-y-4">
+<form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md space-y-6">
+    
+    <!-- Foto Profil -->
+    <div class="flex justify-center">
+        <label for="profile_picture" class="relative cursor-pointer group">
+            <img id="profilePreview" 
+                 src="<?= htmlspecialchars($user['profile_picture'] ?? '../assets/images/avatar.jpeg') ?>" 
+                 alt="Profile Picture" 
+                 class="w-28 h-28 rounded-full object-cover border-4 border-white shadow-md">
+            
+            <!-- Camera icon overlay -->
+            <div class="absolute bottom-1 right-1 bg-gray-200 p-1 rounded-full group-hover:bg-blue-500 transition">
+                <svg class="w-5 h-5 text-gray-600 group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" 
+                     viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" 
+                          d="M15.232 5.232l3.536 3.536M9 11l6-6 3.536 3.536-6 6H9v-3.536z" />
+                </svg>
+            </div>
+        </label>
+        <input type="file" name="profile_picture" id="profile_picture" accept="image/*" class="hidden" onchange="previewImage(event)">
+    </div>
+
     <!-- Nama -->
     <div>
         <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
@@ -115,36 +136,24 @@ style="background: url('../assets/images/new.jpg') no-repeat center center/cover
 
     <!-- Email -->
     <div>
-    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-    <div class="relative">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-            <!-- Mail Icon -->
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"/>
-            </svg>
-        </span>
-        <input type="email" name="email" id="email"
-               value="<?= htmlspecialchars($user['email']) ?>"
-               class="w-full pl-10 p-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-200" required>
-    </div>
-</div>
-
-    <!-- Foto Profil -->
-    <div>
-        <label for="profile_picture" class="block text-sm font-medium text-gray-700 mb-1">Foto Profil</label>
-        <input type="file" name="profile_picture" id="profile_picture"
-               class="w-full p-3 border border-gray-300 rounded-md">
-        <?php if ($user['profile_picture']) { ?>
-            <img src="<?= htmlspecialchars($user['profile_picture']) ?>" alt="Profile Picture"
-                 class="w-24 h-24 mt-4 rounded-full object-cover">
-        <?php } ?>
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <!-- Mail Icon -->
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"/>
+                </svg>
+            </span>
+            <input type="email" name="email" id="email"
+                   value="<?= htmlspecialchars($user['email']) ?>"
+                   class="w-full pl-10 p-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-200" required>
+        </div>
     </div>
 
     <!-- Tombol Submit -->
     <button type="submit"
             class="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 transition">
-        <!-- Save Icon -->
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
         </svg>
@@ -157,6 +166,18 @@ style="background: url('../assets/images/new.jpg') no-repeat center center/cover
   <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" class="w-6 h-6">
   <span class="hidden md:inline font-semibold">Hubungi Admin</span>
 </a>
+
+<script>
+        function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function(){
+            const preview = document.getElementById('profilePreview');
+            preview.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+</script>
 
 
 
