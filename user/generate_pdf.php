@@ -75,7 +75,30 @@ while ($row = $result->fetch_assoc()) {
     $pdf->Cell(40, 10, "Rp" . number_format($row['price'], 2), 1, 1, 'R');
 }
 
-// Output PDF
-$pdf->Output("Transaksi kantin ifsu berkah_$order_id.pdf", "D"); // D = Download, I = Tampilkan di browser
+// Atur posisi manual lebih rapi
+$pdf->SetY(-90); // Sesuaikan tinggi dari bawah halaman
+$pdf->SetFont('helvetica', '', 12);
+
+// Posisi X (kiri-kanan) untuk seluruh blok
+$xRight = 150;
+
+$pdf->SetX($xRight);
+$pdf->Cell(0, 6, 'Mengetahui,', 0, 1, 'R');
+
+$pdf->Ln(2);
+
+$ttdPath = __DIR__ . '/../assets/images/ttd.jpeg';
+if (file_exists($ttdPath)) {
+    $pdf->Image($ttdPath, $xRight + 5, $pdf->GetY(), 40); 
+    $pdf->Ln(30); 
+} else {
+    $pdf->SetX($xRight);
+    $pdf->Cell(0, 10, '[Tanda tangan tidak ditemukan]', 0, 1, 'R');
+}
+
+$pdf->SetX($xRight);
+$pdf->Cell(0, 6, 'Agung Ganteng Pisan', 0, 1, 'R');
+
+$pdf->Output("Transaksi kantin ifsu berkah_$order_id.pdf", "D"); 
 
 exit;
